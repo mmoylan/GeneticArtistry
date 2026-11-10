@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import PostRow from '../../components/PostRow.astro';
+import PostCard from '../../components/PostCard.astro';
 
 const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -14,14 +14,14 @@ const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
       <p class="eyebrow">Journal</p>
       <h1>Notes from the <em>grow room</em></h1>
       {posts.length === 0 ? <p class="muted">No entries yet.</p> : (
-        <ol class="list">{posts.map((p, i) => <PostRow post={p} index={i} />)}</ol>
+        <ul class="grid">{posts.map((p) => <PostCard post={p} />)}</ul>
       )}
     </div>
   </section>
 </Base>
 
 <style>
-  .top { padding-top: clamp(8rem, 16vw, 13rem); }
-  h1 { margin: 1.5rem 0 4rem; font-size: var(--t-1); max-width: 12ch; }
-  .list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--line); }
+  .top { padding-top: clamp(8rem, 14vw, 11rem); }
+  h1 { margin: 1.2rem 0 3rem; max-width: 14ch; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
 </style>

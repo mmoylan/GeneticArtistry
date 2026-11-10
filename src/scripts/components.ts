@@ -218,7 +218,33 @@ class GaTheme extends HTMLElement {
   }
 }
 
+/**
+ * <ga-draw>            line-art that draws itself as you scroll (scrub)
+ * <ga-draw autoplay>   draws once when it first becomes visible
+ */
+class GaDraw extends HTMLElement {
+  private paths: SVGGeometryElement[] = [];
+  private update = () => this.draw();
+  connectedCallback() {
+    this.paths = [...this.querySelectorAll<SVGGeometryElement>('path,line,circle')];
+    this.paths.forEach((p) => p.setAttribute('pathLength', '1'));
+    if (reduced) return;
+    if (this.hasAttribute('autoplay')) return whenVisible(this);
+    tickers.add(this.update);
+    this.draw();
+  }
+  disconnectedCallback() {
+    tickers.delete(this.update);
+  }
+  draw() {
+    const r = this.getBoundingClientRect();
+    const p = clamp((innerHeight * 0.85 - r.top) / (innerHeight * 0.45 + r.height * 0.5));
+    this.style.setProperty('--d', (1 - p).toFixed(3));
+  }
+}
+
 const defs: [string, CustomElementConstructor][] = [
+  ['ga-draw', GaDraw],
   ['ga-theme', GaTheme],
   ['ga-reveal', GaReveal],
   ['ga-split', GaSplit],

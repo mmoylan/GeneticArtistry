@@ -2,12 +2,10 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-import Marquee from '../components/Marquee.astro';
-import Manifesto from '../components/Manifesto.astro';
-import LinesShowcase from '../components/LinesShowcase.astro';
-import Process from '../components/Process.astro';
+import Specimen from '../components/Specimen.astro';
+import Catalogue from '../components/Catalogue.astro';
 import Stats from '../components/Stats.astro';
-import PostRow from '../components/PostRow.astro';
+import PostCard from '../components/PostCard.astro';
 import Connect from '../components/Connect.astro';
 
 const posts = (await getCollection('blog', (p) => !p.data.draft))
@@ -17,13 +15,11 @@ const posts = (await getCollection('blog', (p) => !p.data.draft))
 
 <Base>
   <Hero />
-  <Marquee />
-  <Manifesto />
-  <LinesShowcase />
-  <Process />
+  <Specimen />
+  <Catalogue />
   <Stats />
   {posts.length > 0 && (
-    <section class="pad" aria-labelledby="journal-title">
+    <section class="pad journal" aria-labelledby="journal-title">
       <div class="wrap">
         <div class="head">
           <div>
@@ -32,7 +28,7 @@ const posts = (await getCollection('blog', (p) => !p.data.draft))
           </div>
           <a class="btn" href="/blog">All entries</a>
         </div>
-        <ol class="list">{posts.map((p, i) => <PostRow post={p} index={i} />)}</ol>
+        <ul class="grid">{posts.map((p) => <PostCard post={p} />)}</ul>
       </div>
     </section>
   )}
@@ -40,7 +36,7 @@ const posts = (await getCollection('blog', (p) => !p.data.draft))
 </Base>
 
 <style>
-  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 3rem; }
-  .head h2 { margin: 1rem 0 0; max-width: 14ch; }
-  .list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--line); }
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 2.5rem; }
+  .head h2 { margin: 1rem 0 0; max-width: 16ch; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
 </style>

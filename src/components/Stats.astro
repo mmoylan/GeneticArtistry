@@ -2,23 +2,23 @@
 import story from '../data/story.json';
 ---
 
-<section class="stats bleed" aria-label="By the numbers">
+<section class="pad stats" aria-label="By the numbers">
   <div class="wrap">
     <dl>
-      {story.stats.map((s) => (
-        <div>
+      {story.stats.map((s, i) => (
+        <ga-reveal delay={String(i * 90)} class="card">
           <dd class="display"><ga-counter to={s.value} suffix={s.suffix}>{s.value}{s.suffix}</ga-counter></dd>
-          <dt class="label">{s.label}</dt>
-        </div>
+          <dt class="label muted">{s.label}</dt>
+        </ga-reveal>
       ))}
     </dl>
   </div>
 </section>
 
 <style>
-  .stats { background: var(--accent); color: var(--on-accent); padding: clamp(4rem, 9vw, 8rem) 0; }
-  dl { display: grid; gap: 3rem 2rem; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin: 0; }
-  div { display: flex; flex-direction: column-reverse; border-top: 1px solid currentColor; padding-top: 1rem; }
-  dd { margin: 0; font-size: clamp(4rem, 9vw, 8.5rem); font-weight: 200; line-height: .9; letter-spacing: -.05em; }
-  dt { opacity: 1; }
+  .stats { padding-top: 0; }
+  dl { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 0; }
+  .card { display: flex; flex-direction: column-reverse; gap: .6rem; }
+  dd { margin: 0; font-size: clamp(3rem, 6vw, 5rem); font-weight: 300; line-height: 1; letter-spacing: -.04em; color: var(--ink); }
+  dt { margin: 0; }
 </style>

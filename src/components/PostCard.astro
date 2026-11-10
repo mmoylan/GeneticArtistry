@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const { title, date, description, tags, cover } = post.data;
+---
+
+<li>
+  <a class="card post" href={`/blog/${post.id}`}>
+    {cover && <img src={cover} alt="" loading="lazy" />}
+    <time class="label muted" datetime={date.toISOString()}>{date.toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' })}{tags.length > 0 && ` · ${tags.join(', ')}`}</time>
+    <h3>{title}</h3>
+    {description && <p class="muted">{description}</p>}
+    <span class="more label" aria-hidden="true">Read →</span>
+  </a>
+</li>
+
+<style>
+  .post { display: flex; flex-direction: column; gap: .7rem; height: 100%; text-decoration: none; transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+  .post:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,.08); }
+  img { border-radius: calc(var(--r) - 8px); aspect-ratio: 16/9; object-fit: cover; width: 100%; }
+  h3 { margin: 0; } p { margin: 0; }
+  .more { margin-top: auto; padding-top: 1rem; color: var(--leaf); }
+</style>

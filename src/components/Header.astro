@@ -4,38 +4,39 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 ---
 
 <header class="site-header">
-  <div class="bar">
+  <div class="pill">
     <a href="/" class="brand" aria-label="Genetic Artistry, home">
-      <Logo variant="mark" height={44} decorative />
+      <Logo variant="mark" height={40} decorative />
       <span class="name">Genetic Artistry</span>
     </a>
     <nav aria-label="Primary">
       <ul>
+        <li><a href="/#specimen">Method</a></li>
         <li><a href="/#collection">Collection</a></li>
-        <li><a href="/#process">Process</a></li>
         <li><a href="/blog">Journal</a></li>
-        <li><a href="/#connect">Contact</a></li>
       </ul>
     </nav>
     <details class="theme">
       <summary>Theme</summary>
       <div class="panel"><ThemeSwitcher /></div>
     </details>
+    <a class="btn solid cta" href="/#connect">Contact</a>
   </div>
 </header>
 
 <style>
-  .site-header { position: fixed; inset: 0 0 auto 0; z-index: 80; background: color-mix(in srgb, var(--bg) 84%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-  .bar { display: flex; align-items: center; gap: 1.5rem; padding: .55rem clamp(1rem, 3vw, 2rem); }
-  .brand { display: flex; align-items: center; gap: .8rem; text-decoration: none; margin-right: auto; min-height: 44px; }
-  .name { font-family: var(--display); font-size: 1.35rem; font-weight: 400; letter-spacing: -.01em; }
-  nav ul { display: flex; gap: .4rem; list-style: none; margin: 0; padding: 0; }
-  nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .8rem; text-decoration: none; font: 700 var(--t-label)/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; }
-  nav a:hover { color: var(--accent); }
+  .site-header { position: fixed; top: 14px; left: 0; right: 0; z-index: 80; display: flex; justify-content: center; padding-inline: 12px; pointer-events: none; }
+  .pill { pointer-events: auto; width: min(1180px, 100%); display: flex; align-items: center; gap: 1rem; padding: .4rem .5rem .4rem 1.1rem; border-radius: 999px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(16px) saturate(1.4); border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(0,0,0,.06); }
+  .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; margin-right: auto; min-height: 44px; }
+  .name { font-family: var(--display); font-size: 1.15rem; font-weight: 500; }
+  nav ul { display: flex; gap: .2rem; list-style: none; margin: 0; padding: 0; }
+  nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; text-decoration: none; font: 700 .75rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; border-radius: 999px; }
+  nav a:hover { background: var(--bg-2); }
   .theme { position: relative; }
-  summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; border: 1px solid var(--line); font: 700 var(--t-label)/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; }
+  summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; border-radius: 999px; font: 700 .75rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; }
   summary::-webkit-details-marker { display: none; }
-  summary:hover, details[open] summary { border-color: var(--accent); color: var(--accent); }
-  .panel { position: absolute; right: 0; top: calc(100% + .5rem); width: min(86vw, 340px); padding: 1rem; background: var(--bg-2); border: 1px solid var(--line); }
+  summary:hover, details[open] summary { background: var(--bg-2); }
+  .panel { position: absolute; right: 0; top: calc(100% + .7rem); width: min(86vw, 340px); padding: 1rem; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+  .cta { min-height: 44px; padding-block: .6rem; }
   @media (max-width: 860px) { nav { display: none; } .name { display: none; } }
 </style>

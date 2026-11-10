@@ -10,7 +10,7 @@ const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.t
 ---
 
 <!doctype html>
-<html lang="en" data-theme="obsidian">
+<html lang="en" data-theme="paper">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,7 +24,7 @@ const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.t
       (function () {
         var d = document.documentElement, t;
         try { t = localStorage.getItem('ga-theme'); } catch (e) {}
-        if (!t) t = matchMedia('(prefers-contrast: more)').matches ? 'contrast' : matchMedia('(prefers-color-scheme: light)').matches ? 'ivory' : 'obsidian';
+        if (!t) t = matchMedia('(prefers-contrast: more)').matches ? 'contrast' : matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'paper';
         d.dataset.theme = t;
         d.classList.add('js');
       })();
@@ -32,7 +32,7 @@ const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.t
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,100..700,0..100;1,9..144,100..700,0..100&family=Manrope:wght@400..800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300..700;1,300..600&family=Montserrat:wght@400..800&display=swap"
       rel="stylesheet"
     />
   </head>

@@ -1,0 +1,72 @@
+---
+import lines from '../data/lines.json';
+import story from '../data/story.json';
+import LeafArt from './LeafArt.astro';
+const list = lines.lines;
+---
+
+<section id="collection" class="pad catalogue" aria-labelledby="lines-title">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <ga-reveal><p class="eyebrow">{String(list.length).padStart(2, '0')} lines</p></ga-reveal>
+        <h2 id="lines-title"><ga-split>{story.lines_heading}</ga-split></h2>
+      </div>
+      <ga-reveal><p class="muted intro">{story.lines_intro}</p></ga-reveal>
+    </div>
+
+    <ul class="grid">
+      {list.map((l, i) => (
+        <li>
+          <ga-reveal delay={String((i % 3) * 100)}>
+            <article class="card line" style={`--c1:${l.c1};--c2:${l.c2}`} aria-labelledby={`line-${i}`}>
+              <div class="plate" aria-hidden="true">
+                <ga-draw><LeafArt class="lf" stroke={1.4} /></ga-draw>
+                <span class="n label">№ {String(i + 1).padStart(2, '0')}</span>
+                <i class="chip" style="background:linear-gradient(135deg,var(--c1),var(--c2))"></i>
+              </div>
+              <p class="label meta"><span>{l.type}</span><span class="status">{l.status}</span></p>
+              <h3 id={`line-${i}`}>{l.name}</h3>
+              <p class="lineage">{l.lineage}</p>
+              <p class="muted notes">{l.notes}</p>
+            </article>
+          </ga-reveal>
+        </li>
+      ))}
+      <li>
+        <ga-reveal delay="200">
+          <a class="card cta" href="#connect">
+            <span class="label">Next drop</span>
+            <span class="display">Ask about upcoming seed runs</span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </ga-reveal>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .head { display: grid; gap: 1.5rem 4rem; grid-template-columns: 1fr; align-items: end; margin-bottom: 3rem; }
+  @media (min-width: 860px) { .head { grid-template-columns: 1.3fr 1fr; } }
+  .head h2 { margin: 1rem 0 0; }
+  .intro { margin: 0; max-width: 40ch; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+  .grid li, .grid ga-reveal { height: 100%; }
+  .line { height: 100%; transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+  .line:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,.08); }
+  .plate { position: relative; aspect-ratio: 16 / 10; border-radius: calc(var(--r) - 8px); background: color-mix(in srgb, var(--c1) 14%, var(--bg)); display: grid; place-items: center; margin-bottom: 1.4rem; overflow: hidden; }
+  .plate ga-draw { width: 46%; color: var(--ink); }
+  .plate :global(.lf) { width: 100%; height: auto; }
+  .n { position: absolute; left: 1rem; top: .9rem; color: var(--muted); }
+  .chip { position: absolute; right: 1rem; top: 1rem; width: 1.4rem; height: 1.4rem; border-radius: 50%; }
+  .meta { display: flex; justify-content: space-between; gap: 1rem; color: var(--leaf); margin: 0 0 .7rem; }
+  .status { color: var(--muted); }
+  h3 { margin: 0 0 .3rem; }
+  .lineage { font-family: var(--display); font-style: italic; margin: 0 0 .6rem; }
+  .notes { margin: 0; font-size: .98rem; }
+  .cta { height: 100%; min-height: 260px; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; text-decoration: none; background: var(--accent); color: var(--on-accent); transition: transform .5s var(--ease); }
+  .cta:hover { transform: translateY(-6px); }
+  .cta .display { font-size: 1.8rem; line-height: 1.15; }
+  .arrow { font-size: 2rem; }
+</style>

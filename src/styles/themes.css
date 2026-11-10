@@ -1,36 +1,29 @@
 /*
- * Colour schemes. Every pairing is checked against WCAG AA (most reach AAA):
- *   ink/bg >= 7:1, muted & accent text >= 4.5:1, on-accent/accent >= 4.5:1, leaf >= 3:1.
- * Switch with <html data-theme="...">; the <ga-theme> element does this and remembers the choice.
+ * Design B — Atelier Blueprint. Light paper, cream cards, ink-navy accent.
+ * All pairings verified WCAG AA by design-compare/check-themes.mjs.
  */
 :root,
-[data-theme='obsidian'] {
-  --bg: #070b09; --bg-2: #0d1511; --ink: #efe9da; --muted: #a9b7ad;
-  --accent: #d4af5a; --on-accent: #0a0a08; --leaf: #6fb381;
-  --line: rgba(239, 233, 218, 0.2); --glow-a: #1d4d33; --glow-b: #5a4515;
-  color-scheme: dark;
-}
-[data-theme='ivory'] {
-  --bg: #f6f1e6; --bg-2: #ece5d4; --ink: #14201a; --muted: #4a5a50;
-  --accent: #74560c; --on-accent: #fbf7ec; --leaf: #2f6b40;
-  --line: rgba(20, 32, 26, 0.22); --glow-a: #cfe0c8; --glow-b: #ecd9a4;
+[data-theme='paper'] {
+  --bg: #ffffff; --bg-2: #f3efe6; --ink: #151c1a; --muted: #4d5752;
+  --accent: #1c2b5a; --on-accent: #ffffff; --leaf: #2f6b40;
+  --line: rgba(21, 28, 26, 0.16); --glow-a: #cfe0c8; --glow-b: #e9dcb2;
   color-scheme: light;
 }
-[data-theme='midnight'] {
-  --bg: #0a1020; --bg-2: #101a33; --ink: #eaeefc; --muted: #a3afd0;
-  --accent: #e0975f; --on-accent: #0a1020; --leaf: #7fd0b0;
-  --line: rgba(234, 238, 252, 0.2); --glow-a: #1c3a7a; --glow-b: #6b3a1c;
+[data-theme='night'] {
+  --bg: #0e1412; --bg-2: #172019; --ink: #eef1ea; --muted: #a8b5ad;
+  --accent: #a9c4ff; --on-accent: #0e1412; --leaf: #7fc596;
+  --line: rgba(238, 241, 234, 0.2); --glow-a: #1d4d33; --glow-b: #24365e;
   color-scheme: dark;
 }
-[data-theme='plum'] {
-  --bg: #160d1c; --bg-2: #20132a; --ink: #f4ecf6; --muted: #bfaec8;
-  --accent: #e9c8a0; --on-accent: #160d1c; --leaf: #9bd68f;
-  --line: rgba(244, 236, 246, 0.2); --glow-a: #5a2a6e; --glow-b: #7a4a2a;
-  color-scheme: dark;
+[data-theme='sage'] {
+  --bg: #eef2ea; --bg-2: #dfe7d8; --ink: #14221a; --muted: #455449;
+  --accent: #23472f; --on-accent: #f4f8ef; --leaf: #2b6a3d;
+  --line: rgba(20, 34, 26, 0.2); --glow-a: #cfe0c8; --glow-b: #e1e6b8;
+  color-scheme: light;
 }
 [data-theme='contrast'] {
-  --bg: #000; --bg-2: #0a0a0a; --ink: #fff; --muted: #e0e0e0;
-  --accent: #ffd84d; --on-accent: #000; --leaf: #7dff9b;
-  --line: rgba(255, 255, 255, 0.55); --glow-a: #000; --glow-b: #000;
-  color-scheme: dark;
+  --bg: #fff; --bg-2: #fff; --ink: #000; --muted: #1a1a1a;
+  --accent: #0000b3; --on-accent: #fff; --leaf: #006400;
+  --line: rgba(0, 0, 0, 0.7); --glow-a: #fff; --glow-b: #fff;
+  color-scheme: light;
 }
