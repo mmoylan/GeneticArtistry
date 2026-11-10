@@ -1,0 +1,261 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Spec from '../components/gallery/Spec.astro';
+import Hero from '../components/Hero.astro';
+import Specimen from '../components/Specimen.astro';
+import Process from '../components/Process.astro';
+import Catalogue from '../components/Catalogue.astro';
+import Stats from '../components/Stats.astro';
+import Connect from '../components/Connect.astro';
+import PostCard from '../components/PostCard.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import InstagramFeed from '../components/InstagramFeed.astro';
+import ThemeSwitcher from '../components/ThemeSwitcher.astro';
+import Logo from '../components/Logo.astro';
+import LeafArt from '../components/LeafArt.astro';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft)).slice(0, 1);
+
+const toc = [
+  ['Page sections', [['hero', 'Hero'], ['specimen', 'About bento'], ['process', 'Process steps'], ['collection', 'Catalogue'], ['stats', 'Stats'], ['connect', 'Connect'], ['postcard', 'Post card']]],
+  ['Motion elements', [['reveal', 'ga-reveal'], ['split', 'ga-split'], ['scrub', 'ga-scrub'], ['draw', 'ga-draw'], ['parallax', 'ga-parallax'], ['counter', 'ga-counter'], ['progress', 'ga-progress'], ['hscroll', 'ga-hscroll']]],
+  ['Building blocks', [['logo', 'Logo'], ['leaf', 'LeafArt'], ['buttons', 'Buttons'], ['cards', 'Cards'], ['type', 'Typography'], ['social', 'Social links'], ['instagram', 'Instagram feed'], ['theme', 'Theme switcher'], ['tokens', 'Colour tokens']]],
+] as const;
+
+const code = {
+  hero: `---\nimport Hero from '../components/Hero.astro';\n---\n<Hero />\n\n<!-- Text comes from src/data/story.json (hero_eyebrow, hero_title, hero_lede). -->`,
+  specimen: `<Specimen />\n\n<!-- Heading and text: src/data/site.json (about_heading, about); philosophy: story.json (manifesto). -->`,
+  process: `<Process />\n\n<!-- Steps come from story.json → process[] (title, text). The rail draws as you scroll. -->`,
+  collection: `<Catalogue />\n\n<!-- One card per entry in src/data/lines.json (name, type, lineage, notes, status, c1, c2). -->`,
+  stats: `<Stats />\n\n<!-- Numbers come from story.json → stats[] (value, suffix, label); they count up on scroll. -->`,
+  connect: `<Connect />\n\n<!-- Email/phone/location: site.json → contact. Includes SocialLinks and the Instagram feed. -->`,
+  postcard: `---\nimport PostCard from '../components/PostCard.astro';\nconst posts = await getCollection('blog');\n---\n<ul class="grid">\n  {posts.map((p) => <PostCard post={p} />)}\n</ul>`,
+  reveal: `<ga-reveal>…anything…</ga-reveal>\n<ga-reveal delay="200">staggered by 200 ms</ga-reveal>\n<ga-reveal effect="fade">fades without sliding</ga-reveal>`,
+  split: `<h2><ga-split>One breeder. <em>Every plant</em> a canvas.</ga-split></h2>\n\n<!-- Words rise into view. Inline tags such as <em> are kept. -->`,
+  scrub: `<p class="display"><ga-scrub>Words light up one by one as you scroll past this paragraph.</ga-scrub></p>`,
+  draw: `<!-- Scroll-driven: the lines draw as the block enters the screen -->\n<ga-draw><LeafArt stroke={1.2} /></ga-draw>\n\n<!-- Plays once when visible -->\n<ga-draw autoplay><LeafArt stroke={1.2} /></ga-draw>\n\n<!-- Any inline <svg> with <path>/<line>/<circle> works; --d (1→0) is exposed for custom effects. -->`,
+  parallax: `<div style="position:relative; overflow:hidden; height:20rem">\n  <ga-parallax speed="0.25" rotate="0.05">…</ga-parallax>\n</div>\n\n<!-- Moves relative to its parent while scrolling. speed: -0.5…0.5, rotate: degrees per px. -->`,
+  counter: `<ga-counter to="120" suffix="+">120+</ga-counter>`,
+  progress: `<ga-progress aria-hidden="true"></ga-progress>\n\n<!-- Already in Base.astro; the green bar at the very top of every page. -->`,
+  hscroll: `<ga-hscroll>\n  <div class="pin"> <!-- position: sticky; top: 0; height: 100svh; overflow: hidden -->\n    <div class="track"> <!-- display: flex; gap: 1.5rem; width: max-content -->\n      <article>…</article> <article>…</article>\n    </div>\n  </div>\n</ga-hscroll>\n\n<!-- Turns vertical scroll into a sideways slide at ≥860 px; keyboard focus scrolls cards into view. -->`,
+  logo: `<Logo variant="mark" height={48} />\n<Logo variant="text-below" height={140} />\n<Logo variant="text-above" height={140} />\n\n<!-- Colours follow the active theme. Print versions: /public/logo/*.svg -->`,
+  leaf: `<LeafArt class="my-leaf" stroke={1.2} />\n\n<!-- Outline leaf in currentColor: set colour and opacity from CSS; crop it by placing it half outside an overflow:hidden parent. -->`,
+  buttons: `<a class="btn" href="#">Outline</a>\n<a class="btn solid" href="#">Solid</a>\n<button class="btn">Button</button>`,
+  cards: `<div class="card">Soft card (cream)</div>\n<div class="card" style="background:var(--accent);color:var(--on-accent)">Accent card</div>`,
+  type: `<p class="eyebrow">Eyebrow</p>\n<h1>…</h1> <h2>…</h2> <h3>…</h3>\n<p class="lede">Display-serif lead paragraph</p>\n<p class="muted">Secondary text</p>\n<p class="label">Small caps label</p>\n<h2 class="mega">Huge</h2>\n<em>Italic accent word</em>`,
+  social: `<SocialLinks />\n\n<!-- Links come from site.json → socials[] (label + url). Empty URLs are skipped. -->`,
+  instagram: `<InstagramFeed />\n\n<!-- With a Behold feed ID (site.json → instagram.behold_feed_id) it embeds the live grid; otherwise it shows a profile link. -->`,
+  theme: `<ThemeSwitcher />\n\n<!-- Sage / Paper / Night / High contrast. Choice is remembered; also follows prefers-color-scheme and prefers-contrast. -->`,
+  tokens: `color: var(--ink);  background: var(--bg-2);\nborder-color: var(--line);  color: var(--accent);\n\n<!-- Defined per theme in src/styles/themes.css; every pairing is checked to WCAG AA. -->`,
+};
+
+const tokens = [
+  ['--bg', 'Page'], ['--bg-2', 'Cards'], ['--ink', 'Text'], ['--muted', 'Secondary text'],
+  ['--accent', 'Accent'], ['--on-accent', 'On accent'], ['--leaf', 'Leaf green'], ['--line', 'Lines'],
+];
+---
+
+<Base title="Component gallery" description="Every building block available for pages." noindex>
+  <section class="pad intro">
+    <div class="wrap">
+      <ga-reveal><p class="eyebrow">Design system</p></ga-reveal>
+      <h1><ga-split>Component gallery</ga-split></h1>
+      <ga-reveal><p class="lede muted">Every block available for building a page: full sections, scroll-motion elements and small building blocks. Each is live, with its usage underneath. Use the Theme control to see them in every colour scheme.</p></ga-reveal>
+      <nav aria-label="Gallery contents" class="toc">
+        {toc.map(([group, items]) => (
+          <div>
+            <h2 class="label">{group}</h2>
+            <ul>{items.map(([id, label]) => <li><a href={`#g-${id}`}>{label}</a></li>)}</ul>
+          </div>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <h2 class="group">Page sections</h2>
+    <p class="muted g-intro">Full-width sections you can drop into any page. Their text comes from the editable content files, so they update from the CMS.</p>
+  </div>
+  <div class="full">
+    <div class="wrap"><Spec id="hero" kind="Section" name="Hero" desc="Dark rounded panel with a huge headline, call-to-action buttons and a faint, cropped leaf that draws itself from its centre." code={code.hero} replay /></div>
+    <Hero />
+    <div class="wrap"><Spec id="specimen" kind="Section" name="About bento" desc="Intro text plus a bento grid: a leaf plate, botanical facts and a philosophy card." code={code.specimen} /></div>
+    <Specimen />
+    <div class="wrap"><Spec id="process" kind="Section" name="Process steps" desc="Numbered steps joined by a line that draws across as you scroll." code={code.process} /></div>
+    <Process />
+    <div class="wrap"><Spec id="collection" kind="Section" name="Catalogue" desc="A card for each genetic line, with a partial leaf, status and lineage, plus a closing call-to-action card." code={code.collection} /></div>
+    <Catalogue />
+    <div class="wrap"><Spec id="stats" kind="Section" name="Stats" desc="Large figures that count up when they scroll into view." code={code.stats} /></div>
+    <Stats />
+    <div class="wrap"><Spec id="connect" kind="Section" name="Connect" desc="Contact panel with email, social links and the Instagram feed." code={code.connect} /></div>
+    <Connect />
+  </div>
+
+  <div class="wrap">
+    {posts.length > 0 && (
+      <Spec id="postcard" kind="Block" name="Post card" desc="Journal entry card with date, tags, title and summary. Used in the blog list and on the home page." code={code.postcard}>
+        <ul class="plist">{posts.map((p) => <PostCard post={p} />)}</ul>
+      </Spec>
+    )}
+
+    <h2 class="group">Motion elements</h2>
+    <p class="muted g-intro">Custom HTML elements (no framework). They respect “reduce motion” and fall back to plain, fully visible content without JavaScript.</p>
+
+    <Spec id="reveal" kind="Element" name="ga-reveal" desc="Fades and slides its content up when it scrolls into view. Optional delay in milliseconds and a fade-only effect." code={code.reveal} replay>
+      <div class="trio">
+        <ga-reveal><div class="card">Default</div></ga-reveal>
+        <ga-reveal delay="200"><div class="card">delay="200"</div></ga-reveal>
+        <ga-reveal effect="fade" delay="400"><div class="card">effect="fade"</div></ga-reveal>
+      </div>
+    </Spec>
+
+    <Spec id="split" kind="Element" name="ga-split" desc="Splits a headline into words that rise into place one after another." code={code.split} replay>
+      <h2 class="demo-h"><ga-split>One breeder. <em>Every plant</em> a canvas.</ga-split></h2>
+    </Spec>
+
+    <Spec id="scrub" kind="Element" name="ga-scrub" desc="Words light up one by one as you scroll past, so the reader's progress colours the text." code={code.scrub} note="Scroll slowly past the paragraph to see it fill.">
+      <p class="display scrub-text"><ga-scrub>Every cross is selected, grown and documented by hand, treating each plant like a work of art in progress. Nothing is rushed and nothing is left to chance.</ga-scrub></p>
+    </Spec>
+
+    <Spec id="draw" kind="Element" name="ga-draw" desc="Draws any line-art SVG stroke by stroke. Scroll-driven by default, or autoplay once when visible. The leaf draws outward from its centre." code={code.draw} replay>
+      <div class="pair">
+        <figure><ga-draw autoplay class="leafbox"><LeafArt stroke={1.3} /></ga-draw><figcaption class="label muted">autoplay</figcaption></figure>
+        <figure><ga-draw class="leafbox"><LeafArt stroke={1.3} /></ga-draw><figcaption class="label muted">scroll-driven</figcaption></figure>
+      </div>
+    </Spec>
+
+    <Spec id="parallax" kind="Element" name="ga-parallax" desc="Moves its content at a different speed from the page, giving depth. Can also rotate slightly." code={code.parallax} note="Scroll up and down: the leaf drifts and turns inside its frame.">
+      <div class="px">
+        <ga-parallax speed="0.25" rotate="0.04"><LeafArt class="pxleaf" stroke={1.2} /></ga-parallax>
+      </div>
+    </Spec>
+
+    <Spec id="counter" kind="Element" name="ga-counter" desc="A number that counts up from zero the first time it is seen." code={code.counter}>
+      <p class="display big"><ga-counter to="120" suffix="+">120+</ga-counter></p>
+    </Spec>
+
+    <Spec id="progress" kind="Element" name="ga-progress" desc="A thin bar fixed to the top of the window that fills as you scroll the page." code={code.progress}>
+      <p class="muted">Already on every page: watch the green line along the very top edge as you scroll this one.</p>
+    </Spec>
+
+    <Spec id="hscroll" kind="Element" name="ga-hscroll" desc="Pins a section and turns vertical scrolling into a sideways slide through a row of cards. Used in design A's collection." code={code.hscroll} note="Not used on this design's home page; it needs the sticky wrapper CSS shown in the usage.">
+      <p class="muted">Code-only entry: a live demo would take over the page's scroll.</p>
+    </Spec>
+
+    <h2 class="group">Building blocks</h2>
+    <p class="muted g-intro">Smaller pieces used inside the sections above. Mix them into any layout.</p>
+
+    <Spec id="logo" kind="Block" name="Logo" desc="The GA mark with the paintbrush leg, in three layouts. Colours follow the active theme." code={code.logo}>
+      <div class="logos">
+        <Logo variant="mark" height={90} />
+        <Logo variant="text-below" height={170} />
+        <Logo variant="text-above" height={170} />
+      </div>
+    </Spec>
+
+    <Spec id="leaf" kind="Block" name="LeafArt" desc="The outline cannabis leaf. Sits well as a faint, cropped background. Colour and opacity come from CSS." code={code.leaf}>
+      <div class="leaves">
+        <div class="lcard"><LeafArt class="l1" stroke={1.2} /></div>
+        <div class="lcard"><LeafArt class="l2" stroke={1.2} /></div>
+      </div>
+    </Spec>
+
+    <Spec id="buttons" kind="Block" name="Buttons" desc="Pill buttons in outline and solid styles, 48 px tall for easy tapping." code={code.buttons}>
+      <p class="row"><a class="btn" href="#g-buttons">Outline</a><a class="btn solid" href="#g-buttons">Solid</a><button type="button" class="btn">Button</button></p>
+    </Spec>
+
+    <Spec id="cards" kind="Block" name="Cards" desc="Rounded surface for grouping content, in the soft cream tone or the accent colour." code={code.cards}>
+      <div class="trio">
+        <div class="card"><p class="label muted">Soft card</p><h3>Plain surface</h3><p class="muted">For facts, notes and lists.</p></div>
+        <div class="card acc"><p class="label">Accent card</p><h3>Highlight</h3><p>For a key message.</p></div>
+      </div>
+    </Spec>
+
+    <Spec id="type" kind="Block" name="Typography" desc="Bitter for headings, Montserrat for body and labels. Sizes scale fluidly with the screen." code={code.type}>
+      <p class="eyebrow">Eyebrow</p>
+      <h2>Heading two with <em>italic accent</em></h2>
+      <h3>Heading three</h3>
+      <p class="lede">Display-serif lead paragraph for introductions.</p>
+      <p>Body text in Montserrat, comfortable line length and spacing.</p>
+      <p class="muted">Secondary text.</p>
+      <p class="label">Small caps label</p>
+    </Spec>
+
+    <Spec id="social" kind="Block" name="Social links" desc="Large text links to your profiles, opened in a new tab with an accessible hint." code={code.social}>
+      <SocialLinks />
+    </Spec>
+
+    <Spec id="instagram" kind="Block" name="Instagram feed" desc="Live Instagram grid through Behold, or a simple profile link until a feed is connected." code={code.instagram}>
+      <InstagramFeed />
+      <p class="muted">Nothing shows here until an Instagram handle or Behold feed ID is set in the CMS.</p>
+    </Spec>
+
+    <Spec id="theme" kind="Block" name="Theme switcher" desc="Lets visitors pick Sage, Paper, Night or High contrast. Remembered between visits." code={code.theme}>
+      <ThemeSwitcher />
+    </Spec>
+
+    <Spec id="tokens" kind="Reference" name="Colour tokens" desc="The colours every component is built from. Switch theme to see them change." code={code.tokens}>
+      <ul class="tokens">
+        {tokens.map(([v, label]) => (
+          <li><span class="chip" style={`background:var(${v})`} aria-hidden="true"></span><code>{v}</code><span class="muted">{label}</span></li>
+        ))}
+      </ul>
+    </Spec>
+  </div>
+</Base>
+
+<script>
+  // Replay buttons: restart the entrance animations inside one entry's demo stage.
+  document.querySelectorAll<HTMLButtonElement>('[data-replay]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const spec = btn.closest('.spec');
+      const els = spec ? [...spec.querySelectorAll<HTMLElement>('.stage ga-reveal, .stage ga-split, .stage ga-draw[autoplay]')] : [];
+      // The hero and process entries demo the real section placed right after their label.
+      const id = spec?.id;
+      const extra = id === "g-hero" ? document.querySelectorAll<HTMLElement>('.hero ga-reveal, .hero ga-split, .hero ga-draw[autoplay]') : [];
+      const all = [...els, ...extra];
+      all.forEach((el) => el.classList.remove('in'));
+      void document.body.offsetHeight;
+      setTimeout(() => all.forEach((el) => el.classList.add('in')), 80);
+    });
+  });
+</script>
+
+<style>
+  .intro { padding-top: clamp(7rem, 12vw, 9rem); }
+  .intro h1 { margin: 1rem 0 1.2rem; }
+  .intro .lede { max-width: 52ch; }
+  .toc { display: grid; gap: 1.6rem 3rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 3rem; }
+  .toc h2 { margin: 0 0 .6rem; color: var(--leaf); font-size: var(--t-label); font-family: var(--sans); letter-spacing: .24em; }
+  .toc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .1rem .3rem; }
+  .toc a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .9rem; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; font-weight: 600; font-size: .9rem; }
+  .toc a:hover { border-color: var(--accent); color: var(--accent); }
+  .group { margin: clamp(3rem, 7vw, 5rem) 0 .6rem; }
+  .g-intro { max-width: 62ch; margin-bottom: 1rem; }
+  .full { margin-top: 1rem; }
+  .trio { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .pair { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  figure { margin: 0; text-align: center; }
+  figcaption { margin-top: .6rem; }
+  .leafbox { width: min(100%, 260px); margin: 0 auto; color: var(--leaf); }
+  .demo-h { margin: 0; }
+  .scrub-text { font-size: var(--t-3); margin: 0; max-width: 40ch; }
+  .px { position: relative; height: 18rem; overflow: hidden; border-radius: 16px; background: var(--bg-2); }
+  .px ga-parallax { position: absolute; inset: 0; display: grid; place-items: center; }
+  .px :global(.pxleaf) { width: 62%; max-width: 340px; color: var(--leaf); opacity: .7; }
+  .big { font-size: var(--t-1); margin: 0; }
+  .logos { display: flex; flex-wrap: wrap; align-items: center; gap: 2.5rem 4rem; }
+  .leaves { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .lcard { position: relative; overflow: hidden; min-height: 14rem; border-radius: 16px; background: var(--bg-2); }
+  .lcard :global(.l1) { position: absolute; width: 90%; right: -18%; bottom: -34%; color: var(--leaf); opacity: .4; }
+  .lcard :global(.l2) { position: absolute; width: 70%; left: 15%; top: 8%; color: var(--ink); opacity: .85; }
+  .row { display: flex; flex-wrap: wrap; gap: .8rem; margin: 0; }
+  .acc { background: var(--accent); color: var(--on-accent); }
+  .acc .label { color: var(--on-accent); }
+  .plist { list-style: none; margin: 0; padding: 0; max-width: 420px; }
+  .tokens { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem 2rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .tokens li { display: flex; align-items: center; gap: .8rem; }
+  .chip { width: 2.4rem; height: 2.4rem; border-radius: 50%; border: 1px solid var(--line); flex: none; }
+  code { font: 600 .85rem ui-monospace, Consolas, monospace; }
+</style>

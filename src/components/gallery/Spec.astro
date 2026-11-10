@@ -1,0 +1,35 @@
+---
+/** One entry in the component gallery: title, what it does, a live demo (slot) and a usage snippet. */
+interface Props { id: string; name: string; kind: string; desc: string; code: string; replay?: boolean; note?: string }
+const { id, name, kind, desc, code, replay = false, note } = Astro.props;
+---
+
+<article class="spec" id={`g-${id}`} aria-labelledby={`g-${id}-h`}>
+  <header>
+    <div>
+      <p class="label kind">{kind}</p>
+      <h3 id={`g-${id}-h`}>{name}</h3>
+    </div>
+    {replay && <button type="button" class="btn replay" data-replay>Replay <span class="sr-only">{name} animation</span></button>}
+  </header>
+  <p class="muted desc">{desc}</p>
+  {Astro.slots.has('default') && <div class="stage" data-stage><slot /></div>}
+  {note && <p class="note label muted">{note}</p>}
+  <details>
+    <summary>Usage</summary>
+    <pre tabindex="0"><code>{code}</code></pre>
+  </details>
+</article>
+
+<style>
+  .spec { padding: clamp(1.4rem, 3vw, 2.2rem) 0; border-top: 1px solid var(--line); scroll-margin-top: 6rem; }
+  header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+  .kind { color: var(--leaf); margin: 0 0 .4rem; }
+  h3 { margin: 0; }
+  .desc { max-width: 62ch; margin: .8rem 0 1.4rem; }
+  .stage { position: relative; border: 1px dashed var(--line); border-radius: var(--r); padding: clamp(1.2rem, 3vw, 2.4rem); background: var(--bg); overflow: hidden; }
+  .note { margin: .9rem 0 0; text-transform: none; letter-spacing: .02em; font-weight: 500; font-size: .85rem; }
+  details { margin-top: 1rem; }
+  summary { cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; font: 700 .75rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  pre { margin: .6rem 0 0; padding: 1.1rem 1.3rem; background: var(--bg-2); border-radius: 14px; overflow-x: auto; font: 500 .85rem/1.65 ui-monospace, 'Cascadia Code', Consolas, monospace; color: var(--ink); }
+</style>
