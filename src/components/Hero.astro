@@ -14,14 +14,6 @@ import LeafArt from './LeafArt.astro';
           <LeafArt class="leaf" stroke={1.1} />
         </ga-draw>
       </ga-parallax>
-      <!-- dimension annotations, like a technical drawing -->
-      <svg class="dims" viewBox="0 0 400 300" fill="none" stroke="currentColor" stroke-width=".7">
-        <path d="M70 40H330M70 34V46M330 34V46" />
-        <path d="M356 40V270M350 40H362M350 270H362" />
-        <text x="200" y="30" text-anchor="middle" fill="currentColor" stroke="none">Ø 24 cm</text>
-        <text x="372" y="160" fill="currentColor" stroke="none" transform="rotate(90 372 160)" text-anchor="middle">30 cm</text>
-      </svg>
-      <p class="fig label">Fig. 01 — Palmate leaf, 7 leaflets</p>
     </div>
 
     <div class="content">
@@ -50,14 +42,13 @@ import LeafArt from './LeafArt.astro';
   .b:hover { transform: translateY(-2px); background: rgba(255,255,255,.14); }
   .b.solid { background: #fff; color: #0d2418; }
   .b.solid:hover { background: #e9f3ea; }
-  .art :global(.leaf) { position: absolute; right: 4vw; top: 8vh; width: min(52vw, 760px); color: #8fcf9a; opacity: .9; }
+  /* One huge, faint leaf, cropped by the panel edge: it draws outward from its centre, then sits quietly behind the type. */
+  .art :global(.leaf) { position: absolute; right: -12vw; top: -14vh; width: min(78vw, 1100px); color: #8fcf9a; opacity: .3; }
   .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse at 70% 40%, #000 20%, transparent 75%); }
-  .dims { position: absolute; right: 2vw; top: 6vh; width: min(58vw, 840px); color: #cfe9d3; opacity: .7; font: 600 9px var(--sans); letter-spacing: .1em; }
-  .fig { position: absolute; right: clamp(1.4rem, 5vw, 4.5rem); bottom: 2rem; margin: 0; color: #cfe9d3; }
   .glow { position: absolute; border-radius: 50%; filter: blur(100px); animation: drift 24s ease-in-out infinite alternate; }
   .glow.a { width: 55vw; height: 55vw; right: -10vw; top: -20vw; background: #2f7a4a; opacity: .45; }
   .glow.b { width: 40vw; height: 40vw; left: -12vw; bottom: -14vw; background: #6d5b1f; opacity: .35; animation-delay: -10s; }
   @keyframes drift { to { transform: translate3d(-6vw, 5vh, 0) scale(1.12); } }
-  @media (max-width: 760px) { .fig, .dims { display: none; } .art :global(.leaf) { width: 95vw; right: -20vw; opacity: .5; } }
+  @media (max-width: 760px) { .art :global(.leaf) { width: 120vw; right: -40vw; top: -8vh; opacity: .24; } }
   @media (prefers-reduced-motion: reduce) { .glow { animation: none; } }
 </style>

@@ -1,29 +1,29 @@
 /*
- * Design B — Atelier Blueprint. Light paper, cream cards, ink-navy accent.
+ * Design B — Atelier Blueprint. Sage is the default; every accent is a green (no blue/purple).
  * All pairings verified WCAG AA by design-compare/check-themes.mjs.
  */
 :root,
-[data-theme='paper'] {
-  --bg: #ffffff; --bg-2: #f3efe6; --ink: #151c1a; --muted: #4d5752;
-  --accent: #1c2b5a; --on-accent: #ffffff; --leaf: #2f6b40;
-  --line: rgba(21, 28, 26, 0.16); --glow-a: #cfe0c8; --glow-b: #e9dcb2;
-  color-scheme: light;
-}
-[data-theme='night'] {
-  --bg: #0e1412; --bg-2: #172019; --ink: #eef1ea; --muted: #a8b5ad;
-  --accent: #a9c4ff; --on-accent: #0e1412; --leaf: #7fc596;
-  --line: rgba(238, 241, 234, 0.2); --glow-a: #1d4d33; --glow-b: #24365e;
-  color-scheme: dark;
-}
 [data-theme='sage'] {
   --bg: #eef2ea; --bg-2: #dfe7d8; --ink: #14221a; --muted: #455449;
   --accent: #23472f; --on-accent: #f4f8ef; --leaf: #2b6a3d;
   --line: rgba(20, 34, 26, 0.2); --glow-a: #cfe0c8; --glow-b: #e1e6b8;
   color-scheme: light;
 }
+[data-theme='paper'] {
+  --bg: #ffffff; --bg-2: #f3efe6; --ink: #151c1a; --muted: #4d5752;
+  --accent: #1f4d33; --on-accent: #ffffff; --leaf: #2f6b40;
+  --line: rgba(21, 28, 26, 0.16); --glow-a: #cfe0c8; --glow-b: #e9dcb2;
+  color-scheme: light;
+}
+[data-theme='night'] {
+  --bg: #0e1412; --bg-2: #172019; --ink: #eef1ea; --muted: #a8b5ad;
+  --accent: #b7d9a8; --on-accent: #0e1412; --leaf: #7fc596;
+  --line: rgba(238, 241, 234, 0.2); --glow-a: #1d4d33; --glow-b: #3a4a22;
+  color-scheme: dark;
+}
 [data-theme='contrast'] {
   --bg: #fff; --bg-2: #fff; --ink: #000; --muted: #1a1a1a;
-  --accent: #0000b3; --on-accent: #fff; --leaf: #006400;
+  --accent: #004d1a; --on-accent: #fff; --leaf: #006400;
   --line: rgba(0, 0, 0, 0.7); --glow-a: #fff; --glow-b: #fff;
   color-scheme: light;
 }

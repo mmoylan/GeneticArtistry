@@ -1,0 +1,45 @@
+---
+import story from '../data/story.json';
+---
+
+<section id="process" class="pad" aria-labelledby="steps-title">
+  <div class="wrap">
+    <ga-reveal><p class="eyebrow">How we work</p></ga-reveal>
+    <h2 id="steps-title"><ga-split>{story.process_heading}</ga-split></h2>
+    <ga-reveal><p class="lede muted intro">Calm, careful and in the open. Four steps from first idea to finished line.</p></ga-reveal>
+
+    <ga-draw class="rail-host">
+      <div class="rail" aria-hidden="true"><i></i></div>
+      <ol>
+        {story.process.map((s, i) => (
+          <li>
+            <ga-reveal delay={String(i * 140)}>
+              <span class="circle" aria-hidden="true">{i + 1}</span>
+              <h3>{s.title}</h3>
+              <p class="muted">{s.text}</p>
+            </ga-reveal>
+          </li>
+        ))}
+      </ol>
+    </ga-draw>
+
+    <ga-reveal><a class="btn solid" href="#connect">Talk to the breeder</a></ga-reveal>
+  </div>
+</section>
+
+<style>
+  .wrap { text-align: center; }
+  .eyebrow { justify-content: center; }
+  h2 { margin: 1rem auto 1.2rem; max-width: 18ch; }
+  .intro { margin: 0 auto 4rem; }
+  .rail-host { position: relative; margin-bottom: 3.5rem; }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem 2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); position: relative; }
+  .circle { display: grid; place-items: center; width: 4.4rem; height: 4.4rem; margin: 0 auto 1.4rem; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--accent); color: var(--accent); font: 500 1.9rem/1 var(--display); position: relative; }
+  h3 { margin-bottom: .5rem; }
+  li p { margin: 0 auto; max-width: 30ch; font-size: 1rem; }
+  /* The rail draws itself left to right as you scroll (driven by <ga-draw>'s --d); hidden when steps wrap. */
+  .rail { position: absolute; left: 12.5%; right: 12.5%; top: 2.2rem; height: 1.5px; background: var(--line); }
+  .rail i { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(calc(1 - var(--d, 0))); }
+  @media (max-width: 900px) { .rail { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .rail i { transform: none; } }
+</style>

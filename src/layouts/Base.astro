@@ -10,7 +10,7 @@ const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.t
 ---
 
 <!doctype html>
-<html lang="en" data-theme="paper">
+<html lang="en" data-theme="sage">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,7 +24,7 @@ const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.t
       (function () {
         var d = document.documentElement, t;
         try { t = localStorage.getItem('ga-theme'); } catch (e) {}
-        if (!t) t = matchMedia('(prefers-contrast: more)').matches ? 'contrast' : matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'paper';
+        if (!t) t = matchMedia('(prefers-contrast: more)').matches ? 'contrast' : matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'sage';
         d.dataset.theme = t;
         d.classList.add('js');
       })();
