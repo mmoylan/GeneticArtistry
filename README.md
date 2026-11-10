@@ -38,13 +38,33 @@ Edit content locally at `http://localhost:4321/admin` (Sveltia can open a local 
 
 Without a Feed ID the site just shows a link to the profile.
 
-## Deploy (Netlify) and CMS login
+## Deploy (GitHub Pages + Cloudflare) and CMS login
 
-1. Push this repo to GitHub, then in Netlify choose **Add new site → Import from Git**.
-2. In Netlify: **Site configuration → Access & security → OAuth → Install provider → GitHub** (this lets `/admin` sign in with GitHub).
-3. Update `site` in `astro.config.mjs` and `site_url` in `public/admin/config.yml` to the real domain.
+The domain is set in three places; change all of them together: `public/CNAME`, `site` in `astro.config.mjs`, and `site_url`/`display_url` in `public/admin/config.yml` (plus `ALLOWED_ORIGIN` in `oauth-worker/wrangler.toml`). It is currently the placeholder `geneticartistry.com`.
 
-Alternative sign-in: on the `/admin` login screen choose "Sign in with token" and paste a GitHub personal access token with repo access.
+### 1. Publish
+1. Push this repo to GitHub (`mmoylan/GeneticArtistry`). Free accounts need a public repo for Pages.
+2. GitHub → **Settings → Pages → Source: GitHub Actions**. Every push to `main` (including CMS saves) runs `.github/workflows/deploy.yml`.
+3. In the same Pages screen enter the custom domain, then tick **Enforce HTTPS** once the certificate is ready.
+
+### 2. Cloudflare DNS
+- Apex domain: four `A` records → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`.
+- `www`: `CNAME` → `mmoylan.github.io`.
+- Keep them **DNS only** (grey cloud) until GitHub issues the certificate, then switch to **Proxied** and set SSL/TLS mode to **Full** (not Flexible, which loops).
+
+### 3. CMS login (OAuth Worker)
+1. GitHub → **Settings → Developer settings → OAuth Apps → New**. Homepage URL: your site. Callback URL: `https://ga-cms-auth.<your-subdomain>.workers.dev/callback`. Create it and generate a client secret.
+2. In `oauth-worker/`:
+   ```
+   npx wrangler login
+   npx wrangler deploy
+   npx wrangler secret put GITHUB_CLIENT_ID
+   npx wrangler secret put GITHUB_CLIENT_SECRET
+   ```
+   `deploy` prints the Worker URL; use it for the OAuth app callback above and for `base_url` in `public/admin/config.yml`.
+3. Open `/admin` on the live site and choose **Sign in with GitHub**.
+
+Fallback: on the login screen choose "Sign in with token" and paste a GitHub personal access token with repo access.
 
 ## Logo notes
 
