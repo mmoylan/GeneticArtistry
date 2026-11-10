@@ -23,6 +23,14 @@ Edit content locally at `http://localhost:4321/admin` (Sveltia can open a local 
 | `public/admin/` | Sveltia CMS entry point and `config.yml` |
 | `public/logo/` | Logo SVGs: `logo-mark`, `logo-text-below`, `logo-text-above` |
 
+## Design system
+
+- **Type:** Fraunces (display, huge fluid scale, italic accents, outlined decorative type) + Manrope (text and labels). Tokens live in `src/styles/global.css`.
+- **Colour schemes:** Obsidian, Ivory, Midnight, Plum and High contrast, defined in `src/styles/themes.css`. Visitors switch via the Theme menu in the header or the footer. The first visit follows the OS (`prefers-color-scheme`, and High contrast for `prefers-contrast: more`). To add a scheme, add a `[data-theme='name']` block and a button in `ThemeSwitcher.astro`.
+- **Accessibility:** all text pairings are checked against WCAG AA (body text reaches AAA). Skip link, visible focus rings, 44px targets, semantic landmarks, reduced-motion support, no-JS fallback, keyboard access to the pinned horizontal collection.
+- **Scroll web components** (`src/scripts/components.ts`, vanilla custom elements): `<ga-reveal>`, `<ga-split>`, `<ga-scrub>`, `<ga-parallax>`, `<ga-hscroll>`, `<ga-counter>`, `<ga-progress>`, `<ga-theme>`. Use them in any page or component.
+- **Content:** homepage copy lives in `src/data/story.json`, collection lines in `src/data/lines.json`. All of it is placeholder text to replace, and all editable in `/admin`.
+
 ## Instagram feed
 
 1. Create a free feed at [behold.so](https://behold.so) for the Instagram account.

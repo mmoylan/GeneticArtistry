@@ -1,0 +1,22 @@
+---
+const themes = [
+  { id: 'obsidian', label: 'Obsidian', bg: '#070b09', fg: '#d4af5a' },
+  { id: 'ivory', label: 'Ivory', bg: '#f6f1e6', fg: '#74560c' },
+  { id: 'midnight', label: 'Midnight', bg: '#0a1020', fg: '#e0975f' },
+  { id: 'plum', label: 'Plum', bg: '#160d1c', fg: '#e9c8a0' },
+  { id: 'contrast', label: 'High contrast', bg: '#000000', fg: '#ffd84d' },
+];
+---
+
+<ga-theme>
+  <ul class="themes" aria-label="Colour scheme">
+    {themes.map((t) => (
+      <li>
+        <button type="button" data-theme-value={t.id} aria-pressed="false">
+          <span class="sw" style={`background:linear-gradient(135deg,${t.bg} 50%,${t.fg} 50%)`} aria-hidden="true"></span>
+          {t.label}
+        </button>
+      </li>
+    ))}
+  </ul>
+</ga-theme>

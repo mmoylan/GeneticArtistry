@@ -1,0 +1,22 @@
+---
+/** Large outlined cannabis leaf, purely decorative. Inherits colour via currentColor. */
+interface Props { stroke?: number; class?: string }
+const { stroke = 1.4, class: cls } = Astro.props;
+const leaflets = [
+  { len: 300, w: 44, rot: 0 },
+  { len: 262, w: 40, rot: -28 }, { len: 262, w: 40, rot: 28 },
+  { len: 210, w: 34, rot: -56 }, { len: 210, w: 34, rot: 56 },
+  { len: 150, w: 28, rot: -82 }, { len: 150, w: 28, rot: 82 },
+].map(({ len, w, rot }) => ({
+  rot,
+  d: `M0 0C${-w} ${-len * 0.3} ${-w} ${-len * 0.7} 0 ${-len}C${w} ${-len * 0.7} ${w} ${-len * 0.3} 0 0Z`,
+  rib: `M0 0V${-len * 0.88}`,
+}));
+---
+
+<svg class={cls} viewBox="-230 -320 460 420" fill="none" stroke="currentColor" stroke-width={stroke} stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false">
+  {leaflets.map((l) => (
+    <g transform={`rotate(${l.rot})`}><path d={l.d} /><path d={l.rib} opacity=".55" /></g>
+  ))}
+  <path d="M0 0V96" />
+</svg>

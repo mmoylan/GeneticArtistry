@@ -65,3 +65,50 @@ collections:
             fields:
               - { name: handle, label: Instagram Handle (no @), widget: string, required: false }
               - { name: behold_feed_id, label: Behold Feed ID, widget: string, required: false }
+
+      - name: lines
+        label: Genetics Lines (Collection)
+        file: src/data/lines.json
+        fields:
+          - label: Lines
+            name: lines
+            widget: list
+            summary: "{{fields.name}} — {{fields.status}}"
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: type, label: Type, widget: string, hint: "e.g. Hybrid, Indica-leaning" }
+              - { name: lineage, label: Lineage, widget: string, hint: "Parent A × Parent B" }
+              - { name: notes, label: Aroma / Notes, widget: string }
+              - { name: status, label: Status, widget: select, options: ["Available", "Limited run", "Coming soon", "Sold out"] }
+              - { name: c1, label: Art Colour 1, widget: color }
+              - { name: c2, label: Art Colour 2, widget: color }
+
+      - name: story
+        label: Homepage Content
+        file: src/data/story.json
+        fields:
+          - { name: hero_eyebrow, label: Hero Eyebrow, widget: string }
+          - { name: hero_title, label: Hero Title, widget: string, hint: "Wrap a word in <em>…</em> for the italic accent." }
+          - { name: hero_lede, label: Hero Intro, widget: text }
+          - { label: Scrolling Banner Phrases, name: marquee, widget: list, field: { name: phrase, label: Phrase, widget: string } }
+          - { name: manifesto, label: Manifesto (scroll-lit text), widget: text }
+          - { name: lines_heading, label: Collection Heading, widget: string }
+          - { name: lines_intro, label: Collection Intro, widget: string }
+          - { name: process_heading, label: Process Heading, widget: string }
+          - label: Process Steps
+            name: process
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: text, label: Text, widget: text }
+          - label: Numbers
+            name: stats
+            widget: list
+            summary: "{{fields.value}}{{fields.suffix}} {{fields.label}}"
+            fields:
+              - { name: value, label: Value, widget: number, value_type: int }
+              - { name: suffix, label: Suffix (e.g. +), widget: string, required: false }
+              - { name: label, label: Label, widget: string }
+          - { name: connect_heading, label: Contact Heading, widget: string, hint: "Wrap a word in <em>…</em> for the italic accent." }
+          - { name: disclaimer, label: Footer Disclaimer, widget: string }

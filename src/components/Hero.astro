@@ -1,22 +1,45 @@
 ---
-import site from '../data/site.json';
-import Logo from './Logo.astro';
+import story from '../data/story.json';
+import LeafArt from './LeafArt.astro';
 ---
 
-<section class="hero">
-  <div class="wrap inner">
-    <Logo variant="text-below" height={220} />
-    <h1>{site.tagline}</h1>
-    <div class="cta">
-      <a class="btn primary" href="#connect">Get in touch</a>
-      <a class="btn" href="/blog">Read the blog</a>
+<section class="hero bleed" aria-labelledby="hero-title">
+  <div class="art" aria-hidden="true">
+    <div class="glow a"></div>
+    <div class="glow b"></div>
+    <ga-parallax speed="-0.18" rotate="0.012"><LeafArt class="leaf" stroke={0.9} /></ga-parallax>
+    <ga-parallax speed="0.1"><p class="ghost outline mega">GENETIC</p></ga-parallax>
+  </div>
+
+  <div class="wrap content">
+    <ga-reveal effect="fade"><p class="eyebrow">{story.hero_eyebrow}</p></ga-reveal>
+    <h1 id="hero-title"><ga-split set:html={story.hero_title} /></h1>
+    <div class="foot">
+      <ga-reveal delay="500"><p class="lede">{story.hero_lede}</p></ga-reveal>
+      <ga-reveal delay="700" class="cta">
+        <a class="btn solid" href="#collection">Explore the collection</a>
+        <a class="btn" href="#connect">Get in touch</a>
+      </ga-reveal>
     </div>
   </div>
+  <a class="cue label" href="#manifesto" aria-label="Scroll to the story"><span aria-hidden="true">Scroll</span><i aria-hidden="true"></i></a>
 </section>
 
 <style>
-  .hero { padding: 4rem 0 3rem; text-align: center; }
-  .inner { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-  h1 { max-width: 18ch; margin: 0; }
-  .cta { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; }
+  .hero { min-height: 100svh; display: flex; align-items: flex-end; padding: 8rem 0 4rem; }
+  .content { position: relative; }
+  h1 { font-size: var(--t-mega); line-height: .86; letter-spacing: -.05em; margin: 1.2rem 0 3rem; max-width: 12ch; }
+  .foot { display: flex; flex-wrap: wrap; gap: 2rem 4rem; align-items: flex-end; justify-content: space-between; }
+  .lede { margin: 0; }
+  .cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .art :global(.leaf) { position: absolute; right: -6vw; top: 6vh; width: min(70vw, 900px); color: var(--leaf); opacity: .55; }
+  .ghost { position: absolute; left: -2vw; top: 14vh; margin: 0; white-space: nowrap; opacity: .6; }
+  .glow { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; animation: drift 22s ease-in-out infinite alternate; }
+  .glow.a { width: 60vw; height: 60vw; left: -15vw; top: -15vw; background: var(--glow-a); }
+  .glow.b { width: 45vw; height: 45vw; right: -10vw; bottom: -12vw; background: var(--glow-b); animation-delay: -9s; }
+  @keyframes drift { to { transform: translate3d(8vw, 6vh, 0) scale(1.15); } }
+  .cue { position: absolute; left: 50%; bottom: 1.2rem; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .6rem; text-decoration: none; color: var(--muted); min-height: 44px; }
+  .cue i { width: 1px; height: 2.6rem; background: linear-gradient(var(--accent), transparent); animation: cue 2.2s var(--ease) infinite; transform-origin: top; }
+  @keyframes cue { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .glow, .cue i { animation: none; } }
 </style>

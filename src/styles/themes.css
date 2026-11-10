@@ -1,0 +1,36 @@
+/*
+ * Colour schemes. Every pairing is checked against WCAG AA (most reach AAA):
+ *   ink/bg >= 7:1, muted & accent text >= 4.5:1, on-accent/accent >= 4.5:1, leaf >= 3:1.
+ * Switch with <html data-theme="...">; the <ga-theme> element does this and remembers the choice.
+ */
+:root,
+[data-theme='obsidian'] {
+  --bg: #070b09; --bg-2: #0d1511; --ink: #efe9da; --muted: #a9b7ad;
+  --accent: #d4af5a; --on-accent: #0a0a08; --leaf: #6fb381;
+  --line: rgba(239, 233, 218, 0.2); --glow-a: #1d4d33; --glow-b: #5a4515;
+  color-scheme: dark;
+}
+[data-theme='ivory'] {
+  --bg: #f6f1e6; --bg-2: #ece5d4; --ink: #14201a; --muted: #4a5a50;
+  --accent: #74560c; --on-accent: #fbf7ec; --leaf: #2f6b40;
+  --line: rgba(20, 32, 26, 0.22); --glow-a: #cfe0c8; --glow-b: #ecd9a4;
+  color-scheme: light;
+}
+[data-theme='midnight'] {
+  --bg: #0a1020; --bg-2: #101a33; --ink: #eaeefc; --muted: #a3afd0;
+  --accent: #e0975f; --on-accent: #0a1020; --leaf: #7fd0b0;
+  --line: rgba(234, 238, 252, 0.2); --glow-a: #1c3a7a; --glow-b: #6b3a1c;
+  color-scheme: dark;
+}
+[data-theme='plum'] {
+  --bg: #160d1c; --bg-2: #20132a; --ink: #f4ecf6; --muted: #bfaec8;
+  --accent: #e9c8a0; --on-accent: #160d1c; --leaf: #9bd68f;
+  --line: rgba(244, 236, 246, 0.2); --glow-a: #5a2a6e; --glow-b: #7a4a2a;
+  color-scheme: dark;
+}
+[data-theme='contrast'] {
+  --bg: #000; --bg-2: #0a0a0a; --ink: #fff; --muted: #e0e0e0;
+  --accent: #ffd84d; --on-accent: #000; --leaf: #7dff9b;
+  --line: rgba(255, 255, 255, 0.55); --glow-a: #000; --glow-b: #000;
+  color-scheme: dark;
+}

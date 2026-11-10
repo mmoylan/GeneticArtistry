@@ -5,14 +5,10 @@ const profile = handle ? `https://instagram.com/${handle}` : '';
 ---
 
 {behold_feed_id ? (
-  <>
+  <section aria-label="Latest from Instagram" class="feed">
     <behold-widget feed-id={behold_feed_id}></behold-widget>
     <script type="module" src="https://w.behold.so/widget.js" is:inline></script>
-  </>
+  </section>
 ) : profile ? (
-  <p class="fallback">Follow along on <a href={profile} target="_blank" rel="noopener noreferrer">@{handle}</a>.</p>
+  <p>Follow along on <a href={profile} target="_blank" rel="noopener noreferrer">@{handle}<span class="sr-only"> (opens in a new tab)</span></a>.</p>
 ) : null}
-
-<style>
-  .fallback { color: var(--muted); }
-</style>

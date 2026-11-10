@@ -1,0 +1,30 @@
+---
+import story from '../data/story.json';
+import site from '../data/site.json';
+import { marked } from 'marked';
+import LeafArt from './LeafArt.astro';
+const about = marked.parse(site.about) as string;
+---
+
+<section id="manifesto" class="bleed pad" aria-labelledby="about-title">
+  <div class="art" aria-hidden="true">
+    <ga-parallax speed="0.22"><LeafArt class="leaf" stroke={0.8} /></ga-parallax>
+  </div>
+  <div class="wrap">
+    <ga-reveal><p class="eyebrow">About</p></ga-reveal>
+    <h2 id="about-title" class="sr-only">{site.about_heading}</h2>
+    <ga-scrub class="display big">{story.manifesto}</ga-scrub>
+    <div class="cols">
+      <ga-reveal><h3>{site.about_heading}</h3></ga-reveal>
+      <ga-reveal delay="150"><div class="muted" set:html={about} /></ga-reveal>
+    </div>
+  </div>
+</section>
+
+<style>
+  .big { font-size: clamp(2rem, 5.4vw, 5rem); font-weight: 300; line-height: 1.08; letter-spacing: -.03em; margin: 2rem 0 5rem; max-width: 22ch; max-width: 26ch; }
+  .cols { display: grid; gap: 2rem 4rem; grid-template-columns: 1fr; border-top: 1px solid var(--line); padding-top: 3rem; }
+  @media (min-width: 860px) { .cols { grid-template-columns: 1fr 1fr; } }
+  .cols h3 { margin: 0; }
+  .art :global(.leaf) { position: absolute; left: -12vw; bottom: -18vw; width: 60vw; color: var(--leaf); opacity: .3; transform: rotate(-24deg); }
+</style>

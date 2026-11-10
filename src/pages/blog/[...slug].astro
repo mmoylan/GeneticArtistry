@@ -13,10 +13,10 @@ const { title, date, description, cover, tags } = post.data;
 ---
 
 <Base title={title} description={description}>
-  <article class="wrap post">
-    <a href="/blog">← All posts</a>
+  <article class="wrap pad top">
+    <a class="back label" href="/blog">← All entries</a>
     <h1>{title}</h1>
-    <p class="meta">
+    <p class="meta label muted">
       <time datetime={date.toISOString()}>{date.toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' })}</time>
       {tags.length > 0 && <span> · {tags.join(', ')}</span>}
     </p>
@@ -26,7 +26,8 @@ const { title, date, description, cover, tags } = post.data;
 </Base>
 
 <style>
-  .post { padding: 2.5rem 0; }
-  .meta { color: var(--muted); }
-  .cover { border-radius: var(--radius); margin: 1.5rem 0; }
+  .top { padding-top: clamp(8rem, 16vw, 12rem); }
+  .back { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: var(--accent); }
+  h1 { margin: 1.5rem 0 1rem; font-size: var(--t-1); max-width: 16ch; }
+  .cover { margin: 2.5rem 0; width: 100%; }
 </style>

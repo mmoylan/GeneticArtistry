@@ -1,0 +1,31 @@
+---
+import story from '../data/story.json';
+const items = story.marquee;
+---
+
+<!-- Decorative repeating type; the same ideas are stated in real text further down. -->
+<div class="marquee" aria-hidden="true">
+  {[false, true].map((reverse) => (
+    <div class:list={['row', { reverse }]}>
+      <div class="belt">
+        {[0, 1].map(() => (
+          <ul>
+            {items.map((t, i) => <li class:list={['display', { outline: (i + Number(reverse)) % 2 === 1 }]}>{t}<span>✦</span></li>)}
+          </ul>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .marquee { border-block: 1px solid var(--line); padding: 1.2rem 0; overflow: hidden; display: grid; gap: .4rem; background: var(--bg); }
+  .row { overflow: hidden; }
+  .belt { display: flex; width: max-content; animation: slide 45s linear infinite; }
+  .reverse .belt { animation-direction: reverse; animation-duration: 60s; }
+  ul { display: flex; list-style: none; margin: 0; padding: 0; }
+  li { font-size: clamp(3rem, 8vw, 7rem); line-height: 1.1; white-space: nowrap; padding-right: 2.5rem; margin: 0; display: flex; align-items: center; gap: 2.5rem; letter-spacing: -.04em; }
+  li span { font-size: .35em; color: var(--accent); }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .belt { animation: none; } }
+</style>

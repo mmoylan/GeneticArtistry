@@ -1,0 +1,24 @@
+---
+import story from '../data/story.json';
+---
+
+<section class="stats bleed" aria-label="By the numbers">
+  <div class="wrap">
+    <dl>
+      {story.stats.map((s) => (
+        <div>
+          <dd class="display"><ga-counter to={s.value} suffix={s.suffix}>{s.value}{s.suffix}</ga-counter></dd>
+          <dt class="label">{s.label}</dt>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .stats { background: var(--accent); color: var(--on-accent); padding: clamp(4rem, 9vw, 8rem) 0; }
+  dl { display: grid; gap: 3rem 2rem; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin: 0; }
+  div { display: flex; flex-direction: column-reverse; border-top: 1px solid currentColor; padding-top: 1rem; }
+  dd { margin: 0; font-size: clamp(4rem, 9vw, 8.5rem); font-weight: 200; line-height: .9; letter-spacing: -.05em; }
+  dt { opacity: 1; }
+</style>

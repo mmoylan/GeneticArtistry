@@ -1,50 +1,46 @@
 ---
 import { getCollection } from 'astro:content';
-import { marked } from 'marked';
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-import Section from '../components/Section.astro';
-import ContactCard from '../components/ContactCard.astro';
-import SocialLinks from '../components/SocialLinks.astro';
-import InstagramFeed from '../components/InstagramFeed.astro';
-import PostCard from '../components/PostCard.astro';
-import site from '../data/site.json';
+import Marquee from '../components/Marquee.astro';
+import Manifesto from '../components/Manifesto.astro';
+import LinesShowcase from '../components/LinesShowcase.astro';
+import Process from '../components/Process.astro';
+import Stats from '../components/Stats.astro';
+import PostRow from '../components/PostRow.astro';
+import Connect from '../components/Connect.astro';
 
 const posts = (await getCollection('blog', (p) => !p.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
-const aboutHtml = marked.parse(site.about) as string;
 ---
 
 <Base>
   <Hero />
-
-  <Section id="about" title={site.about_heading}>
-    <div class="prose" set:html={aboutHtml} />
-  </Section>
-
+  <Marquee />
+  <Manifesto />
+  <LinesShowcase />
+  <Process />
+  <Stats />
   {posts.length > 0 && (
-    <Section title="Latest from the blog">
-      <div class="grid">{posts.map((post) => <PostCard post={post} />)}</div>
-      <p class="more"><a href="/blog">All posts →</a></p>
-    </Section>
-  )}
-
-  <Section id="connect" title="Connect">
-    <div class="connect">
-      <ContactCard />
-      <div class="social">
-        <h3>Find us online</h3>
-        <SocialLinks />
+    <section class="pad" aria-labelledby="journal-title">
+      <div class="wrap">
+        <div class="head">
+          <div>
+            <ga-reveal><p class="eyebrow">Journal</p></ga-reveal>
+            <h2 id="journal-title"><ga-split>Notes from the grow room</ga-split></h2>
+          </div>
+          <a class="btn" href="/blog">All entries</a>
+        </div>
+        <ol class="list">{posts.map((p, i) => <PostRow post={p} index={i} />)}</ol>
       </div>
-    </div>
-    <div class="ig"><InstagramFeed /></div>
-  </Section>
+    </section>
+  )}
+  <Connect />
 </Base>
 
 <style>
-  .grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-  .more { margin-top: 1.2rem; }
-  .connect { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: start; }
-  .ig { margin-top: 2rem; }
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 3rem; }
+  .head h2 { margin: 1rem 0 0; max-width: 14ch; }
+  .list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--line); }
 </style>

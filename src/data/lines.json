@@ -1,0 +1,9 @@
+{
+  "lines": [
+    { "name": "Gilded Lilac", "type": "Hybrid", "lineage": "Violet Reverie × Honey Atlas", "notes": "Lavender, honeyed citrus, cedar.", "status": "Limited run", "c1": "#3a2a63", "c2": "#c9a24b" },
+    { "name": "Moss & Marble", "type": "Indica-leaning", "lineage": "Stone Orchard × Old Verdigris", "notes": "Pine resin, wet stone, green apple.", "status": "Available", "c1": "#12392a", "c2": "#8fb59a" },
+    { "name": "Saffron Hour", "type": "Sativa-leaning", "lineage": "Amber Parade × Soft Thunder", "notes": "Saffron, mandarin zest, warm spice.", "status": "Limited run", "c1": "#7a3b12", "c2": "#f0b955" },
+    { "name": "Nocturne No. 9", "type": "Indica-leaning", "lineage": "Black Sonnet × Plum Cathedral", "notes": "Dark cherry, cacao, incense.", "status": "Coming soon", "c1": "#2a0f2f", "c2": "#b3476b" },
+    { "name": "Quiet Fire", "type": "Hybrid", "lineage": "Ember Lace × Glasshouse", "notes": "Peppered citrus, smoke, sweet basil.", "status": "Available", "c1": "#4a1a0e", "c2": "#e0733a" }
+  ]
+}

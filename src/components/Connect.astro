@@ -1,0 +1,53 @@
+---
+import site from '../data/site.json';
+import story from '../data/story.json';
+import SocialLinks from './SocialLinks.astro';
+import InstagramFeed from './InstagramFeed.astro';
+import LeafArt from './LeafArt.astro';
+const { email, phone, location } = site.contact;
+---
+
+<section id="connect" class="bleed pad" aria-labelledby="connect-title">
+  <div class="art" aria-hidden="true">
+    <div class="glow"></div>
+    <ga-parallax speed="-0.15" rotate="-0.01"><LeafArt class="leaf" stroke={0.8} /></ga-parallax>
+  </div>
+  <div class="wrap">
+    <ga-reveal><p class="eyebrow">Contact</p></ga-reveal>
+    <h2 id="connect-title" class="mega"><ga-split set:html={story.connect_heading} /></h2>
+
+    {email && (
+      <ga-reveal>
+        <a class="mail display" href={`mailto:${email}`}>{email}</a>
+      </ga-reveal>
+    )}
+
+    <div class="details">
+      <ga-reveal>
+        <h3 class="label muted">Reach out</h3>
+        <ul class="plain">
+          {phone && <li><a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a></li>}
+          {location && <li>{location}</li>}
+        </ul>
+      </ga-reveal>
+      <ga-reveal delay="150">
+        <h3 class="label muted">Follow</h3>
+        <SocialLinks />
+      </ga-reveal>
+    </div>
+
+    <ga-reveal class="ig"><InstagramFeed /></ga-reveal>
+  </div>
+</section>
+
+<style>
+  .mail { display: inline-block; font-size: clamp(1.6rem, 5vw, 4.5rem); letter-spacing: -.03em; font-weight: 300; margin: 2rem 0 4rem; word-break: break-word; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: .15em; }
+  .mail:hover { color: var(--accent); }
+  .details { display: grid; gap: 2.5rem 4rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); border-top: 1px solid var(--line); padding-top: 2.5rem; }
+  h3.label { font-family: var(--sans); font-size: var(--t-label); letter-spacing: .28em; text-transform: uppercase; font-weight: 700; margin: 0 0 1rem; line-height: 1.4; }
+  .plain { list-style: none; margin: 0; padding: 0; font-family: var(--display); font-size: 1.6rem; font-weight: 300; }
+  .plain li { min-height: 44px; display: flex; align-items: center; }
+  .ig { margin-top: 4rem; }
+  .art :global(.leaf) { position: absolute; right: -10vw; top: -4vw; width: 55vw; color: var(--leaf); opacity: .28; }
+  .glow { position: absolute; left: 20%; top: 30%; width: 60vw; height: 60vw; border-radius: 50%; filter: blur(110px); background: var(--glow-a); opacity: .5; }
+</style>

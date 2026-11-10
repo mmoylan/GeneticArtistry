@@ -1,18 +1,15 @@
 ---
 import site from '../data/site.json';
-interface Props { compact?: boolean }
-const { compact = false } = Astro.props;
 ---
 
-<ul class:list={['links', { compact }]}>
+<ul class="links">
   {site.socials.filter((s) => s.url).map((s) => (
-    <li><a href={s.url} target="_blank" rel="noopener noreferrer me">{s.label} <span aria-hidden="true">↗</span></a></li>
+    <li><a href={s.url} target="_blank" rel="noopener noreferrer me">{s.label}<span class="sr-only"> (opens in a new tab)</span> <span aria-hidden="true">↗</span></a></li>
   ))}
 </ul>
 
 <style>
-  .links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
-  a { display: inline-block; padding: .5rem 1rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); text-decoration: none; font-weight: 600; color: var(--ink); }
-  a:hover { border-color: var(--green); color: var(--green); }
-  .compact a { padding: .25rem .8rem; font-size: .9rem; }
+  .links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; }
+  a { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; font-family: var(--display); font-size: 1.6rem; font-weight: 300; text-decoration-color: var(--line); }
+  a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 </style>
