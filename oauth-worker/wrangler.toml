@@ -1,0 +1,7 @@
+name = "ga-cms-auth"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# The site that hosts /admin. Must match exactly (https, no trailing slash).
+ALLOWED_ORIGIN = "https://geneticartistry.com"

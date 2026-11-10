@@ -1,18 +1,18 @@
 # Sveltia CMS configuration
-# Sign in at /admin. With Netlify hosting, GitHub login works through Netlify's OAuth.
+# Sign in at /admin. GitHub login goes through the Cloudflare Worker in /oauth-worker.
 # (Alternative: choose "Sign in with token" on the login screen and paste a GitHub PAT.)
 backend:
   name: github
   repo: mmoylan/GeneticArtistry
   branch: main
-  base_url: https://api.netlify.com
+  base_url: https://ga-cms-auth.YOUR-SUBDOMAIN.workers.dev # <- replace with your deployed Worker URL
   auth_endpoint: auth
 
 media_folder: public/uploads
 public_folder: /uploads
 
-site_url: https://geneticartistry.netlify.app
-display_url: https://geneticartistry.netlify.app
+site_url: https://geneticartistry.com
+display_url: https://geneticartistry.com
 
 collections:
   - name: blog

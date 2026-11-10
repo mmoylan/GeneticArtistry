@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 
-// Update `site` once the real domain is known.
+// Keep in sync with public/CNAME and public/admin/config.yml (site_url).
 export default defineConfig({
-  site: 'https://geneticartistry.netlify.app',
+  site: 'https://geneticartistry.com',
 });
