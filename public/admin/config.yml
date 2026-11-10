@@ -1,0 +1,67 @@
+# Sveltia CMS configuration
+# Sign in at /admin. With Netlify hosting, GitHub login works through Netlify's OAuth.
+# (Alternative: choose "Sign in with token" on the login screen and paste a GitHub PAT.)
+backend:
+  name: github
+  repo: mmoylan/GeneticArtistry
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+media_folder: public/uploads
+public_folder: /uploads
+
+site_url: https://geneticartistry.netlify.app
+display_url: https://geneticartistry.netlify.app
+
+collections:
+  - name: blog
+    label: Blog Posts
+    label_singular: Blog Post
+    folder: src/content/blog
+    create: true
+    extension: md
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} — {{date}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Publish Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { name: description, label: Summary, widget: text, hint: "Shown on the blog list and in search results." }
+      - { name: cover, label: Cover Image, widget: image, required: false }
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: draft, label: Draft (hide from site), widget: boolean, default: false }
+      - { name: body, label: Body, widget: markdown }
+
+  - name: settings
+    label: Site Settings
+    files:
+      - name: site
+        label: Site Info & Links
+        file: src/data/site.json
+        fields:
+          - { name: name, label: Company Name, widget: string }
+          - { name: tagline, label: Tagline, widget: string }
+          - { name: about_heading, label: About Heading, widget: string }
+          - { name: about, label: About Text, widget: markdown }
+          - label: Contact
+            name: contact
+            widget: object
+            fields:
+              - { name: email, label: Email, widget: string, required: false }
+              - { name: phone, label: Phone, widget: string, required: false }
+              - { name: location, label: Location, widget: string, required: false }
+          - label: Social Links
+            name: socials
+            widget: list
+            summary: "{{fields.label}}"
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: url, label: URL, widget: string }
+          - label: Instagram Feed
+            name: instagram
+            widget: object
+            hint: "Create a free feed at behold.so, then paste the Feed ID here."
+            fields:
+              - { name: handle, label: Instagram Handle (no @), widget: string, required: false }
+              - { name: behold_feed_id, label: Behold Feed ID, widget: string, required: false }

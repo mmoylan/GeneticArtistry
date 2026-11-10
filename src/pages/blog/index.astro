@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Base title="Blog" description="Grow notes, new lines and stories from Genetic Artistry.">
+  <Section title="Blog">
+    {posts.length === 0 ? <p>No posts yet.</p> : (
+      <div class="grid">{posts.map((post) => <PostCard post={post} />)}</div>
+    )}
+  </Section>
+</Base>
+
+<style>
+  .grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+</style>

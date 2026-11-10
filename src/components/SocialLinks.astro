@@ -1,0 +1,18 @@
+---
+import site from '../data/site.json';
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+
+<ul class:list={['links', { compact }]}>
+  {site.socials.filter((s) => s.url).map((s) => (
+    <li><a href={s.url} target="_blank" rel="noopener noreferrer me">{s.label} <span aria-hidden="true">↗</span></a></li>
+  ))}
+</ul>
+
+<style>
+  .links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+  a { display: inline-block; padding: .5rem 1rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); text-decoration: none; font-weight: 600; color: var(--ink); }
+  a:hover { border-color: var(--green); color: var(--green); }
+  .compact a { padding: .25rem .8rem; font-size: .9rem; }
+</style>

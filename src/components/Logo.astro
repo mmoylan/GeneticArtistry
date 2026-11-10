@@ -1,0 +1,9 @@
+---
+interface Props {
+  variant?: 'mark' | 'text-below' | 'text-above';
+  height?: number;
+}
+const { variant = 'mark', height = 48 } = Astro.props;
+---
+
+<img src={`/logo/logo-${variant}.svg`} alt="Genetic Artistry" height={height} style={`height:${height}px;width:auto`} />

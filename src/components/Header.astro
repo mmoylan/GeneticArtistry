@@ -1,0 +1,24 @@
+---
+import Logo from './Logo.astro';
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="/" class="brand" aria-label="Genetic Artistry home"><Logo variant="mark" height={46} /><span>Genetic Artistry</span></a>
+    <nav>
+      <a href="/#about">About</a>
+      <a href="/blog">Blog</a>
+      <a href="/#connect">Connect</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header { border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 10; }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: .6rem 0; }
+  .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: var(--ink); font-family: var(--serif); font-size: 1.4rem; font-weight: 600; }
+  nav { display: flex; gap: 1.4rem; }
+  nav a { color: var(--ink); text-decoration: none; font-weight: 500; }
+  nav a:hover { color: var(--green); }
+  @media (max-width: 520px) { .brand span { display: none; } }
+</style>

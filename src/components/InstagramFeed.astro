@@ -1,0 +1,18 @@
+---
+import site from '../data/site.json';
+const { handle, behold_feed_id } = site.instagram;
+const profile = handle ? `https://instagram.com/${handle}` : '';
+---
+
+{behold_feed_id ? (
+  <>
+    <behold-widget feed-id={behold_feed_id}></behold-widget>
+    <script type="module" src="https://w.behold.so/widget.js" is:inline></script>
+  </>
+) : profile ? (
+  <p class="fallback">Follow along on <a href={profile} target="_blank" rel="noopener noreferrer">@{handle}</a>.</p>
+) : null}
+
+<style>
+  .fallback { color: var(--muted); }
+</style>

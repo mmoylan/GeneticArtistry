@@ -1,0 +1,17 @@
+---
+import site from '../data/site.json';
+import SocialLinks from './SocialLinks.astro';
+---
+
+<footer class="site-footer">
+  <div class="wrap row">
+    <p>© {new Date().getFullYear()} {site.name}</p>
+    <SocialLinks compact />
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--line); margin-top: 5rem; padding: 2rem 0; color: var(--muted); }
+  .row { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; }
+  p { margin: 0; }
+</style>

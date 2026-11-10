@@ -1,0 +1,18 @@
+{
+  "name": "Genetic Artistry",
+  "tagline": "Cannabis genetics, crafted by hand.",
+  "about_heading": "One breeder. Every plant a canvas.",
+  "about": "Genetic Artistry is a one-person cannabis genetics company. Every cross is selected, grown and documented by hand, treating each plant like a work of art in progress.\n\nFollow along for new drops, grow notes and the story behind each line.",
+  "contact": {
+    "email": "hello@example.com",
+    "phone": "",
+    "location": ""
+  },
+  "socials": [
+    { "label": "Instagram", "url": "https://instagram.com/" }
+  ],
+  "instagram": {
+    "handle": "",
+    "behold_feed_id": ""
+  }
+}
