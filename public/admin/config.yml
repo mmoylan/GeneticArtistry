@@ -136,6 +136,27 @@ collections:
               - *anchor
               - *animation
 
+          - label: Values (cards with icons)
+            name: values
+            widget: object
+            summary: "Values: {{heading}}"
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string, required: false }
+              - { name: heading, label: Heading, widget: string, required: false }
+              - { name: intro, label: Intro text, widget: markdown, required: false }
+              - { name: columns, label: Cards per row, widget: select, default: auto, hint: "Auto fits as many as the screen allows. Fixed counts drop to 2, then 1, on smaller screens.", options: [{ label: Auto, value: auto }, { label: "2", value: "2" }, { label: "3", value: "3" }, { label: "4", value: "4" }] }
+              - label: Cards
+                name: items
+                widget: list
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: icon, label: Icon, widget: select, default: leaf, options: [{ label: "No icon", value: none }, { label: "Leaf", value: leaf }, { label: "Sprout", value: sprout }, { label: "Flask (lab)", value: flask }, { label: "DNA", value: dna }, { label: "Eye", value: eye }, { label: "Hand and heart", value: hand-heart }, { label: "Heart", value: heart }, { label: "Shield (quality)", value: shield-check }, { label: "Sparkles", value: sparkles }, { label: "Scales (balance)", value: scale }, { label: "Compass", value: compass }, { label: "Paintbrush", value: brush }, { label: "Microscope", value: microscope }, { label: "Sun", value: sun }, { label: "Water drops", value: droplets }, { label: "Open book", value: book-open }, { label: "Handshake", value: handshake }, { label: "Scissors", value: scissors }, { label: "Award", value: award }, { label: "Gem", value: gem }, { label: "Feather", value: feather }, { label: "Palette", value: palette }, { label: "Lightbulb", value: lightbulb }, { label: "People", value: users }, { label: "Target", value: target }, { label: "Hourglass", value: hourglass }, { label: "Magnifier", value: search }, { label: "Checklist", value: clipboard-list }, { label: "Camera", value: camera }, { label: "Fingerprint", value: fingerprint }, { label: "Package", value: package }, { label: "Speech bubble", value: message-circle }, { label: "Envelope", value: mail }, { label: "Star", value: star }] }
+                  - { name: title, label: Title, widget: string }
+                  - { name: text, label: Description, widget: text, required: false }
+              - *spacing
+              - *anchor
+              - *animation
+
           - label: Numbers (count-up stats)
             name: stats
             widget: object

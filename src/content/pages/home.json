@@ -36,6 +36,21 @@
       "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
     },
     {
+      "type": "values",
+      "eyebrow": "What we stand for",
+      "heading": "Four promises behind every line",
+      "intro": "Small batches only work when every plant earns its place. These are the standards each line is held to.",
+      "columns": "auto",
+      "items": [
+        { "icon": "target", "title": "Selective", "text": "Only a handful of seedlings out of hundreds earn a place in a line." },
+        { "icon": "book-open", "title": "Documented", "text": "Every cross and every season is recorded, so you can see where a plant comes from." },
+        { "icon": "hourglass", "title": "Patient", "text": "Lines are bred slowly, with no shortcuts and no rushed releases." },
+        { "icon": "hand-heart", "title": "Personal", "text": "One breeder, one inbox. You talk to the person who made the plant." }
+      ],
+      "spacing": "normal",
+      "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
+    },
+    {
       "type": "process",
       "eyebrow": "How we work",
       "heading": "From sketch to seed",

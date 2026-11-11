@@ -66,6 +66,7 @@ const section = z.discriminatedUnion('type', [
   z.object({ type: z.literal('about'), ...base, eyebrow: str, heading: str, body: str, plate_label: str, plate_caption: str, facts_label: str, facts: z.array(z.object({ label: str, value: str })).optional(), quote_label: str, quote: str, leaf }),
   z.object({ type: z.literal('process'), ...base, eyebrow: str, heading: str, intro: str, steps: z.array(z.object({ title: str, text: str })).optional(), cta_label: str, cta_link: str, rail: bool }),
   z.object({ type: z.literal('collection'), ...base, heading: str, intro: str, limit: num, plate_leaf: bool, cta_card: bool, cta_kicker: str, cta_label: str, cta_link: str }),
+  z.object({ type: z.literal('values'), ...base, eyebrow: str, heading: str, intro: str, columns: z.enum(['auto', '2', '3', '4']).optional(), items: z.array(z.object({ icon: str, title: str, text: str })).optional() }),
   z.object({ type: z.literal('stats'), ...base, items: z.array(z.object({ value: num, suffix: str, label: str })).optional(), count_up: bool }),
   z.object({ type: z.literal('insights'), ...base, eyebrow: str, heading: str, count: num, category: str, button_label: str }),
   z.object({ type: z.literal('connect'), ...base, eyebrow: str, heading: str, show_email: bool, show_details: bool, show_social: bool, show_instagram: bool }),

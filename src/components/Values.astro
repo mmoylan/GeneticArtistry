@@ -1,0 +1,57 @@
+---
+import { marked } from 'marked';
+import BlockIcon from './BlockIcon.astro';
+/**
+ * Page-builder block: values ("What we stand for"). A heading with intro text, then a grid of cards,
+ * each with an icon chosen in the CMS, a title and a short description.
+ */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, uid = 'values', anchor = '' } = Astro.props;
+const { eyebrow = 'What we stand for', heading = '', intro = '', items = [], columns = 'auto' } = data;
+const introHtml = intro ? (marked.parse(intro) as string) : '';
+const cols = ['2', '3', '4'].includes(String(columns)) ? String(columns) : '';
+---
+
+<section id={anchor || undefined} class="pad" aria-labelledby={heading ? `${uid}-title` : undefined}>
+  <div class="wrap">
+    {(eyebrow || heading || introHtml) && (
+      <div class="head">
+        <div>
+          {eyebrow && <ga-reveal><p class="eyebrow">{eyebrow}</p></ga-reveal>}
+          {heading && <h2 id={`${uid}-title`}><ga-split>{heading}</ga-split></h2>}
+        </div>
+        {introHtml && <ga-reveal><div class="muted body" set:html={introHtml} /></ga-reveal>}
+      </div>
+    )}
+    <ul class:list={['grid', { fixed: cols }]} style={cols ? `--cols:${cols}` : undefined}>
+      {items.map((v: { icon?: string; title?: string; text?: string }, i: number) => (
+        <li>
+          <ga-reveal delay={String((i % 4) * 100)}>
+            <div class="card value">
+              {v.icon && v.icon !== 'none' && <span class="tile"><BlockIcon name={v.icon} size={26} /></span>}
+              <h3>{v.title}</h3>
+              {v.text && <p class="muted">{v.text}</p>}
+            </div>
+          </ga-reveal>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .head { display: grid; gap: 1.5rem 5rem; margin-bottom: 3rem; align-items: end; }
+  @media (min-width: 900px) { .head { grid-template-columns: 1.1fr 1fr; } }
+  .head h2 { margin: 1rem 0 0; }
+  .body :global(p) { margin: 0 0 .8em; }
+  .body :global(p:last-child) { margin-bottom: 0; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  /* a fixed column count (set in the CMS) collapses to 2 and then 1 column on narrower screens */
+  .grid.fixed { grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+  @media (max-width: 980px) { .grid.fixed { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .grid.fixed { grid-template-columns: minmax(0, 1fr); } }
+  .grid li, .grid ga-reveal, .value { height: 100%; }
+  .tile { display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 16px; background: var(--bg); color: var(--accent); margin-bottom: 1.3rem; }
+  h3 { margin-bottom: .5rem; }
+  .value p { margin: 0; font-size: 1rem; }
+</style>

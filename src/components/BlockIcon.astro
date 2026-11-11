@@ -1,0 +1,32 @@
+---
+/**
+ * Line icon set for content blocks (Lucide, ISC licence). Single colour (currentColor), decorative only:
+ * the text beside an icon always carries the meaning, so it is hidden from screen readers.
+ * To offer another icon: import it here, add it to `icons`, and add it to the select in public/admin/config.yml.
+ */
+import {
+  Leaf, Sprout, FlaskConical, Dna, Eye, HandHeart, Heart, ShieldCheck, Sparkles, Scale, Compass, Brush,
+  Microscope, Sun, Droplets, BookOpen, Handshake, Scissors, Award, Gem, Feather, Palette, Lightbulb, Users,
+  Target, Hourglass, Search, ClipboardList, Camera, Fingerprint, Package, MessageCircle, Mail, Star,
+} from 'lucide';
+
+interface Props { name: string; size?: number }
+const { name, size = 28 } = Astro.props;
+
+const icons: Record<string, any> = {
+  leaf: Leaf, sprout: Sprout, flask: FlaskConical, dna: Dna, eye: Eye, 'hand-heart': HandHeart, heart: Heart,
+  'shield-check': ShieldCheck, sparkles: Sparkles, scale: Scale, compass: Compass, brush: Brush, microscope: Microscope,
+  sun: Sun, droplets: Droplets, 'book-open': BookOpen, handshake: Handshake, scissors: Scissors, award: Award, gem: Gem,
+  feather: Feather, palette: Palette, lightbulb: Lightbulb, users: Users, target: Target, hourglass: Hourglass,
+  search: Search, 'clipboard-list': ClipboardList, camera: Camera, fingerprint: Fingerprint, package: Package,
+  'message-circle': MessageCircle, mail: Mail, star: Star,
+};
+const node = icons[name];
+const markup = node
+  ? node.map(([tag, attrs]: [string, Record<string, string>]) => `<${tag} ${Object.entries(attrs).map(([k, v]) => `${k}="${v}"`).join(' ')}/>`).join('')
+  : '';
+---
+
+{markup && (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" set:html={markup} />
+)}

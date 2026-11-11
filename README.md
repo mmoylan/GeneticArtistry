@@ -16,7 +16,7 @@ Edit content locally at `http://localhost:4321/admin` (Sveltia can open a local 
 
 | Path | Purpose |
 | --- | --- |
-| `src/components/` | Page blocks (Hero, Specimen/About, Process, Catalogue, Stats, Insights, Connect, TextBlock, Statement, ImageBand, CtaBand), the `Sections.astro` renderer, plus Header, Footer, SocialLinks, InstagramFeed, PostCard, Logo |
+| `src/components/` | Page blocks (Hero, Specimen/About, Process, Catalogue, Values, Stats, Insights, Connect, TextBlock, Statement, ImageBand, CtaBand), the `Sections.astro` renderer, plus Header, Footer, SocialLinks, InstagramFeed, PostCard, Logo |
 | `src/pages/` | Home (`index.astro`), any other page (`[page].astro`), Insights list, category and post pages (`/insights`), and the component gallery (`/components`) |
 | `src/content/pages/` | Pages as ordered lists of blocks (`home.json` is the home page), edited through the CMS |
 | `src/content/blog/` | Insight posts (Markdown), edited through the CMS as **Insights** |
@@ -31,7 +31,7 @@ Edit content locally at `http://localhost:4321/admin` (Sveltia can open a local 
 
 Pages are an ordered list of **blocks**. In `/admin` → **Pages**, open a page (the one called `home` is the home page; any other page is published at `/<slug>`), then add, delete and drag blocks to rearrange them.
 
-- **Block types:** Hero, About, Process, Collection, Numbers, Insights, Contact panel, Text, Statement, Image, Call to action. See `/components` for a live gallery of each.
+- **Block types:** Hero, About, Values, Process, Collection, Numbers, Insights, Contact panel, Text, Statement, Image, Call to action. See `/components` for a live gallery of each.
 - **Shared settings on every block:** *Space above and below* (none / compact / normal / roomy), an optional *Anchor name* (for links like `/#contact`), and an **Animation** group:
   - *Block entrance*: none, fade, rise, slide from left or right, zoom, with *speed* and *delay* in milliseconds
   - *Headline words rise one by one*: on or off
