@@ -5,7 +5,7 @@ backend:
   name: github
   repo: mmoylan/GeneticArtistry
   branch: main
-  base_url: https://ga-cms-auth.YOUR-SUBDOMAIN.workers.dev # <- replace with your deployed Worker URL
+  base_url: https://ga-cms-auth.geneticartistryllc.workers.dev
   auth_endpoint: auth
 
 media_folder: public/uploads
