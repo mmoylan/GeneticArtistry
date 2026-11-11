@@ -1,12 +1,13 @@
 ---
-/** Page-builder block: process (numbered steps joined by a rail that draws as you scroll). */
+/** Page-builder block: process (numbered steps joined by a line that draws as you scroll). */
 interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
 const { data = {}, uid = 'process', anchor = 'process' } = Astro.props;
 const {
   eyebrow = 'How we work', heading = 'From sketch to seed',
   intro = '', steps = [], cta_label = '', cta_link = '#connect', rail = true,
 } = data;
-const Host = rail ? 'ga-draw' : 'div'; // without ga-draw the rail simply stays fully drawn
+const Host = rail ? 'ga-draw' : 'div'; // without ga-draw the line simply stays fully drawn
+const wide = steps.length >= 2 && steps.length <= 5; // up to 5 steps sit on one row with a horizontal line
 ---
 
 <section id={anchor || undefined} class="pad" aria-labelledby={`${uid}-title`}>
@@ -15,11 +16,11 @@ const Host = rail ? 'ga-draw' : 'div'; // without ga-draw the rail simply stays 
     {heading && <h2 id={`${uid}-title`}><ga-split>{heading}</ga-split></h2>}
     {intro && <ga-reveal><p class="lede muted intro">{intro}</p></ga-reveal>}
 
-    <Host class="rail-host">
-      <div class="rail" aria-hidden="true"><i></i></div>
-      <ol>
+    <Host class="rail-host" style={`--cols:${steps.length};--n:${Math.max(steps.length - 1, 1)}`}>
+      <div class:list={['rail', { off: !wide }]} aria-hidden="true"><i></i></div>
+      <ol class:list={{ many: !wide }}>
         {steps.map((s: { title?: string; text?: string }, i: number) => (
-          <li>
+          <li style={`--i:${i}`}>
             <ga-reveal delay={String(i * 140)}>
               <span class="circle" aria-hidden="true">{i + 1}</span>
               <h3>{s.title}</h3>
@@ -40,13 +41,34 @@ const Host = rail ? 'ga-draw' : 'div'; // without ga-draw the rail simply stays 
   h2 { margin: 1rem auto 1.2rem; max-width: 18ch; }
   .intro { margin: 0 auto 4rem; }
   .wrap :global(.rail-host) { position: relative; margin-bottom: 3.5rem; display: block; }
-  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem 2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); position: relative; }
-  .circle { display: grid; place-items: center; width: 4.4rem; height: 4.4rem; margin: 0 auto 1.4rem; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--accent); color: var(--accent); font: 500 1.9rem/1 var(--display); position: relative; }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem 2rem; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); position: relative; }
+  ol.many { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .circle { display: grid; place-items: center; width: 4.4rem; height: 4.4rem; margin: 0 auto 1.4rem; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--accent); color: var(--accent); font: 500 1.9rem/1 var(--display); position: relative; z-index: 1; }
   h3 { margin-bottom: .5rem; }
   li p { margin: 0 auto; max-width: 30ch; font-size: 1rem; }
-  /* The rail draws itself left to right as you scroll (driven by <ga-draw>'s --d); hidden when steps wrap. */
-  .rail { position: absolute; left: 12.5%; right: 12.5%; top: 2.2rem; height: 1.5px; background: var(--line); }
+
+  /* Wide screens: one line runs across, from the centre of the first number to the centre of the last,
+     and draws itself left to right as you scroll (driven by <ga-draw>'s --d). */
+  .rail { position: absolute; left: calc(50% / var(--cols)); right: calc(50% / var(--cols)); top: 2.2rem; height: 1.5px; background: var(--line); }
   .rail i { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(calc(1 - var(--d, 0))); }
-  @media (max-width: 900px) { .rail { display: none; } }
-  @media (prefers-reduced-motion: reduce) { .rail i { transform: none; } }
+  .rail.off { display: none; }
+
+  /* 768px and narrower: one column. Text on the left, numbers on the right, and a vertical line joins one
+     number to the next. Each joining segment draws in turn as you scroll. */
+  @media (max-width: 768px) {
+    .rail { display: none; }
+    ol, ol.many { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    li { position: relative; padding-bottom: 3rem; text-align: left; }
+    li:last-child { padding-bottom: 0; }
+    li ga-reveal { display: grid; grid-template-columns: minmax(0, 1fr) 4.4rem; column-gap: 1.5rem; align-items: start; }
+    .circle { grid-column: 2; grid-row: 1 / span 2; margin: 0; }
+    h3 { grid-column: 1; grid-row: 1; margin: .55rem 0 .4rem; }
+    li p { grid-column: 1; grid-row: 2; margin: 0; max-width: none; }
+    /* grey track + accent fill, from the bottom of this number to the top of the next */
+    li:not(:last-child)::before,
+    li:not(:last-child)::after { content: ''; position: absolute; right: calc(2.2rem - .75px); top: 4.4rem; bottom: 0; width: 1.5px; }
+    li:not(:last-child)::before { background: var(--line); }
+    li:not(:last-child)::after { background: var(--accent); transform-origin: top; transform: scaleY(clamp(0, calc((1 - var(--d, 0)) * var(--n) - var(--i)), 1)); }
+  }
+  @media (prefers-reduced-motion: reduce) { .rail i { transform: none; } li::after { transform: none !important; } }
 </style>
