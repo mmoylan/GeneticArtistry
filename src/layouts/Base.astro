@@ -6,7 +6,7 @@ import PageBackdrop from '../components/PageBackdrop.astro';
 import site from '../data/site.json';
 
 interface Props { title?: string; description?: string; noindex?: boolean; backdrop?: 'none' | 'subtle' | 'medium'; backdropPosition?: 'right' | 'left' | 'center' }
-const { title, description = site.tagline, noindex = false, backdrop = 'subtle', backdropPosition = 'right' } = Astro.props;
+const { title, description = site.tagline, noindex = false, backdrop = 'subtle', backdropPosition = 'left' } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.tagline}`;
 ---
 

@@ -34,7 +34,7 @@ collections:
       - { name: title, label: Page Title, widget: string }
       - { name: description, label: Description (search results), widget: text, required: false }
       - { name: backdrop, label: Background leaf, widget: select, default: subtle, hint: "A huge, faint leaf fixed behind the whole page that drifts as you scroll. Switched off automatically for visitors who ask for high contrast.", options: [{ label: "Subtle (recommended)", value: subtle }, { label: Medium, value: medium }, { label: None, value: none }] }
-      - { name: backdrop_position, label: Background leaf position, widget: select, default: right, hint: "Which edge of the content column the leaf is centred on.", options: [{ label: "Right edge", value: right }, { label: "Left edge", value: left }, { label: "Centre", value: center }] }
+      - { name: backdrop_position, label: Background leaf position, widget: select, default: left, hint: "The leaf is centred on this screen edge, so half of it sits off-screen.", options: [{ label: "Left edge (half off-screen)", value: left }, { label: "Right edge (half off-screen)", value: right }, { label: "Centre of the page", value: center }] }
       - label: Sections
         name: sections
         widget: list

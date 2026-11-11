@@ -6,8 +6,8 @@ import LeafArt from './LeafArt.astro';
  * Very low contrast on purpose; it never changes the readability of text (see strength below).
  * Level comes from each page's "Background leaf" setting in the CMS.
  */
-interface Props { level?: 'none' | 'subtle' | 'medium'; position?: 'right' | 'left' | 'center' }
-const { level = 'subtle', position = 'right' } = Astro.props;
+interface Props { level?: 'none' | 'subtle' | 'medium'; position?: 'left' | 'right' | 'center' }
+const { level = 'subtle', position = 'left' } = Astro.props;
 const opacity = { subtle: 0.16, medium: 0.26 }[level as 'subtle'] ?? 0;
 ---
 
@@ -21,11 +21,10 @@ const opacity = { subtle: 0.16, medium: 0.26 }[level as 'subtle'] ?? 0;
 
 <style>
   .backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-  /* The leaf's hub (where the leaflets meet) is centred on a rail: the right or left edge of the content column.
-     Hub = 50% across and ~76% down the drawing, so it also turns around that point. */
-  .backdrop { --rail-r: min(calc(100vw - 1.25rem), calc(50vw + 600px)); --rail-l: max(1.25rem, calc(50vw - 600px)); }
-  .backdrop :global(ga-parallax) { position: absolute; width: 150vw; left: calc(var(--rail-r) - 75vw); top: calc(55vh - 104.4vw); transform-origin: 50% 76.2%; }
-  .backdrop[data-pos='left'] :global(ga-parallax) { left: calc(var(--rail-l) - 75vw); }
+  /* The leaf is 150vw wide and its hub (where the leaflets meet, 50% across and ~76% down) sits exactly on a screen edge,
+     so half of the leaf is off-screen: 'left' = hub on the left edge, 'right' = hub on the right edge, 'center' = hub mid-page. */
+  .backdrop :global(ga-parallax) { position: absolute; width: 150vw; left: -75vw; top: calc(55vh - 104.4vw); transform-origin: 50% 76.2%; }
+  .backdrop[data-pos='right'] :global(ga-parallax) { left: 25vw; }
   .backdrop[data-pos='center'] :global(ga-parallax) { left: -25vw; }
   .backdrop :global(.bd-leaf) { width: 100%; height: auto; color: var(--leaf); opacity: var(--bd-op, .16); }
   /* Hairline strokes at any size, so the huge leaf stays delicate instead of getting thick. */
