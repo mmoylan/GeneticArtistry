@@ -9,8 +9,21 @@ const blog = defineCollection({
     description: z.string().default(''),
     cover: z.string().optional(),
     category: z.string().optional(), // id of an entry in the categories collection
+    author: z.string().optional(), // id of an entry in the people collection
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+  }),
+});
+
+/* People (authors and team), managed in the CMS. */
+const people = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/people' }),
+  schema: z.object({
+    name: z.string(),
+    job_title: z.string().default(''),
+    photo: z.string().optional(),
+    bio: z.string().default(''),
+    order: z.coerce.number().default(100),
   }),
 });
 
@@ -73,4 +86,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { blog, categories, pages };
+export const collections = { blog, categories, people, pages };

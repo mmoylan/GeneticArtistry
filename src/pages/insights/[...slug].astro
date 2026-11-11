@@ -1,7 +1,8 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { getPosts, getCategoryOf } from '../../lib/insights';
+import AuthorCard from '../../components/AuthorCard.astro';
+import { getPosts, getCategoryOf, getAuthorOf } from '../../lib/insights';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -12,6 +13,7 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const { title, date, description, cover, tags } = post.data;
 const category = await getCategoryOf(post);
+const author = await getAuthorOf(post);
 ---
 
 <Base title={title} description={description}>
@@ -24,7 +26,14 @@ const category = await getCategoryOf(post);
       {tags.length > 0 && <span> · {tags.join(', ')}</span>}
     </p>
     {cover && <img src={cover} alt="" class="cover" />}
-    <div class="prose"><Content /></div>
+    <div class="layout">
+      <div class="prose"><Content /></div>
+      {author && (
+        <aside class="rail" aria-label="About the author">
+          <AuthorCard person={author} />
+        </aside>
+      )}
+    </div>
   </article>
 </Base>
 
@@ -35,4 +44,7 @@ const category = await getCategoryOf(post);
   .cat a { display: inline-flex; align-items: center; min-height: 44px; color: var(--leaf); }
   h1 { margin: .4rem 0 1rem; font-size: var(--t-1); max-width: 16ch; }
   .cover { margin: 2.5rem 0; width: 100%; }
+  /* Article text with a side rail: the author card stays in view beside the text on wide screens, and follows it on small ones. */
+  .layout { display: grid; gap: 3rem; grid-template-columns: minmax(0, 1fr); margin-top: 2rem; }
+  @media (min-width: 980px) { .layout { grid-template-columns: minmax(0, 1fr) 320px; gap: 4rem; } .rail { position: sticky; top: 7rem; align-self: start; } }
 </style>

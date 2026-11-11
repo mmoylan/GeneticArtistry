@@ -12,6 +12,11 @@ export async function getPosts(categoryId?: string) {
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
+/** The author (person) of a post, if it has one and they still exist. */
+export async function getAuthorOf(post: { data: { author?: string } }) {
+  return post.data.author ? ((await getEntry('people', post.data.author)) ?? undefined) : undefined;
+}
+
 /** The category entry for a post, if it has one and it still exists. */
 export async function getCategoryOf(post: { data: { category?: string } }) {
   return post.data.category ? ((await getEntry('categories', post.data.category)) ?? undefined) : undefined;

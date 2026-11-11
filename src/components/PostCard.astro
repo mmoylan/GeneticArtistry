@@ -1,10 +1,11 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { getCategoryOf } from '../lib/insights';
+import { getCategoryOf, getAuthorOf } from '../lib/insights';
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
 const { title, date, description, tags, cover } = post.data;
 const category = await getCategoryOf(post);
+const author = await getAuthorOf(post);
 ---
 
 <li>
@@ -14,6 +15,7 @@ const category = await getCategoryOf(post);
     <time class="label muted" datetime={date.toISOString()}>{date.toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' })}{tags.length > 0 && ` · ${tags.join(', ')}`}</time>
     <h3>{title}</h3>
     {description && <p class="muted">{description}</p>}
+    {author && <p class="label muted by">By {author.data.name}</p>}
     <span class="more label" aria-hidden="true">Read →</span>
   </a>
 </li>
@@ -24,5 +26,6 @@ const category = await getCategoryOf(post);
   img { border-radius: calc(var(--r) - 8px); aspect-ratio: 16/9; object-fit: cover; width: 100%; }
   h3 { margin: 0; } p { margin: 0; }
   .cat { color: var(--leaf); }
+  .by { text-transform: none; letter-spacing: .02em; font-weight: 600; font-size: .85rem; }
   .more { margin-top: auto; padding-top: 1rem; color: var(--leaf); }
 </style>

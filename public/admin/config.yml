@@ -248,10 +248,29 @@ collections:
       - { name: date, label: Publish Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
       - { name: description, label: Summary, widget: text, hint: "Shown on the Insights list and in search results." }
       - { name: category, label: Category, widget: relation, collection: categories, search_fields: [title], value_field: "{{slug}}", display_fields: [title], required: false, hint: "Create new categories under Insight Categories." }
+      - { name: author, label: Author, widget: relation, collection: people, search_fields: [name], value_field: "{{slug}}", display_fields: [name], required: false, hint: "Shown in the side rail beside the post. Add people under People." }
       - { name: cover, label: Cover Image, widget: image, required: false }
       - { name: tags, label: Tags, widget: list, required: false }
       - { name: draft, label: Draft (hide from site), widget: boolean, default: false }
       - { name: body, label: Body, widget: markdown }
+
+  - name: people
+    label: People
+    label_singular: Person
+    folder: src/content/people
+    format: json
+    extension: json
+    create: true
+    identifier_field: name
+    slug: "{{slug}}"
+    summary: "{{name}}: {{job_title}}"
+    sortable_fields: [order, name]
+    fields:
+      - { name: name, label: Name, widget: string }
+      - { name: job_title, label: Title, widget: string, required: false, hint: "e.g. Founder & Head Breeder" }
+      - { name: photo, label: Photo, widget: image, required: false, hint: "Portrait works best (4:5). Without a photo, their initials are shown." }
+      - { name: bio, label: Short bio, widget: text, required: false, hint: "One to three sentences. Shown in the side rail on their insights." }
+      - { name: order, label: Order, widget: number, value_type: int, default: 100, hint: "Lower numbers come first." }
 
   - name: categories
     label: Insight Categories

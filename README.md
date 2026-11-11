@@ -20,6 +20,7 @@ Edit content locally at `http://localhost:4321/admin` (Sveltia can open a local 
 | `src/pages/` | Home (`index.astro`), any other page (`[page].astro`), Insights list, category and post pages (`/insights`), and the component gallery (`/components`) |
 | `src/content/pages/` | Pages as ordered lists of blocks (`home.json` is the home page), edited through the CMS |
 | `src/content/blog/` | Insight posts (Markdown), edited through the CMS as **Insights** |
+| `src/content/people/` | People (name, title, photo, short bio) used as authors, edited as **People** |
 | `src/content/categories/` | Insight categories (Business Insights, Cultivation, Grow Journal…), edited as **Insight Categories** |
 | `src/data/site.json` | Company text, contact info, social links, footer disclaimer, Instagram feed ID (edited through the CMS) |
 | `src/data/lines.json` | The genetic lines shown by the Collection block |

@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+/**
+ * Author card for the side rail: photo, name, title and short bio.
+ * Without a photo it shows the person's initials on the accent colour.
+ * The photo is decorative (the name sits right beside it), so it has empty alt text.
+ */
+interface Props { person: CollectionEntry<'people'>; label?: string }
+const { person, label = 'Written by' } = Astro.props;
+const { name, job_title, photo, bio } = person.data;
+const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+---
+
+<div class="card author">
+  {label && <p class="label muted">{label}</p>}
+  <div class="photo">
+    {photo ? <img src={photo} alt="" loading="lazy" /> : <span class="initials" aria-hidden="true">{initials}</span>}
+  </div>
+  <p class="display name">{name}</p>
+  {job_title && <p class="label role">{job_title}</p>}
+  {bio && <p class="muted bio">{bio}</p>}
+</div>
+
+<style>
+  .author { display: flex; flex-direction: column; gap: .5rem; }
+  .author p { margin: 0; }
+  .photo { aspect-ratio: 4 / 5; border-radius: calc(var(--r) - 8px); overflow: hidden; background: var(--accent); margin: .8rem 0 .6rem; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .initials { display: grid; place-items: center; width: 100%; height: 100%; color: var(--on-accent); font: 400 clamp(3rem, 8vw, 4.5rem)/1 var(--display); letter-spacing: -.02em; }
+  .name { font-size: var(--t-3); line-height: 1.15; }
+  .role { color: var(--leaf); }
+  .bio { font-size: .98rem; line-height: 1.6; margin-top: .4rem; }
+</style>
