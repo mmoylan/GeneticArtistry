@@ -57,6 +57,7 @@ const pages = defineCollection({
     title: z.string(),
     description: z.string().default(''),
     backdrop: z.enum(['none', 'subtle', 'medium']).optional(),
+    backdrop_position: z.enum(['right', 'left', 'center']).optional(),
     sections: z.array(section).default([]),
   }),
 });

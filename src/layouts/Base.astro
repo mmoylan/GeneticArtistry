@@ -5,8 +5,8 @@ import Footer from '../components/Footer.astro';
 import PageBackdrop from '../components/PageBackdrop.astro';
 import site from '../data/site.json';
 
-interface Props { title?: string; description?: string; noindex?: boolean; backdrop?: 'none' | 'subtle' | 'medium' }
-const { title, description = site.tagline, noindex = false, backdrop = 'subtle' } = Astro.props;
+interface Props { title?: string; description?: string; noindex?: boolean; backdrop?: 'none' | 'subtle' | 'medium'; backdropPosition?: 'right' | 'left' | 'center' }
+const { title, description = site.tagline, noindex = false, backdrop = 'subtle', backdropPosition = 'right' } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.tagline}`;
 ---
 
@@ -31,7 +31,7 @@ const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.t
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <PageBackdrop level={backdrop} />
+    <PageBackdrop level={backdrop} position={backdropPosition} />
     <ga-progress aria-hidden="true"></ga-progress>
     <Header />
     <main id="main" tabindex="-1"><slot /></main>
