@@ -78,7 +78,8 @@ ga-section[data-spacing='roomy'] { --pad-scale: 1.5; }
 .js ga-section[data-items='off'] ga-reveal { opacity: 1; transform: none; transition: none; }
 /* Soft backing panel: the site background colour, semi-transparent with a hint of blur, so text stays readable over the page backdrop.
    Inset from the screen edges (6vw, up to 96px in total) and capped at 1320px wide, so it never runs full bleed. */
-ga-section[data-backing='on'] { width: min(100% - clamp(24px, 6vw, 96px), 1320px); margin: .9rem auto; border-radius: 28px; background: color-mix(in srgb, var(--bg) 40%, transparent); backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); }
+ga-section[data-backing='on'], .backing { width: min(100% - clamp(24px, 6vw, 96px), 1320px); margin: .9rem auto; border-radius: 28px; background: color-mix(in srgb, var(--bg) 40%, transparent); backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); }
+.backing.top { margin-top: 6.2rem; padding-top: clamp(2.5rem, 5vw, 4rem); } /* clears the fixed header on pages that start with a panel */
 .page-offset { padding-top: 5.5rem; }
 ga-parallax { will-change: transform; }
 ga-counter { font-variant-numeric: tabular-nums lining-nums; }

@@ -15,7 +15,7 @@ const posts = await getPosts(category.id);
 ---
 
 <Base title={category.data.title} description={category.data.description || `${category.data.title} from Genetic Artistry.`}>
-  <section class="pad top">
+  <section class="backing top pad">
     <div class="wrap">
       <p class="eyebrow">Insights</p>
       <h1>{category.data.title}</h1>
@@ -29,7 +29,6 @@ const posts = await getPosts(category.id);
 </Base>
 
 <style>
-  .top { padding-top: clamp(8rem, 14vw, 11rem); }
   h1 { margin: 1.2rem 0 1rem; max-width: 16ch; }
   .intro { margin: 0 0 2rem; }
   .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }

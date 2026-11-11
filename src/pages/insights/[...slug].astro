@@ -17,7 +17,8 @@ const author = await getAuthorOf(post);
 ---
 
 <Base title={title} description={description}>
-  <article class="wrap pad top">
+  <article class="backing top pad">
+   <div class="wrap">
     <a class="back label" href="/insights">← All insights</a>
     {category && <p class="cat"><a class="label" href={`/insights/category/${category.id}`}>{category.data.title}</a></p>}
     <h1>{title}</h1>
@@ -34,11 +35,11 @@ const author = await getAuthorOf(post);
         </aside>
       )}
     </div>
+   </div>
   </article>
 </Base>
 
 <style>
-  .top { padding-top: clamp(8rem, 16vw, 12rem); }
   .back { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: var(--accent); }
   .cat { margin: 1.2rem 0 0; }
   .cat a { display: inline-flex; align-items: center; min-height: 44px; color: var(--leaf); }

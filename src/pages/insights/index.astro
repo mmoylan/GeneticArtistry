@@ -8,7 +8,7 @@ const posts = await getPosts();
 ---
 
 <Base title="Insights" description="Business insights, cultivation notes and grow journals from Genetic Artistry.">
-  <section class="pad top">
+  <section class="backing top pad">
     <div class="wrap">
       <p class="eyebrow">Insights</p>
       <h1>Notes from the <em>grow room</em></h1>
@@ -21,7 +21,6 @@ const posts = await getPosts();
 </Base>
 
 <style>
-  .top { padding-top: clamp(8rem, 14vw, 11rem); }
   h1 { margin: 1.2rem 0 2rem; max-width: 14ch; }
   .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
 </style>
