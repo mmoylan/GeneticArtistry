@@ -54,6 +54,7 @@ const animation = z
 const base = {
   anchor: z.string().optional(),
   spacing: z.enum(['none', 'compact', 'normal', 'roomy']).optional(),
+  backing: z.enum(['auto', 'on', 'off']).optional(), // soft panel behind the block that dulls the page backdrop
   animation,
 };
 const str = z.string().optional();

@@ -27,6 +27,8 @@ const registry: Record<string, any> = {
 };
 // Anchors the header links rely on (/#specimen, /#process, /#collection, /#connect).
 const defaultAnchor: Record<string, string> = { about: 'specimen', process: 'process', collection: 'collection', connect: 'connect' };
+// Blocks that are mostly text get a soft backing panel by default; blocks with their own solid panel or picture do not.
+const backedByDefault = new Set(['about', 'values', 'process', 'collection', 'stats', 'insights', 'text', 'statement']);
 const ANIM = { entrance: 'none', duration: 1000, delay: 0, headline_words: true, item_motion: true };
 
 const used = new Set<string>();
@@ -51,6 +53,7 @@ const firstType = items[0]?.s.type;
       data-headline={a.headline_words ? 'on' : 'off'}
       data-items={a.item_motion ? 'on' : 'off'}
       data-spacing={s.spacing ?? 'normal'}
+      data-backing={(s.backing ?? 'auto') === 'on' || ((s.backing ?? 'auto') === 'auto' && backedByDefault.has(s.type)) ? 'on' : 'off'}
     >
       <Comp data={s} uid={uid} anchor={anchor} />
     </ga-section>

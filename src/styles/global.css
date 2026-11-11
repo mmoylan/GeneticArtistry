@@ -76,6 +76,8 @@ ga-section[data-spacing='roomy'] { --pad-scale: 1.5; }
 .js ga-section[effect].in { opacity: 1; transform: none; }
 .js ga-section[data-headline='off'] ga-split .wi { transform: none; transition: none; }
 .js ga-section[data-items='off'] ga-reveal { opacity: 1; transform: none; transition: none; }
+/* Soft backing panel: the site background colour, semi-transparent with a hint of blur, so text stays readable over the page backdrop. */
+ga-section[data-backing='on'] { margin: .9rem 12px; border-radius: 28px; background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); }
 .page-offset { padding-top: 5.5rem; }
 ga-parallax { will-change: transform; }
 ga-counter { font-variant-numeric: tabular-nums lining-nums; }

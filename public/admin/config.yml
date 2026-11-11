@@ -94,6 +94,7 @@ collections:
               - { name: quote_label, label: Quote card label, widget: string, required: false }
               - { name: quote, label: Quote card text, widget: text, required: false }
               - *spacing
+              - &backing { name: backing, label: Text backing panel, widget: select, default: auto, hint: "A soft, semi-transparent panel in the page colour behind the block, so text stays easy to read over the background leaf. Auto turns it on for text-heavy blocks.", options: [{ label: Auto, value: auto }, { label: Always on, value: on }, { label: Off, value: off }] }
               - *anchor
               - *animation
 
@@ -116,6 +117,7 @@ collections:
               - { name: cta_link, label: Button link, widget: string, required: false }
               - { name: rail, label: Line draws across as you scroll, widget: boolean, default: true }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -133,6 +135,7 @@ collections:
               - { name: cta_label, label: Card text, widget: string, required: false }
               - { name: cta_link, label: Card link, widget: string, required: false }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -154,6 +157,7 @@ collections:
                   - { name: title, label: Title, widget: string }
                   - { name: text, label: Description, widget: text, required: false }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -172,6 +176,7 @@ collections:
                   - { name: label, label: Label, widget: string }
               - { name: count_up, label: Count up from zero when scrolled into view, widget: boolean, default: true }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -186,6 +191,7 @@ collections:
               - { name: category, label: Only show this category, widget: relation, collection: categories, search_fields: [title], value_field: "{{slug}}", display_fields: [title], required: false, hint: "Leave empty to show the newest from every category." }
               - { name: button_label, label: Button text, widget: string, required: false }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -201,6 +207,7 @@ collections:
               - { name: show_social, label: Show social links, widget: boolean, default: true }
               - { name: show_instagram, label: Show Instagram feed, widget: boolean, default: true }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -214,6 +221,7 @@ collections:
               - { name: body, label: Body, widget: markdown, required: false }
               - { name: align, label: Alignment, widget: select, default: left, options: [{ label: Left, value: left }, { label: Centred, value: center }] }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -225,6 +233,7 @@ collections:
               - { name: eyebrow, label: Eyebrow, widget: string, required: false }
               - { name: text, label: Statement, widget: text }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -239,6 +248,7 @@ collections:
               - { name: height, label: Height, widget: select, default: tall, options: [{ label: Short, value: short }, { label: Tall, value: tall }, { label: Full screen, value: screen }] }
               - { name: parallax, label: Image drifts gently as you scroll, widget: boolean, default: true }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 
@@ -252,6 +262,7 @@ collections:
               - { name: button_label, label: Button text, widget: string, required: false }
               - { name: button_link, label: Button link, widget: string, required: false }
               - *spacing
+              - *backing
               - *anchor
               - *animation
 

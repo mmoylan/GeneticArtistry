@@ -46,7 +46,7 @@ const code = {
   values: `{ "type": "values", "eyebrow": "What we stand for", "heading": "Four promises behind every line", "intro": "…", "columns": "auto", "items": [{ "icon": "target", "title": "Selective", "text": "…" }] }\n\n// 34 line icons to pick from per card (leaf, sprout, flask, dna, eye, hand-heart, shield-check, book-open, hourglass, target…). Icons are decorative; the title carries the meaning.`,
   stats: `{ "type": "stats", "items": [{ "value": 12, "suffix": "+", "label": "Lines released" }], "count_up": true }`,
   connect: `{ "type": "connect", "heading": "Let's make something <em>rare.</em>", "show_email": true, "show_social": true, "show_instagram": true }\n\n// Email, phone and location come from Site Settings → Contact.`,
-  builder: `{\n  "title": "Home",\n  "sections": [\n    { "type": "hero", "title": "…", "animation": { "entrance": "fade", "duration": 1200 } },\n    { "type": "about", "heading": "…", "spacing": "roomy" },\n    { "type": "cta", "heading": "…", "anchor": "contact" }\n  ]\n}\n\n// Stored in src/content/pages/<slug>.json and edited in /admin → Pages. The page called "home" is the home page; any other page appears at /<slug>.`,
+  builder: `{\n  "title": "Home",\n  "sections": [\n    { "type": "hero", "title": "…", "animation": { "entrance": "fade", "duration": 1200 } },\n    { "type": "about", "heading": "…", "spacing": "roomy", "backing": "on" },\n    { "type": "cta", "heading": "…", "anchor": "contact" }\n  ]\n}\n\n// Stored in src/content/pages/<slug>.json and edited in /admin → Pages. The page called "home" is the home page; any other page appears at /<slug>.`,
   insights: `{ "type": "insights", "heading": "Notes from the grow room", "count": 3, "category": "cultivation", "button_label": "All insights" }\n\n// Leave category blank for the newest insights from every category. Hides itself when there are none.`,
   text: `{ "type": "text", "eyebrow": "Our story", "heading": "…", "body": "markdown paragraphs", "align": "left" }`,
   statement: `{ "type": "statement", "text": "One big sentence whose words light up as you scroll." }`,
@@ -101,7 +101,7 @@ const tokens = [
   <div class="wrap">
     <h2 class="group">Page builder</h2>
     <p class="muted g-intro">Pages are an ordered list of blocks edited in /admin → Pages. Add, remove or drag blocks to rearrange them, and set each block's animation, spacing and anchor. Every block below is available from the Sections → Add menu.</p>
-    <Spec id="builder" kind="Concept" name="How blocks work" desc="A page is a JSON file holding a list of blocks. Each block has a type, its own content fields and three shared settings: Space above and below (none, compact, normal, roomy), an optional Anchor name for links like /#contact, and an Animation group." code={code.builder} />
+    <Spec id="builder" kind="Concept" name="How blocks work" desc="A page is a JSON file holding a list of blocks. Each block has a type, its own content fields and three shared settings: Space above and below (none, compact, normal, roomy), a Text backing panel (auto, on or off: a soft, semi-transparent panel in the page colour that keeps text readable over the background leaf), an optional Anchor name for links like /#contact, and an Animation group." code={code.builder} />
 
     <h2 class="group">Page sections</h2>
     <p class="muted g-intro">Full-width sections you can drop into any page. Their text comes from the editable content files, so they update from the CMS.</p>
