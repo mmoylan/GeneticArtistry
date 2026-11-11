@@ -8,7 +8,7 @@ import Logo from './Logo.astro';
       <Logo variant="mark" height={40} decorative />
       <span class="name">Genetic Artistry</span>
     </a>
-    <nav aria-label="Primary">
+    <nav id="site-nav" aria-label="Primary">
       <ul>
         <li><a href="/#process">Method</a></li>
         <li><a href="/#collection">Collection</a></li>
@@ -16,17 +16,66 @@ import Logo from './Logo.astro';
       </ul>
     </nav>
     <a class="btn solid cta" href="/#connect">Contact</a>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav">
+      <span class="menu-text">Menu</span>
+      <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
   </div>
 </header>
 
 <style>
   .site-header { position: fixed; top: 14px; left: 0; right: 0; z-index: 80; display: flex; justify-content: center; padding-inline: 12px; pointer-events: none; }
-  .pill { pointer-events: auto; width: min(1180px, 100%); display: flex; align-items: center; gap: 1rem; padding: .4rem .5rem .4rem 1.1rem; border-radius: 999px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(16px) saturate(1.4); border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(0,0,0,.06); }
+  .pill { position: relative; pointer-events: auto; width: min(1180px, 100%); display: flex; align-items: center; gap: 1rem; padding: .4rem .5rem .4rem 1.1rem; border-radius: 999px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(16px) saturate(1.4); border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(0,0,0,.06); }
   .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; margin-right: auto; min-height: 44px; }
   .name { font-family: var(--display); font-size: 1.15rem; font-weight: 500; }
   nav ul { display: flex; gap: .2rem; list-style: none; margin: 0; padding: 0; }
   nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; text-decoration: none; font: 700 .75rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; border-radius: 999px; }
   nav a:hover { background: var(--bg-2); }
   .cta { min-height: 44px; padding-block: .6rem; }
-  @media (max-width: 860px) { nav { display: none; } .name { display: none; } }
+
+  /* Menu button: only exists on small screens (and only when JavaScript can run it). */
+  .menu-btn { display: none; align-items: center; gap: .6rem; min-height: 44px; padding: 0 1rem; border: 1.5px solid var(--accent); border-radius: 999px; background: transparent; color: var(--accent); cursor: pointer; font: 700 .75rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; }
+  .menu-btn:hover, .menu-btn[aria-expanded='true'] { background: var(--accent); color: var(--on-accent); }
+  .bars { position: relative; width: 18px; height: 12px; }
+  .bars i { position: absolute; left: 0; right: 0; height: 2px; border-radius: 2px; background: currentColor; transition: transform .3s var(--ease), opacity .2s; }
+  .bars i:nth-child(1) { top: 0; }
+  .bars i:nth-child(2) { top: 5px; }
+  .bars i:nth-child(3) { top: 10px; }
+  .menu-btn[aria-expanded='true'] .bars i:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+  .menu-btn[aria-expanded='true'] .bars i:nth-child(2) { opacity: 0; }
+  .menu-btn[aria-expanded='true'] .bars i:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+
+  @media (max-width: 860px) {
+    .name { display: none; }
+    :global(.js) .menu-btn { display: inline-flex; }
+    /* The links drop down from the pill as a panel. Without JavaScript the panel simply stays open. */
+    nav { position: absolute; top: calc(100% + .6rem); left: 0; right: 0; padding: .6rem; background: var(--bg); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+    :global(.js) nav:not(.open) { display: none; }
+    nav ul { flex-direction: column; gap: 0; }
+    nav a { width: 100%; min-height: 52px; padding: 0 1.2rem; font-size: .85rem; }
+  }
 </style>
+
+<script>
+  // Collapsible navigation for small screens.
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const btn = header?.querySelector<HTMLButtonElement>('.menu-btn');
+  const nav = header?.querySelector<HTMLElement>('#site-nav');
+  if (header && btn && nav) {
+    const set = (open: boolean, returnFocus = false) => {
+      btn.setAttribute('aria-expanded', String(open));
+      nav.classList.toggle('open', open);
+      if (!open && returnFocus) btn.focus();
+    };
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    // Choosing a link, pressing Escape, tapping outside or growing the window all close the menu.
+    nav.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) set(false); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') set(false, true);
+    });
+    document.addEventListener('click', (e) => {
+      if (btn.getAttribute('aria-expanded') === 'true' && !header.contains(e.target as Node)) set(false);
+    });
+    matchMedia('(min-width: 861px)').addEventListener('change', (m) => { if (m.matches) set(false); });
+  }
+</script>
