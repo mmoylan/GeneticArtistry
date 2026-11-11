@@ -1,0 +1,26 @@
+---
+import { marked } from 'marked';
+/** Page-builder block: text (eyebrow, heading and rich body copy). For general pages like About or FAQ. */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, uid = 'text', anchor = '' } = Astro.props;
+const { eyebrow = '', heading = '', body = '', align = 'left' } = data;
+const html = body ? (marked.parse(body) as string) : '';
+---
+
+<section id={anchor || undefined} class:list={['pad', 'textblock', align]} aria-labelledby={heading ? `${uid}-title` : undefined}>
+  <div class="wrap">
+    <div class="col">
+      {eyebrow && <ga-reveal><p class="eyebrow">{eyebrow}</p></ga-reveal>}
+      {heading && <h2 id={`${uid}-title`}><ga-split>{heading}</ga-split></h2>}
+      {html && <ga-reveal><div class="prose" set:html={html} /></ga-reveal>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .col { max-width: 46rem; }
+  h2 { margin: 1rem 0 1.2rem; }
+  .center .col { margin-inline: auto; text-align: center; }
+  .center .eyebrow { justify-content: center; }
+  .center :global(.prose) { margin-inline: auto; }
+</style>

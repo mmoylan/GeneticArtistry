@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from './PostCard.astro';
+/** Page-builder block: journal (latest blog posts). Renders nothing when there are no published posts. */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, uid = 'journal', anchor = '' } = Astro.props;
+const { eyebrow = 'Journal', heading = 'Notes from the grow room', count = 3, button_label = 'All entries' } = data;
+const posts = (await getCollection('blog', (p) => !p.data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, Math.max(1, count));
+---
+
+{posts.length > 0 && (
+  <section id={anchor || undefined} class="pad journal" aria-labelledby={`${uid}-title`}>
+    <div class="wrap">
+      <div class="head">
+        <div>
+          {eyebrow && <ga-reveal><p class="eyebrow">{eyebrow}</p></ga-reveal>}
+          {heading && <h2 id={`${uid}-title`}><ga-split>{heading}</ga-split></h2>}
+        </div>
+        {button_label && <a class="btn" href="/blog">{button_label}</a>}
+      </div>
+      <ul class="grid">{posts.map((p) => <PostCard post={p} />)}</ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 2.5rem; }
+  .head h2 { margin: 1rem 0 0; max-width: 16ch; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+</style>

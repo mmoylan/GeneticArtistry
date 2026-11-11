@@ -1,17 +1,24 @@
 ---
-import story from '../data/story.json';
+/** Page-builder block: process (numbered steps joined by a rail that draws as you scroll). */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, uid = 'process', anchor = 'process' } = Astro.props;
+const {
+  eyebrow = 'How we work', heading = 'From sketch to seed',
+  intro = '', steps = [], cta_label = '', cta_link = '#connect', rail = true,
+} = data;
+const Host = rail ? 'ga-draw' : 'div'; // without ga-draw the rail simply stays fully drawn
 ---
 
-<section id="process" class="pad" aria-labelledby="steps-title">
+<section id={anchor || undefined} class="pad" aria-labelledby={`${uid}-title`}>
   <div class="wrap">
-    <ga-reveal><p class="eyebrow">How we work</p></ga-reveal>
-    <h2 id="steps-title"><ga-split>{story.process_heading}</ga-split></h2>
-    <ga-reveal><p class="lede muted intro">Calm, careful and in the open. Four steps from first idea to finished line.</p></ga-reveal>
+    {eyebrow && <ga-reveal><p class="eyebrow">{eyebrow}</p></ga-reveal>}
+    {heading && <h2 id={`${uid}-title`}><ga-split>{heading}</ga-split></h2>}
+    {intro && <ga-reveal><p class="lede muted intro">{intro}</p></ga-reveal>}
 
-    <ga-draw class="rail-host">
+    <Host class="rail-host">
       <div class="rail" aria-hidden="true"><i></i></div>
       <ol>
-        {story.process.map((s, i) => (
+        {steps.map((s: { title?: string; text?: string }, i: number) => (
           <li>
             <ga-reveal delay={String(i * 140)}>
               <span class="circle" aria-hidden="true">{i + 1}</span>
@@ -21,9 +28,9 @@ import story from '../data/story.json';
           </li>
         ))}
       </ol>
-    </ga-draw>
+    </Host>
 
-    <ga-reveal><a class="btn solid" href="#connect">Talk to the breeder</a></ga-reveal>
+    {cta_label && <ga-reveal><a class="btn solid" href={cta_link}>{cta_label}</a></ga-reveal>}
   </div>
 </section>
 
@@ -32,7 +39,7 @@ import story from '../data/story.json';
   .eyebrow { justify-content: center; }
   h2 { margin: 1rem auto 1.2rem; max-width: 18ch; }
   .intro { margin: 0 auto 4rem; }
-  .rail-host { position: relative; margin-bottom: 3.5rem; }
+  .wrap :global(.rail-host) { position: relative; margin-bottom: 3.5rem; display: block; }
   ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem 2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); position: relative; }
   .circle { display: grid; place-items: center; width: 4.4rem; height: 4.4rem; margin: 0 auto 1.4rem; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--accent); color: var(--accent); font: 500 1.9rem/1 var(--display); position: relative; }
   h3 { margin-bottom: .5rem; }

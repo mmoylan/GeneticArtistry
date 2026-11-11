@@ -1,0 +1,57 @@
+---
+/**
+ * Page-builder renderer. Takes a page's ordered `sections` list (edited in /admin) and renders
+ * each block with its component, wrapped in <ga-section> which applies the block's Animation settings.
+ * To add a new block type: build the component, add it to `registry`, add its schema in content.config.ts
+ * and its fields in public/admin/config.yml.
+ */
+import Hero from './Hero.astro';
+import Specimen from './Specimen.astro';
+import Process from './Process.astro';
+import Catalogue from './Catalogue.astro';
+import Stats from './Stats.astro';
+import Journal from './Journal.astro';
+import Connect from './Connect.astro';
+import TextBlock from './TextBlock.astro';
+import Statement from './Statement.astro';
+import ImageBand from './ImageBand.astro';
+import CtaBand from './CtaBand.astro';
+
+interface Props { sections: Array<Record<string, any>> }
+const { sections } = Astro.props;
+
+const registry: Record<string, any> = {
+  hero: Hero, about: Specimen, process: Process, collection: Catalogue, stats: Stats, journal: Journal,
+  connect: Connect, text: TextBlock, statement: Statement, image: ImageBand, cta: CtaBand,
+};
+// Anchors the header links rely on (/#specimen, /#process, /#collection, /#connect).
+const defaultAnchor: Record<string, string> = { about: 'specimen', process: 'process', collection: 'collection', connect: 'connect' };
+const ANIM = { entrance: 'none', duration: 1000, delay: 0, headline_words: true, item_motion: true };
+
+const used = new Set<string>();
+const items = sections
+  .map((s, i) => {
+    const a = { ...ANIM, ...(s.animation ?? {}) };
+    let anchor = String(s.anchor || defaultAnchor[s.type] || '').trim().replace(/^#/, '');
+    if (anchor && used.has(anchor)) anchor = ''; // never emit the same id twice
+    if (anchor) used.add(anchor);
+    return { s, a, anchor, uid: `b${i}`, Comp: registry[s.type] };
+  })
+  .filter((x) => x.Comp);
+const firstType = items[0]?.s.type;
+---
+
+<div class:list={{ 'page-offset': firstType && firstType !== 'hero' }}>
+  {items.map(({ Comp, s, a, anchor, uid }) => (
+    <ga-section
+      effect={a.entrance}
+      delay={String(a.delay)}
+      duration={String(a.duration)}
+      data-headline={a.headline_words ? 'on' : 'off'}
+      data-items={a.item_motion ? 'on' : 'off'}
+      data-spacing={s.spacing ?? 'normal'}
+    >
+      <Comp data={s} uid={uid} anchor={anchor} />
+    </ga-section>
+  ))}
+</div>

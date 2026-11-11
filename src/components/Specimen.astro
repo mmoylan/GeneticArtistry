@@ -1,54 +1,71 @@
 ---
-import story from '../data/story.json';
-import site from '../data/site.json';
 import { marked } from 'marked';
 import LeafArt from './LeafArt.astro';
-const about = marked.parse(site.about) as string;
-// Botanical facts about the palmate cannabis leaf (accurate, not placeholder).
-const anatomy = [
-  ['Arrangement', 'Palmate compound'],
-  ['Leaflets', '5 to 9, always odd'],
-  ['Margin', 'Serrate (toothed)'],
-  ['Phyllotaxy', 'Opposite, then alternate'],
-];
+/** Page-builder block: about (intro text + bento of leaf plate, facts and philosophy card). */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, uid = 'about', anchor = 'specimen' } = Astro.props;
+const {
+  eyebrow = 'About',
+  heading = 'One breeder. Every plant a canvas.',
+  body = '',
+  plate_label = 'Plate I — The leaf',
+  plate_caption = 'Each line is judged leaf by leaf: structure first, then aroma, then vigour.',
+  facts = [], facts_label = 'Anatomy',
+  quote_label = 'Philosophy', quote = '',
+  leaf = 'draw',
+} = data;
+const html = body ? (marked.parse(body) as string) : '';
+const hasPlate = Boolean(plate_label || plate_caption);
+const solo = hasPlate && facts.length === 0 && !quote; // plate alone spans the full width
 ---
 
-<section id="specimen" class="pad" aria-labelledby="specimen-title">
+<section id={anchor || undefined} class="pad" aria-labelledby={`${uid}-title`}>
   <div class="wrap">
     <div class="intro">
-      <ga-reveal><p class="eyebrow">About</p></ga-reveal>
-      <h2 id="specimen-title"><ga-split>{site.about_heading}</ga-split></h2>
-      <ga-reveal><div class="muted prose" set:html={about} /></ga-reveal>
+      {eyebrow && <ga-reveal><p class="eyebrow">{eyebrow}</p></ga-reveal>}
+      {heading && <h2 id={`${uid}-title`}><ga-split>{heading}</ga-split></h2>}
+      {html && <ga-reveal><div class="muted prose" set:html={html} /></ga-reveal>}
     </div>
 
-    <div class="bento">
-      <ga-reveal class="plate card">
-        <p class="label muted">Plate I — The leaf</p>
-        <p class="display caption">Each line is judged leaf by leaf: structure first, then aroma, then vigour.</p>
-        <ga-draw aria-hidden="true" class="bgleaf"><LeafArt class="art-leaf" stroke={1.2} /></ga-draw>
-      </ga-reveal>
+    {(hasPlate || facts.length > 0 || quote) && (
+      <div class="bento">
+        {hasPlate && (
+          <ga-reveal class:list={['plate', 'card', { solo }]}>
+            {plate_label && <p class="label muted">{plate_label}</p>}
+            {plate_caption && <p class="display caption">{plate_caption}</p>}
+            {leaf === 'draw' && <ga-draw aria-hidden="true" class="bgleaf"><LeafArt class="art-leaf" stroke={1.2} /></ga-draw>}
+            {leaf === 'static' && <div aria-hidden="true" class="bgleaf"><LeafArt class="art-leaf" stroke={1.2} /></div>}
+          </ga-reveal>
+        )}
 
-      <ga-reveal class="card anatomy" delay="100">
-        <p class="label muted">Anatomy</p>
-        <dl>
-          {anatomy.map(([k, v]) => (<div><dt class="label">{k}</dt><dd>{v}</dd></div>))}
-        </dl>
-      </ga-reveal>
+        {facts.length > 0 && (
+          <ga-reveal class="card anatomy" delay="100">
+            {facts_label && <p class="label muted">{facts_label}</p>}
+            <dl>
+              {facts.map((f: { label?: string; value?: string }) => (<div><dt class="label">{f.label}</dt><dd>{f.value}</dd></div>))}
+            </dl>
+          </ga-reveal>
+        )}
 
-      <ga-reveal class="card manifesto" delay="150">
-        <p class="label muted">Philosophy</p>
-        <p class="display quote">{story.manifesto}</p>
-      </ga-reveal>
-    </div>
+        {quote && (
+          <ga-reveal class="card manifesto" delay="150">
+            {quote_label && <p class="label muted">{quote_label}</p>}
+            <p class="display quote">{quote}</p>
+          </ga-reveal>
+        )}
+      </div>
+    )}
   </div>
 </section>
 
 <style>
   .intro { max-width: 48rem; margin-bottom: 3rem; }
+  .intro:empty { display: none; }
   .intro h2 { margin: 1rem 0 1.2rem; }
   .bento { display: grid; gap: 1.1rem; grid-template-columns: repeat(12, 1fr); }
   /* The leaf is a large, faint, partly cropped background; the text sits clear of it. */
   .plate { grid-column: span 7; grid-row: span 2; position: relative; overflow: hidden; min-height: 26rem; display: flex; flex-direction: column; gap: 1rem; }
+  .plate.solo { grid-column: span 12; grid-row: auto; }
   .plate > :not(.bgleaf) { position: relative; z-index: 1; }
   .plate .caption { max-width: 22ch; }
   .plate .bgleaf { position: absolute; right: -16%; bottom: -34%; width: 82%; color: var(--leaf); opacity: .28; pointer-events: none; }

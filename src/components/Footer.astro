@@ -1,6 +1,5 @@
 ---
 import site from '../data/site.json';
-import story from '../data/story.json';
 import SocialLinks from './SocialLinks.astro';
 import ThemeSwitcher from './ThemeSwitcher.astro';
 import Logo from './Logo.astro';
@@ -20,7 +19,7 @@ import Logo from './Logo.astro';
   </div>
   <div class="wrap legal">
     <p>© {new Date().getFullYear()} {site.name}</p>
-    <p>{story.disclaimer}</p>
+    <p>{site.disclaimer}</p>
   </div>
 </footer>
 

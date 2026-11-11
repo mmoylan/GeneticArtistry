@@ -1,0 +1,34 @@
+---
+/** Page-builder block: image (full-width picture with optional caption and gentle parallax). */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, anchor = '' } = Astro.props;
+const { image = '', alt = '', caption = '', height = 'tall', parallax = true } = data;
+---
+
+{image && (
+  <section id={anchor || undefined} class="pad band">
+    <div class="wrap">
+      <figure>
+        <div class:list={['frame', height]}>
+          {parallax
+            ? <ga-parallax speed="0.12"><img src={image} alt={alt} loading="lazy" /></ga-parallax>
+            : <img src={image} alt={alt} loading="lazy" />}
+        </div>
+        {caption && <figcaption class="label muted">{caption}</figcaption>}
+      </figure>
+    </div>
+  </section>
+)}
+
+<style>
+  figure { margin: 0; }
+  .frame { position: relative; overflow: hidden; border-radius: var(--r); background: var(--bg-2); }
+  .frame.short { height: clamp(14rem, 30vw, 22rem); }
+  .frame.tall { height: clamp(20rem, 48vw, 36rem); }
+  .frame.screen { height: min(90svh, 56rem); }
+  .frame img { width: 100%; height: 100%; object-fit: cover; }
+  /* Parallax needs headroom so the picture never shows a gap while it drifts. */
+  .frame :global(ga-parallax) { position: absolute; inset: -12% 0; }
+  .frame :global(ga-parallax) img { height: 100%; }
+  figcaption { margin-top: 1rem; text-transform: none; letter-spacing: .02em; font-weight: 500; font-size: .9rem; }
+</style>

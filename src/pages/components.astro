@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Spec from '../components/gallery/Spec.astro';
 import Hero from '../components/Hero.astro';
@@ -9,6 +9,11 @@ import Catalogue from '../components/Catalogue.astro';
 import Stats from '../components/Stats.astro';
 import Connect from '../components/Connect.astro';
 import PostCard from '../components/PostCard.astro';
+import Journal from '../components/Journal.astro';
+import TextBlock from '../components/TextBlock.astro';
+import Statement from '../components/Statement.astro';
+import ImageBand from '../components/ImageBand.astro';
+import CtaBand from '../components/CtaBand.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import InstagramFeed from '../components/InstagramFeed.astro';
 import ThemeSwitcher from '../components/ThemeSwitcher.astro';
@@ -16,20 +21,32 @@ import Logo from '../components/Logo.astro';
 import LeafArt from '../components/LeafArt.astro';
 
 const posts = (await getCollection('blog', (p) => !p.data.draft)).slice(0, 1);
+// Live demos use the real blocks from the home page so they always match what the editor sees.
+const home = await getEntry('pages', 'home');
+const block = (t: string): Record<string, any> => home?.data.sections.find((x: any) => x.type === t) ?? {};
+const sampleImage = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f6b40"/><stop offset="1" stop-color="#d9c98a"/></linearGradient></defs><rect width="1200" height="600" fill="url(#g)"/></svg>');
 
 const toc = [
-  ['Page sections', [['hero', 'Hero'], ['specimen', 'About bento'], ['process', 'Process steps'], ['collection', 'Catalogue'], ['stats', 'Stats'], ['connect', 'Connect'], ['postcard', 'Post card']]],
-  ['Motion elements', [['reveal', 'ga-reveal'], ['split', 'ga-split'], ['scrub', 'ga-scrub'], ['draw', 'ga-draw'], ['parallax', 'ga-parallax'], ['counter', 'ga-counter'], ['progress', 'ga-progress'], ['hscroll', 'ga-hscroll']]],
+  ['Page builder', [['builder', 'How blocks work']]],
+  ['Page sections', [['hero', 'Hero'], ['specimen', 'About bento'], ['process', 'Process steps'], ['collection', 'Catalogue'], ['stats', 'Stats'], ['connect', 'Connect'], ['journal', 'Journal'], ['text', 'Text'], ['statement', 'Statement'], ['image', 'Image'], ['cta', 'Call to action'], ['postcard', 'Post card']]],
+  ['Motion elements', [['section', 'ga-section'], ['reveal', 'ga-reveal'], ['split', 'ga-split'], ['scrub', 'ga-scrub'], ['draw', 'ga-draw'], ['parallax', 'ga-parallax'], ['counter', 'ga-counter'], ['progress', 'ga-progress'], ['hscroll', 'ga-hscroll']]],
   ['Building blocks', [['logo', 'Logo'], ['leaf', 'LeafArt'], ['buttons', 'Buttons'], ['cards', 'Cards'], ['type', 'Typography'], ['social', 'Social links'], ['instagram', 'Instagram feed'], ['theme', 'Theme switcher'], ['tokens', 'Colour tokens']]],
 ] as const;
 
 const code = {
-  hero: `---\nimport Hero from '../components/Hero.astro';\n---\n<Hero />\n\n<!-- Text comes from src/data/story.json (hero_eyebrow, hero_title, hero_lede). -->`,
-  specimen: `<Specimen />\n\n<!-- Heading and text: src/data/site.json (about_heading, about); philosophy: story.json (manifesto). -->`,
-  process: `<Process />\n\n<!-- Steps come from story.json → process[] (title, text). The rail draws as you scroll. -->`,
-  collection: `<Catalogue />\n\n<!-- One card per entry in src/data/lines.json (name, type, lineage, notes, status, c1, c2). -->`,
-  stats: `<Stats />\n\n<!-- Numbers come from story.json → stats[] (value, suffix, label); they count up on scroll. -->`,
-  connect: `<Connect />\n\n<!-- Email/phone/location: site.json → contact. Includes SocialLinks and the Instagram feed. -->`,
+    hero: `{ "type": "hero", "title": "Genetics, <em>painted</em> by hand.", "leaf": "draw", "leaf_strength": "subtle" }\n\n// Add it from Pages → Sections → Add. Every field is optional; blanks fall back to sensible defaults.`,
+  specimen: `{ "type": "about", "heading": "…", "body": "markdown", "facts": [{ "label": "Leaflets", "value": "5 to 9" }], "quote": "…" }`,
+  process: `{ "type": "process", "heading": "From sketch to seed", "steps": [{ "title": "Select", "text": "…" }], "rail": true }`,
+  collection: `{ "type": "collection", "heading": "The collection", "limit": 0, "cta_card": true }\n\n// Cards come from Site Settings → Genetics Lines (name, type, lineage, notes, status, colours).`,
+  stats: `{ "type": "stats", "items": [{ "value": 12, "suffix": "+", "label": "Lines released" }], "count_up": true }`,
+  connect: `{ "type": "connect", "heading": "Let's make something <em>rare.</em>", "show_email": true, "show_social": true, "show_instagram": true }\n\n// Email, phone and location come from Site Settings → Contact.`,
+  builder: `{\n  "title": "Home",\n  "sections": [\n    { "type": "hero", "title": "…", "animation": { "entrance": "fade", "duration": 1200 } },\n    { "type": "about", "heading": "…", "spacing": "roomy" },\n    { "type": "cta", "heading": "…", "anchor": "contact" }\n  ]\n}\n\n// Stored in src/content/pages/<slug>.json and edited in /admin → Pages. The page called "home" is the home page; any other page appears at /<slug>.`,
+  journal: `{ "type": "journal", "heading": "Notes from the grow room", "count": 3, "button_label": "All entries" }\n\n// Shows the newest published blog posts; hides itself when there are none.`,
+  text: `{ "type": "text", "eyebrow": "Our story", "heading": "…", "body": "markdown paragraphs", "align": "left" }`,
+  statement: `{ "type": "statement", "text": "One big sentence whose words light up as you scroll." }`,
+  image: `{ "type": "image", "image": "/uploads/grow-room.jpg", "alt": "…", "caption": "…", "height": "tall", "parallax": true }`,
+  cta: `{ "type": "cta", "heading": "Ready to talk?", "text": "…", "button_label": "Get in touch", "button_link": "#connect" }`,
+  section: `<ga-section effect="rise" delay="0" duration="1000" data-headline="on" data-items="on" data-spacing="normal">\n  …a whole block…\n</ga-section>\n\n// Added automatically around every block by <Sections />. In /admin it is each block's Animation group:\n//   Block entrance: none | fade | rise | left | right | zoom      Speed / delay: milliseconds\n//   Headline words rise one by one: on | off                       Cards and paragraphs appear in turn: on | off\n//   Block-specific: hero leaf (draws / still / none, subtle→bold), process line, counting numbers, parallax image.`,
   postcard: `---\nimport PostCard from '../components/PostCard.astro';\nconst posts = await getCollection('blog');\n---\n<ul class="grid">\n  {posts.map((p) => <PostCard post={p} />)}\n</ul>`,
   reveal: `<ga-reveal>…anything…</ga-reveal>\n<ga-reveal delay="200">staggered by 200 ms</ga-reveal>\n<ga-reveal effect="fade">fades without sliding</ga-reveal>`,
   split: `<h2><ga-split>One breeder. <em>Every plant</em> a canvas.</ga-split></h2>\n\n<!-- Words rise into view. Inline tags such as <em> are kept. -->`,
@@ -74,22 +91,36 @@ const tokens = [
   </section>
 
   <div class="wrap">
+    <h2 class="group">Page builder</h2>
+    <p class="muted g-intro">Pages are an ordered list of blocks edited in /admin → Pages. Add, remove or drag blocks to rearrange them, and set each block's animation, spacing and anchor. Every block below is available from the Sections → Add menu.</p>
+    <Spec id="builder" kind="Concept" name="How blocks work" desc="A page is a JSON file holding a list of blocks. Each block has a type, its own content fields and three shared settings: Space above and below (none, compact, normal, roomy), an optional Anchor name for links like /#contact, and an Animation group." code={code.builder} />
+
     <h2 class="group">Page sections</h2>
     <p class="muted g-intro">Full-width sections you can drop into any page. Their text comes from the editable content files, so they update from the CMS.</p>
   </div>
   <div class="full">
     <div class="wrap"><Spec id="hero" kind="Section" name="Hero" desc="Dark rounded panel with a huge headline, call-to-action buttons and a faint, cropped leaf that draws itself from its centre." code={code.hero} replay /></div>
-    <Hero />
+    <Hero data={block('hero')} uid="gd-hero" anchor="" />
     <div class="wrap"><Spec id="specimen" kind="Section" name="About bento" desc="Intro text plus a bento grid: a leaf plate, botanical facts and a philosophy card." code={code.specimen} /></div>
-    <Specimen />
+    <Specimen data={block('about')} uid="gd-about" anchor="" />
     <div class="wrap"><Spec id="process" kind="Section" name="Process steps" desc="Numbered steps joined by a line that draws across as you scroll." code={code.process} /></div>
-    <Process />
+    <Process data={block('process')} uid="gd-process" anchor="" />
     <div class="wrap"><Spec id="collection" kind="Section" name="Catalogue" desc="A card for each genetic line, with a partial leaf, status and lineage, plus a closing call-to-action card." code={code.collection} /></div>
-    <Catalogue />
+    <Catalogue data={block('collection')} uid="gd-lines" anchor="" />
     <div class="wrap"><Spec id="stats" kind="Section" name="Stats" desc="Large figures that count up when they scroll into view." code={code.stats} /></div>
-    <Stats />
+    <Stats data={block('stats')} uid="gd-stats" anchor="" />
     <div class="wrap"><Spec id="connect" kind="Section" name="Connect" desc="Contact panel with email, social links and the Instagram feed." code={code.connect} /></div>
-    <Connect />
+    <Connect data={block('connect')} uid="gd-connect" anchor="" />
+    <div class="wrap"><Spec id="journal" kind="Section" name="Journal" desc="Latest blog posts as cards, with a button to the full journal." code={code.journal} /></div>
+    <Journal data={block('journal')} uid="gd-journal" anchor="" />
+    <div class="wrap"><Spec id="text" kind="Section" name="Text" desc="Heading and body copy in a comfortable reading column, left aligned or centred. For general pages like About or FAQ." code={code.text} /></div>
+    <TextBlock data={{ eyebrow: 'Our story', heading: 'Slow, careful and documented', body: 'Every line starts as a single seed and is followed for many seasons.\n\nNotes, photographs and measurements are kept for each plant, so nothing is left to memory.', align: 'left' }} uid="gd-text" anchor="" />
+    <div class="wrap"><Spec id="statement" kind="Section" name="Statement" desc="One large sentence whose words light up as the visitor scrolls past it." code={code.statement} /></div>
+    <Statement data={{ eyebrow: 'Principle', text: 'Most genetics are made to be common. Ours are made to be remembered.' }} uid="gd-statement" anchor="" />
+    <div class="wrap"><Spec id="image" kind="Section" name="Image" desc="A wide picture with optional caption. It drifts gently as you scroll (parallax), which can be switched off. Shown here with a placeholder picture." code={code.image} /></div>
+    <ImageBand data={{ image: sampleImage, alt: '', caption: 'Placeholder picture', height: 'short', parallax: true }} uid="gd-image" anchor="" />
+    <div class="wrap"><Spec id="cta" kind="Section" name="Call to action" desc="An accent-coloured banner with a heading, a line of text and one button." code={code.cta} /></div>
+    <CtaBand data={{ heading: 'Ready to talk genetics?', text: 'Ask about upcoming seed runs or just say hello.', button_label: 'Get in touch', button_link: '#g-connect' }} uid="gd-cta" anchor="" />
   </div>
 
   <div class="wrap">
@@ -101,6 +132,14 @@ const tokens = [
 
     <h2 class="group">Motion elements</h2>
     <p class="muted g-intro">Custom HTML elements (no framework). They respect “reduce motion” and fall back to plain, fully visible content without JavaScript.</p>
+
+    <Spec id="section" kind="Element" name="ga-section" desc="The block-level wrapper that applies a block's Animation settings: how the whole block arrives, how fast, after what delay, and whether headline words and inner cards animate. Reacts as soon as any part of the block appears, so very tall blocks still animate." code={code.section} replay>
+      <div class="trio">
+        <ga-section effect="rise"><div class="card">rise</div></ga-section>
+        <ga-section effect="zoom" delay="200"><div class="card">zoom, 200 ms delay</div></ga-section>
+        <ga-section effect="left" delay="400" duration="1600"><div class="card">left, slow</div></ga-section>
+      </div>
+    </Spec>
 
     <Spec id="reveal" kind="Element" name="ga-reveal" desc="Fades and slides its content up when it scrolls into view. Optional delay in milliseconds and a fade-only effect." code={code.reveal} replay>
       <div class="trio">
@@ -210,7 +249,7 @@ const tokens = [
   document.querySelectorAll<HTMLButtonElement>('[data-replay]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const spec = btn.closest('.spec');
-      const els = spec ? [...spec.querySelectorAll<HTMLElement>('.stage ga-reveal, .stage ga-split, .stage ga-draw[autoplay]')] : [];
+      const els = spec ? [...spec.querySelectorAll<HTMLElement>('.stage ga-reveal, .stage ga-section, .stage ga-split, .stage ga-draw[autoplay]')] : [];
       // The hero and process entries demo the real section placed right after their label.
       const id = spec?.id;
       const extra = id === "g-hero" ? document.querySelectorAll<HTMLElement>('.hero ga-reveal, .hero ga-split, .hero ga-draw[autoplay]') : [];

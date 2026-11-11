@@ -1,29 +1,45 @@
 ---
-import story from '../data/story.json';
 import LeafArt from './LeafArt.astro';
+/** Page-builder block: hero. `data` is the block from the CMS; every field has a safe default. */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, uid = 'hero', anchor = '' } = Astro.props;
+const {
+  eyebrow = 'Small-batch cannabis genetics',
+  title = 'Genetics, <em>painted</em> by hand.',
+  lede = 'One breeder. Every cross selected, grown and documented like a work in progress.',
+  primary_label = 'Explore the collection', primary_link = '#collection',
+  secondary_label = 'Get in touch', secondary_link = '#connect',
+  leaf = 'draw', leaf_strength = 'subtle',
+} = data;
+const strength = { subtle: 0.3, medium: 0.5, bold: 0.8 }[leaf_strength as 'subtle'] ?? 0.3;
 ---
 
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" id={anchor || undefined} aria-labelledby={`${uid}-title`}>
   <div class="panel bleed">
-    <div class="art" aria-hidden="true">
+    <div class="art" aria-hidden="true" style={`--leaf-op:${strength}`}>
       <div class="glow a"></div>
       <div class="glow b"></div>
       <div class="grid"></div>
-      <ga-parallax speed="-0.1">
-        <ga-draw autoplay>
-          <LeafArt class="leaf" stroke={1.1} />
-        </ga-draw>
-      </ga-parallax>
+      {leaf === 'draw' && (
+        <ga-parallax speed="-0.1">
+          <ga-draw autoplay><LeafArt class="leaf" stroke={1.1} /></ga-draw>
+        </ga-parallax>
+      )}
+      {leaf === 'static' && (
+        <ga-parallax speed="-0.1"><LeafArt class="leaf" stroke={1.1} /></ga-parallax>
+      )}
     </div>
 
     <div class="content">
-      <ga-reveal effect="fade"><p class="eyebrow">{story.hero_eyebrow}</p></ga-reveal>
-      <h1 id="hero-title"><ga-split set:html={story.hero_title} /></h1>
-      <ga-reveal delay="500"><p class="lede">{story.hero_lede}</p></ga-reveal>
-      <ga-reveal delay="700" class="cta">
-        <a class="b solid" href="#collection">Explore the collection</a>
-        <a class="b" href="#connect">Get in touch</a>
-      </ga-reveal>
+      {eyebrow && <ga-reveal effect="fade"><p class="eyebrow">{eyebrow}</p></ga-reveal>}
+      <h1 id={`${uid}-title`}><ga-split set:html={title} /></h1>
+      {lede && <ga-reveal delay="500"><p class="lede">{lede}</p></ga-reveal>}
+      {(primary_label || secondary_label) && (
+        <ga-reveal delay="700" class="cta">
+          {primary_label && <a class="b solid" href={primary_link}>{primary_label}</a>}
+          {secondary_label && <a class="b" href={secondary_link}>{secondary_label}</a>}
+        </ga-reveal>
+      )}
     </div>
   </div>
 </section>
@@ -42,13 +58,13 @@ import LeafArt from './LeafArt.astro';
   .b:hover { transform: translateY(-2px); background: rgba(255,255,255,.14); }
   .b.solid { background: #fff; color: #0d2418; }
   .b.solid:hover { background: #e9f3ea; }
-  /* One huge, faint leaf, cropped by the panel edge: it draws outward from its centre, then sits quietly behind the type. */
-  .art :global(.leaf) { position: absolute; right: -12vw; top: -14vh; width: min(78vw, 1100px); color: #8fcf9a; opacity: .3; }
+  /* One huge, faint leaf, cropped by the panel edge. Strength comes from the block's Leaf strength setting. */
+  .art :global(.leaf) { position: absolute; right: -12vw; top: -14vh; width: min(78vw, 1100px); color: #8fcf9a; opacity: var(--leaf-op, .3); }
   .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse at 70% 40%, #000 20%, transparent 75%); }
   .glow { position: absolute; border-radius: 50%; filter: blur(100px); animation: drift 24s ease-in-out infinite alternate; }
   .glow.a { width: 55vw; height: 55vw; right: -10vw; top: -20vw; background: #2f7a4a; opacity: .45; }
   .glow.b { width: 40vw; height: 40vw; left: -12vw; bottom: -14vw; background: #6d5b1f; opacity: .35; animation-delay: -10s; }
   @keyframes drift { to { transform: translate3d(-6vw, 5vh, 0) scale(1.12); } }
-  @media (max-width: 760px) { .art :global(.leaf) { width: 120vw; right: -40vw; top: -8vh; opacity: .24; } }
+  @media (max-width: 760px) { .art :global(.leaf) { width: 120vw; right: -40vw; top: -8vh; opacity: calc(var(--leaf-op, .3) * .8); } }
   @media (prefers-reduced-motion: reduce) { .glow { animation: none; } }
 </style>

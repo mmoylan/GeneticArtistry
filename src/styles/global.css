@@ -40,7 +40,7 @@ em, .it { font-style: italic; font-weight: 400; color: var(--leaf); }
 .wrap { width: min(100% - 2.5rem, var(--max)); margin-inline: auto; }
 .bleed { position: relative; width: 100%; overflow: clip; isolation: isolate; }
 .bleed > .art { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-.pad { padding: clamp(4rem, 9vw, 8rem) 0; }
+.pad { padding: calc(clamp(4rem, 9vw, 8rem) * var(--pad-scale, 1)) 0; }
 .card { background: var(--bg-2); border-radius: var(--r); padding: clamp(1.4rem, 2.5vw, 2.2rem); }
 
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
@@ -63,6 +63,20 @@ ga-reveal, ga-split, ga-scrub, ga-parallax, ga-draw { display: block; }
 .js ga-split.in .wi { transform: none; }
 .js ga-scrub .sw { color: var(--muted); transition: color .5s; }
 .js ga-scrub .sw.on { color: var(--ink); }
+/* Page-builder block wrapper: block-level entrance + per-block switches (set from the CMS). */
+ga-section { display: block; --pad-scale: 1; }
+ga-section[data-spacing='none'] { --pad-scale: 0; }
+ga-section[data-spacing='compact'] { --pad-scale: .55; }
+ga-section[data-spacing='roomy'] { --pad-scale: 1.5; }
+.js ga-section[effect]:not([effect='none']) { opacity: 0; transition: opacity var(--sec-dur, 1000ms) var(--ease) var(--sec-delay, 0ms), transform var(--sec-dur, 1000ms) var(--ease) var(--sec-delay, 0ms); }
+.js ga-section[effect='rise'] { transform: translate3d(0, 56px, 0); }
+.js ga-section[effect='left'] { transform: translate3d(-72px, 0, 0); }
+.js ga-section[effect='right'] { transform: translate3d(72px, 0, 0); }
+.js ga-section[effect='zoom'] { transform: scale(.94); }
+.js ga-section[effect].in { opacity: 1; transform: none; }
+.js ga-section[data-headline='off'] ga-split .wi { transform: none; transition: none; }
+.js ga-section[data-items='off'] ga-reveal { opacity: 1; transform: none; transition: none; }
+.page-offset { padding-top: 5.5rem; }
 ga-parallax { will-change: transform; }
 ga-counter { font-variant-numeric: tabular-nums lining-nums; }
 ga-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 90; transform-origin: 0 50%; transform: scaleX(var(--p, 0)); background: var(--leaf); }

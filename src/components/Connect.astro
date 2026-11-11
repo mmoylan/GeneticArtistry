@@ -1,31 +1,44 @@
 ---
 import site from '../data/site.json';
-import story from '../data/story.json';
 import SocialLinks from './SocialLinks.astro';
 import InstagramFeed from './InstagramFeed.astro';
+/** Page-builder block: connect (contact panel). Contact details come from Site Info in the CMS. */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, uid = 'connect', anchor = 'connect' } = Astro.props;
+const {
+  eyebrow = 'Contact', heading = "Let's make something <em>rare.</em>",
+  show_email = true, show_details = true, show_social = true, show_instagram = true,
+} = data;
 const { email, phone, location } = site.contact;
+const hasDetails = show_details && (phone || location);
 ---
 
-<section id="connect" class="pad" aria-labelledby="connect-title">
+<section id={anchor || undefined} class="pad" aria-labelledby={`${uid}-title`}>
   <div class="wrap">
     <div class="panel">
-      <ga-reveal><p class="eyebrow">Contact</p></ga-reveal>
-      <h2 id="connect-title" class="mega"><ga-split set:html={story.connect_heading} /></h2>
-      {email && <ga-reveal><a class="mail display" href={`mailto:${email}`}>{email}</a></ga-reveal>}
-      <div class="cols">
-        <ga-reveal>
-          <h3 class="label">Reach out</h3>
-          <ul class="plain">
-            {phone && <li><a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a></li>}
-            {location && <li>{location}</li>}
-          </ul>
-        </ga-reveal>
-        <ga-reveal delay="120">
-          <h3 class="label">Follow</h3>
-          <SocialLinks />
-        </ga-reveal>
-      </div>
-      <ga-reveal class="ig"><InstagramFeed /></ga-reveal>
+      {eyebrow && <ga-reveal><p class="eyebrow">{eyebrow}</p></ga-reveal>}
+      {heading && <h2 id={`${uid}-title`} class="mega"><ga-split set:html={heading} /></h2>}
+      {show_email && email && <ga-reveal><a class="mail display" href={`mailto:${email}`}>{email}</a></ga-reveal>}
+      {(hasDetails || show_social) && (
+        <div class="cols">
+          {hasDetails && (
+            <ga-reveal>
+              <h3 class="label">Reach out</h3>
+              <ul class="plain">
+                {phone && <li><a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a></li>}
+                {location && <li>{location}</li>}
+              </ul>
+            </ga-reveal>
+          )}
+          {show_social && (
+            <ga-reveal delay="120">
+              <h3 class="label">Follow</h3>
+              <SocialLinks />
+            </ga-reveal>
+          )}
+        </div>
+      )}
+      {show_instagram && <ga-reveal class="ig"><InstagramFeed /></ga-reveal>}
     </div>
   </div>
 </section>

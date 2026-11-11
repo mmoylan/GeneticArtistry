@@ -1,13 +1,16 @@
 ---
-import story from '../data/story.json';
+/** Page-builder block: stats (big figures that count up when seen). */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, anchor = '' } = Astro.props;
+const { items = [], count_up = true } = data;
 ---
 
-<section class="pad stats" aria-label="By the numbers">
+<section id={anchor || undefined} class="pad stats" aria-label="By the numbers">
   <div class="wrap">
     <dl>
-      {story.stats.map((s, i) => (
+      {items.map((s: { value?: number; suffix?: string; label?: string }, i: number) => (
         <ga-reveal delay={String(i * 90)} class="card">
-          <dd class="display"><ga-counter to={s.value} suffix={s.suffix}>{s.value}{s.suffix}</ga-counter></dd>
+          <dd class="display"><ga-counter to={s.value} suffix={s.suffix ?? ''} static={count_up ? undefined : ''}>{s.value}{s.suffix}</ga-counter></dd>
           <dt class="label muted">{s.label}</dt>
         </ga-reveal>
       ))}

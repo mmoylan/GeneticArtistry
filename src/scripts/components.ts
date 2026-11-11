@@ -2,6 +2,7 @@
  * Genetic Artistry — scroll web components (vanilla custom elements, no dependencies).
  *
  *  <ga-reveal effect="up|fade|mask" delay="120">   fades/slides children in once
+ *  <ga-section effect="rise" delay="0" duration="1000">  whole page-builder block entrance
  *  <ga-split>                                       headline, words rise in staggered
  *  <ga-scrub>                                       paragraph, words light up as you scroll
  *  <ga-parallax speed="0.2">                        drifts relative to scroll
@@ -49,6 +50,34 @@ class GaReveal extends HTMLElement {
     const d = this.getAttribute('delay');
     if (d) this.style.transitionDelay = `${d}ms`;
     whenVisible(this);
+  }
+}
+
+/**
+ * <ga-section effect="none|fade|rise|left|right|zoom" delay="0" duration="1000">
+ * Wraps a whole page-builder block. Has its own observer (threshold 0) so very tall blocks
+ * still animate in; effect/delay/duration come from the block's Animation settings in the CMS.
+ */
+const sectionSeen = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        (e.target as HTMLElement).classList.add('in');
+        sectionSeen.unobserve(e.target);
+      }
+    }
+  },
+  { threshold: 0, rootMargin: '0px 0px -8% 0px' },
+);
+class GaSection extends HTMLElement {
+  connectedCallback() {
+    const effect = this.getAttribute('effect') ?? 'none';
+    const delay = this.getAttribute('delay');
+    const duration = this.getAttribute('duration');
+    if (delay) this.style.setProperty('--sec-delay', `${delay}ms`);
+    if (duration) this.style.setProperty('--sec-dur', `${duration}ms`);
+    if (effect === 'none' || reduced) return this.classList.add('in');
+    sectionSeen.observe(this);
   }
 }
 
@@ -169,6 +198,8 @@ class GaHScroll extends HTMLElement {
 
 class GaCounter extends HTMLElement {
   connectedCallback() {
+    // `static` shows the final number straight away (editor turned counting off).
+    if (this.hasAttribute('static')) return;
     this.textContent = '0' + (this.getAttribute('suffix') ?? '');
     whenVisible(this);
   }
@@ -247,6 +278,7 @@ const defs: [string, CustomElementConstructor][] = [
   ['ga-draw', GaDraw],
   ['ga-theme', GaTheme],
   ['ga-reveal', GaReveal],
+  ['ga-section', GaSection],
   ['ga-split', GaSplit],
   ['ga-scrub', GaScrub],
   ['ga-parallax', GaParallax],

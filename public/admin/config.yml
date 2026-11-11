@@ -15,6 +15,222 @@ site_url: https://geneticartistry.com
 display_url: https://geneticartistry.com
 
 collections:
+  # ---------------------------------------------------------------------------------------------
+  # PAGES: each page is an ordered list of blocks. Add, remove and drag blocks to rearrange them.
+  # Every block has an "Animation" group (entrance effect, speed, delay, headline/item motion),
+  # a spacing option and an optional anchor name for links like /#contact.
+  # The page called "home" is the home page; any other page appears at /<slug>.
+  # ---------------------------------------------------------------------------------------------
+  - name: pages
+    label: Pages
+    label_singular: Page
+    folder: src/content/pages
+    format: json
+    extension: json
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { name: title, label: Page Title, widget: string }
+      - { name: description, label: Description (search results), widget: text, required: false }
+      - label: Sections
+        name: sections
+        widget: list
+        typeKey: type
+        hint: "Add blocks, drag to reorder, delete the ones you don't want."
+        types:
+          - label: Hero
+            name: hero
+            widget: object
+            summary: "Hero: {{title}}"
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string, required: false }
+              - { name: title, label: Title, widget: string, hint: "Wrap a word in <em>…</em> for the italic accent." }
+              - { name: lede, label: Intro, widget: text, required: false }
+              - { name: primary_label, label: Main button text, widget: string, required: false }
+              - { name: primary_link, label: Main button link, widget: string, required: false, hint: "e.g. #collection or /blog" }
+              - { name: secondary_label, label: Second button text, widget: string, required: false }
+              - { name: secondary_link, label: Second button link, widget: string, required: false }
+              - { name: leaf, label: Background leaf, widget: select, default: draw, options: [{ label: "Draws itself in", value: draw }, { label: "Still (no drawing)", value: static }, { label: "No leaf", value: none }] }
+              - { name: leaf_strength, label: Leaf visibility, widget: select, default: subtle, options: [{ label: Subtle, value: subtle }, { label: Medium, value: medium }, { label: Bold, value: bold }] }
+              - &spacing { name: spacing, label: Space above and below, widget: select, default: normal, options: [{ label: None, value: none }, { label: Compact, value: compact }, { label: Normal, value: normal }, { label: Roomy, value: roomy }] }
+              - &anchor { name: anchor, label: Anchor name (for links like /#name), widget: string, required: false, hint: "Optional. Lower-case, no spaces. Leave blank to use the default." }
+              - &animation
+                label: Animation
+                name: animation
+                widget: object
+                collapsed: true
+                required: false
+                hint: "How this block appears as the visitor scrolls. Motion is switched off automatically for visitors who prefer reduced motion."
+                fields:
+                  - { name: entrance, label: Block entrance, widget: select, default: none, hint: "How the whole block arrives. 'None' lets just the content inside animate.", options: [{ label: None, value: none }, { label: Fade in, value: fade }, { label: Rise up, value: rise }, { label: Slide in from left, value: left }, { label: Slide in from right, value: right }, { label: Zoom in, value: zoom }] }
+                  - { name: duration, label: Entrance speed (ms), widget: number, value_type: int, min: 200, max: 3000, step: 100, default: 1000, hint: "Longer is slower. 1000 = one second." }
+                  - { name: delay, label: Entrance delay (ms), widget: number, value_type: int, min: 0, max: 2000, step: 100, default: 0 }
+                  - { name: headline_words, label: Headline words rise one by one, widget: boolean, default: true }
+                  - { name: item_motion, label: Cards and paragraphs appear in turn, widget: boolean, default: true }
+
+          - label: About (text + leaf + facts)
+            name: about
+            widget: object
+            summary: "About: {{heading}}"
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string, required: false }
+              - { name: heading, label: Heading, widget: string }
+              - { name: body, label: Text, widget: markdown, required: false }
+              - { name: plate_label, label: Leaf card label, widget: string, required: false }
+              - { name: plate_caption, label: Leaf card caption, widget: text, required: false }
+              - { name: leaf, label: Leaf on the card, widget: select, default: draw, options: [{ label: "Draws itself in", value: draw }, { label: "Still (no drawing)", value: static }, { label: "No leaf", value: none }] }
+              - { name: facts_label, label: Facts card title, widget: string, required: false }
+              - label: Facts
+                name: facts
+                widget: list
+                required: false
+                summary: "{{fields.label}}: {{fields.value}}"
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: value, label: Value, widget: string }
+              - { name: quote_label, label: Quote card label, widget: string, required: false }
+              - { name: quote, label: Quote card text, widget: text, required: false }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Process (steps with a drawing line)
+            name: process
+            widget: object
+            summary: "Process: {{heading}}"
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string, required: false }
+              - { name: heading, label: Heading, widget: string }
+              - { name: intro, label: Intro, widget: text, required: false }
+              - label: Steps
+                name: steps
+                widget: list
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: text, label: Text, widget: text }
+              - { name: cta_label, label: Button text, widget: string, required: false }
+              - { name: cta_link, label: Button link, widget: string, required: false }
+              - { name: rail, label: Line draws across as you scroll, widget: boolean, default: true }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Collection (genetic lines)
+            name: collection
+            widget: object
+            summary: "Collection: {{heading}}"
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: intro, label: Intro, widget: text, required: false }
+              - { name: limit, label: How many lines to show (0 = all), widget: number, value_type: int, min: 0, default: 0, hint: "The lines themselves are edited under Site Settings → Genetics Lines." }
+              - { name: plate_leaf, label: Faint leaf on each card, widget: boolean, default: true }
+              - { name: cta_card, label: Show the closing call-to-action card, widget: boolean, default: true }
+              - { name: cta_kicker, label: Card small heading, widget: string, required: false }
+              - { name: cta_label, label: Card text, widget: string, required: false }
+              - { name: cta_link, label: Card link, widget: string, required: false }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Numbers (count-up stats)
+            name: stats
+            widget: object
+            summary: "Numbers: {{items.0.label}}…"
+            fields:
+              - label: Numbers
+                name: items
+                widget: list
+                summary: "{{fields.value}}{{fields.suffix}} {{fields.label}}"
+                fields:
+                  - { name: value, label: Value, widget: number, value_type: int }
+                  - { name: suffix, label: Suffix (e.g. +), widget: string, required: false }
+                  - { name: label, label: Label, widget: string }
+              - { name: count_up, label: Count up from zero when scrolled into view, widget: boolean, default: true }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Journal (latest posts)
+            name: journal
+            widget: object
+            summary: "Journal: {{heading}}"
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string, required: false }
+              - { name: heading, label: Heading, widget: string }
+              - { name: count, label: Number of posts, widget: number, value_type: int, min: 1, max: 12, default: 3 }
+              - { name: button_label, label: Button text, widget: string, required: false }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Contact panel
+            name: connect
+            widget: object
+            summary: "Contact: {{heading}}"
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string, required: false }
+              - { name: heading, label: Heading, widget: string, hint: "Wrap a word in <em>…</em> for the italic accent." }
+              - { name: show_email, label: Show email, widget: boolean, default: true }
+              - { name: show_details, label: Show phone and location, widget: boolean, default: true }
+              - { name: show_social, label: Show social links, widget: boolean, default: true }
+              - { name: show_instagram, label: Show Instagram feed, widget: boolean, default: true }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Text (heading + body)
+            name: text
+            widget: object
+            summary: "Text: {{heading}}"
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string, required: false }
+              - { name: heading, label: Heading, widget: string, required: false }
+              - { name: body, label: Body, widget: markdown, required: false }
+              - { name: align, label: Alignment, widget: select, default: left, options: [{ label: Left, value: left }, { label: Centred, value: center }] }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Statement (words light up on scroll)
+            name: statement
+            widget: object
+            summary: "Statement: {{text}}"
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string, required: false }
+              - { name: text, label: Statement, widget: text }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Image
+            name: image
+            widget: object
+            summary: "Image: {{caption}}"
+            fields:
+              - { name: image, label: Image, widget: image }
+              - { name: alt, label: Description for screen readers, widget: string, required: false, hint: "Leave blank only if the picture is purely decorative." }
+              - { name: caption, label: Caption, widget: string, required: false }
+              - { name: height, label: Height, widget: select, default: tall, options: [{ label: Short, value: short }, { label: Tall, value: tall }, { label: Full screen, value: screen }] }
+              - { name: parallax, label: Image drifts gently as you scroll, widget: boolean, default: true }
+              - *spacing
+              - *anchor
+              - *animation
+
+          - label: Call to action banner
+            name: cta
+            widget: object
+            summary: "Call to action: {{heading}}"
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+              - { name: button_label, label: Button text, widget: string, required: false }
+              - { name: button_link, label: Button link, widget: string, required: false }
+              - *spacing
+              - *anchor
+              - *animation
+
   - name: blog
     label: Blog Posts
     label_singular: Blog Post
@@ -42,8 +258,7 @@ collections:
         fields:
           - { name: name, label: Company Name, widget: string }
           - { name: tagline, label: Tagline, widget: string }
-          - { name: about_heading, label: About Heading, widget: string }
-          - { name: about, label: About Text, widget: markdown }
+          - { name: disclaimer, label: Footer Disclaimer, widget: string }
           - label: Contact
             name: contact
             widget: object
@@ -82,33 +297,3 @@ collections:
               - { name: status, label: Status, widget: select, options: ["Available", "Limited run", "Coming soon", "Sold out"] }
               - { name: c1, label: Art Colour 1, widget: color }
               - { name: c2, label: Art Colour 2, widget: color }
-
-      - name: story
-        label: Homepage Content
-        file: src/data/story.json
-        fields:
-          - { name: hero_eyebrow, label: Hero Eyebrow, widget: string }
-          - { name: hero_title, label: Hero Title, widget: string, hint: "Wrap a word in <em>…</em> for the italic accent." }
-          - { name: hero_lede, label: Hero Intro, widget: text }
-          - { label: Scrolling Banner Phrases, name: marquee, widget: list, field: { name: phrase, label: Phrase, widget: string } }
-          - { name: manifesto, label: Manifesto (scroll-lit text), widget: text }
-          - { name: lines_heading, label: Collection Heading, widget: string }
-          - { name: lines_intro, label: Collection Intro, widget: string }
-          - { name: process_heading, label: Process Heading, widget: string }
-          - label: Process Steps
-            name: process
-            widget: list
-            summary: "{{fields.title}}"
-            fields:
-              - { name: title, label: Title, widget: string }
-              - { name: text, label: Text, widget: text }
-          - label: Numbers
-            name: stats
-            widget: list
-            summary: "{{fields.value}}{{fields.suffix}} {{fields.label}}"
-            fields:
-              - { name: value, label: Value, widget: number, value_type: int }
-              - { name: suffix, label: Suffix (e.g. +), widget: string, required: false }
-              - { name: label, label: Label, widget: string }
-          - { name: connect_heading, label: Contact Heading, widget: string, hint: "Wrap a word in <em>…</em> for the italic accent." }
-          - { name: disclaimer, label: Footer Disclaimer, widget: string }

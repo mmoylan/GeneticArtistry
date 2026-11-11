@@ -1,0 +1,101 @@
+{
+  "title": "Home",
+  "description": "Cannabis genetics, crafted by hand.",
+  "sections": [
+    {
+      "type": "hero",
+      "eyebrow": "Small-batch cannabis genetics",
+      "title": "Genetics, <em>painted</em> by hand.",
+      "lede": "One breeder. Every cross selected, grown and documented like a work in progress.",
+      "primary_label": "Explore the collection",
+      "primary_link": "#collection",
+      "secondary_label": "Get in touch",
+      "secondary_link": "#connect",
+      "leaf": "draw",
+      "leaf_strength": "subtle",
+      "spacing": "normal",
+      "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
+    },
+    {
+      "type": "about",
+      "eyebrow": "About",
+      "heading": "One breeder. Every plant a canvas.",
+      "body": "Genetic Artistry is a one-person cannabis genetics company. Every cross is selected, grown and documented by hand, treating each plant like a work of art in progress.\n\nFollow along for new drops, grow notes and the story behind each line.",
+      "plate_label": "Plate I — The leaf",
+      "plate_caption": "Each line is judged leaf by leaf: structure first, then aroma, then vigour.",
+      "facts": [
+        { "label": "Arrangement", "value": "Palmate compound" },
+        { "label": "Leaflets", "value": "5 to 9, always odd" },
+        { "label": "Margin", "value": "Serrate (toothed)" },
+        { "label": "Phyllotaxy", "value": "Opposite, then alternate" }
+      ],
+      "quote_label": "Philosophy",
+      "quote": "Most genetics are made to be common. Ours are made to be remembered. Each line begins as a quiet idea, a colour, a scent, a mood, and is painted into being over many seasons by one pair of hands.",
+      "leaf": "draw",
+      "spacing": "normal",
+      "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
+    },
+    {
+      "type": "process",
+      "eyebrow": "How we work",
+      "heading": "From sketch to seed",
+      "intro": "Calm, careful and in the open. Four steps from first idea to finished line.",
+      "steps": [
+        { "title": "Select", "text": "Hundreds of seedlings are grown out and judged on structure, aroma and vigour. Only a handful earn a second look." },
+        { "title": "Cross", "text": "Chosen parents are paired with intent. Every pairing is recorded, from the first pollen to the last seed." },
+        { "title": "Cultivate", "text": "Plants are grown by hand under steady conditions, so what we see in a line is genuinely the genetics speaking." },
+        { "title": "Document", "text": "Each season is photographed, measured and written up, so every line has a story and a trail of evidence." }
+      ],
+      "cta_label": "Talk to the breeder",
+      "cta_link": "#connect",
+      "rail": true,
+      "spacing": "normal",
+      "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
+    },
+    {
+      "type": "collection",
+      "heading": "The collection",
+      "intro": "Five lines, each bred slowly and released in limited seed runs.",
+      "limit": 0,
+      "plate_leaf": true,
+      "cta_card": true,
+      "cta_kicker": "Next drop",
+      "cta_label": "Ask about upcoming seed runs",
+      "cta_link": "#connect",
+      "spacing": "normal",
+      "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
+    },
+    {
+      "type": "stats",
+      "items": [
+        { "value": 9, "suffix": "", "label": "Seasons of breeding" },
+        { "value": 400, "suffix": "+", "label": "Phenotypes hunted" },
+        { "value": 12, "suffix": "", "label": "Lines released" },
+        { "value": 1, "suffix": "", "label": "Breeder, start to finish" }
+      ],
+      "count_up": true,
+      "spacing": "normal",
+      "animation": { "entrance": "none", "item_motion": true }
+    },
+    {
+      "type": "journal",
+      "eyebrow": "Journal",
+      "heading": "Notes from the grow room",
+      "count": 3,
+      "button_label": "All entries",
+      "spacing": "normal",
+      "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
+    },
+    {
+      "type": "connect",
+      "eyebrow": "Contact",
+      "heading": "Let's make something <em>rare.</em>",
+      "show_email": true,
+      "show_details": true,
+      "show_social": true,
+      "show_instagram": true,
+      "spacing": "normal",
+      "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
+    }
+  ]
+}

@@ -16,20 +16,35 @@ Edit content locally at `http://localhost:4321/admin` (Sveltia can open a local 
 
 | Path | Purpose |
 | --- | --- |
-| `src/components/` | Reusable pieces: Header, Hero, Section, ContactCard, SocialLinks, InstagramFeed, PostCard, Logo |
-| `src/pages/` | Home (`index.astro`), blog list and post pages |
+| `src/components/` | Page blocks (Hero, Specimen/About, Process, Catalogue, Stats, Journal, Connect, TextBlock, Statement, ImageBand, CtaBand), the `Sections.astro` renderer, plus Header, Footer, SocialLinks, InstagramFeed, PostCard, Logo |
+| `src/pages/` | Home (`index.astro`), any other page (`[page].astro`), blog list and post pages, and the component gallery (`/components`) |
+| `src/content/pages/` | Pages as ordered lists of blocks (`home.json` is the home page), edited through the CMS |
 | `src/content/blog/` | Blog posts (Markdown), edited through the CMS |
-| `src/data/site.json` | Company text, contact info, social links, Instagram feed ID (edited through the CMS) |
+| `src/data/site.json` | Company text, contact info, social links, footer disclaimer, Instagram feed ID (edited through the CMS) |
+| `src/data/lines.json` | The genetic lines shown by the Collection block |
 | `public/admin/` | Sveltia CMS entry point and `config.yml` |
 | `public/logo/` | Logo SVGs: `logo-mark`, `logo-text-below`, `logo-text-above` |
 
+## Page builder
+
+Pages are an ordered list of **blocks**. In `/admin` → **Pages**, open a page (the one called `home` is the home page; any other page is published at `/<slug>`), then add, delete and drag blocks to rearrange them.
+
+- **Block types:** Hero, About, Process, Collection, Numbers, Journal, Contact panel, Text, Statement, Image, Call to action. See `/components` for a live gallery of each.
+- **Shared settings on every block:** *Space above and below* (none / compact / normal / roomy), an optional *Anchor name* (for links like `/#contact`), and an **Animation** group:
+  - *Block entrance*: none, fade, rise, slide from left or right, zoom, with *speed* and *delay* in milliseconds
+  - *Headline words rise one by one*: on or off
+  - *Cards and paragraphs appear in turn*: on or off
+- **Block-specific motion:** Hero leaf (draws itself / still / none, and subtle to bold), Process line (draws across or static), Numbers (count up or show final), Image (parallax on or off).
+- Motion switches off automatically for visitors who prefer reduced motion.
+- **Add a new block type:** build the component, register it in `src/components/Sections.astro`, add its schema in `src/content.config.ts` and its fields in `public/admin/config.yml`.
+
 ## Design system
 
-- **Type:** Fraunces (display, huge fluid scale, italic accents, outlined decorative type) + Manrope (text and labels). Tokens live in `src/styles/global.css`.
-- **Colour schemes:** Obsidian, Ivory, Midnight, Plum and High contrast, defined in `src/styles/themes.css`. Visitors switch via the Theme menu in the header or the footer. The first visit follows the OS (`prefers-color-scheme`, and High contrast for `prefers-contrast: more`). To add a scheme, add a `[data-theme='name']` block and a button in `ThemeSwitcher.astro`.
-- **Accessibility:** all text pairings are checked against WCAG AA (body text reaches AAA). Skip link, visible focus rings, 44px targets, semantic landmarks, reduced-motion support, no-JS fallback, keyboard access to the pinned horizontal collection.
-- **Scroll web components** (`src/scripts/components.ts`, vanilla custom elements): `<ga-reveal>`, `<ga-split>`, `<ga-scrub>`, `<ga-parallax>`, `<ga-hscroll>`, `<ga-counter>`, `<ga-progress>`, `<ga-theme>`. Use them in any page or component.
-- **Content:** homepage copy lives in `src/data/story.json`, collection lines in `src/data/lines.json`. All of it is placeholder text to replace, and all editable in `/admin`.
+- **Type:** Bitter (display) + Montserrat (text and labels). Tokens live in `src/styles/global.css`.
+- **Colour schemes:** Sage (default), Paper, Night and High contrast, defined in `src/styles/themes.css`. Visitors switch via the Theme menu in the header or the footer. The first visit follows the OS (`prefers-color-scheme`, and High contrast for `prefers-contrast: more`). To add a scheme, add a `[data-theme='name']` block and a button in `ThemeSwitcher.astro`.
+- **Accessibility:** all text pairings are checked against WCAG AA (body text reaches AAA). Skip link, visible focus rings, 44px targets, semantic landmarks, reduced-motion support, no-JS fallback.
+- **Scroll web components** (`src/scripts/components.ts`, vanilla custom elements): `<ga-section>`, `<ga-reveal>`, `<ga-split>`, `<ga-scrub>`, `<ga-parallax>`, `<ga-draw>`, `<ga-hscroll>`, `<ga-counter>`, `<ga-progress>`, `<ga-theme>`. Use them in any page or component.
+- **Content:** page text lives in `src/content/pages/*.json` (edited as blocks), collection lines in `src/data/lines.json`, company details in `src/data/site.json`. All of it is placeholder text to replace, and all editable in `/admin`.
 
 ## Instagram feed
 

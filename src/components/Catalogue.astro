@@ -1,47 +1,57 @@
 ---
 import lines from '../data/lines.json';
-import story from '../data/story.json';
 import LeafArt from './LeafArt.astro';
-const list = lines.lines;
+/** Page-builder block: collection (a card per genetic line from Genetics Lines in the CMS). */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, uid = 'lines', anchor = 'collection' } = Astro.props;
+const {
+  heading = 'The collection', intro = '',
+  limit = 0, plate_leaf = true,
+  cta_card = true, cta_kicker = 'Next drop', cta_label = 'Ask about upcoming seed runs', cta_link = '#connect',
+} = data;
+const all = lines.lines;
+const list = limit > 0 ? all.slice(0, limit) : all;
 ---
 
-<section id="collection" class="pad catalogue" aria-labelledby="lines-title">
+<section id={anchor || undefined} class="pad catalogue" aria-labelledby={`${uid}-title`}>
   <div class="wrap">
     <div class="head">
       <div>
         <ga-reveal><p class="eyebrow">{String(list.length).padStart(2, '0')} lines</p></ga-reveal>
-        <h2 id="lines-title"><ga-split>{story.lines_heading}</ga-split></h2>
+        {heading && <h2 id={`${uid}-title`}><ga-split>{heading}</ga-split></h2>}
       </div>
-      <ga-reveal><p class="muted intro">{story.lines_intro}</p></ga-reveal>
+      {intro && <ga-reveal><p class="muted intro">{intro}</p></ga-reveal>}
     </div>
 
     <ul class="grid">
       {list.map((l, i) => (
         <li>
           <ga-reveal delay={String((i % 3) * 100)}>
-            <article class="card line" style={`--c1:${l.c1};--c2:${l.c2}`} aria-labelledby={`line-${i}`}>
+            <article class="card line" style={`--c1:${l.c1};--c2:${l.c2}`} aria-labelledby={`${uid}-line-${i}`}>
               <div class="plate" aria-hidden="true">
-                <ga-draw><LeafArt class="lf" stroke={1.4} /></ga-draw>
+                {plate_leaf && <ga-draw><LeafArt class="lf" stroke={1.4} /></ga-draw>}
                 <span class="n label">№ {String(i + 1).padStart(2, '0')}</span>
                 <i class="chip" style="background:linear-gradient(135deg,var(--c1),var(--c2))"></i>
               </div>
               <p class="label meta"><span>{l.type}</span><span class="status">{l.status}</span></p>
-              <h3 id={`line-${i}`}>{l.name}</h3>
+              <h3 id={`${uid}-line-${i}`}>{l.name}</h3>
               <p class="lineage">{l.lineage}</p>
               <p class="muted notes">{l.notes}</p>
             </article>
           </ga-reveal>
         </li>
       ))}
-      <li>
-        <ga-reveal delay="200">
-          <a class="card cta" href="#connect">
-            <span class="label">Next drop</span>
-            <span class="display">Ask about upcoming seed runs</span>
-            <span class="arrow" aria-hidden="true">→</span>
-          </a>
-        </ga-reveal>
-      </li>
+      {cta_card && (
+        <li>
+          <ga-reveal delay="200">
+            <a class="card cta" href={cta_link}>
+              {cta_kicker && <span class="label">{cta_kicker}</span>}
+              <span class="display">{cta_label}</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </ga-reveal>
+        </li>
+      )}
     </ul>
   </div>
 </section>

@@ -1,0 +1,19 @@
+---
+/** Page-builder block: statement (one big sentence whose words light up as you scroll past). */
+interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
+const { data = {}, anchor = '' } = Astro.props;
+const { eyebrow = '', text = '' } = data;
+---
+
+{text && (
+  <section id={anchor || undefined} class="pad statement">
+    <div class="wrap">
+      {eyebrow && <ga-reveal><p class="eyebrow">{eyebrow}</p></ga-reveal>}
+      <p class="display big"><ga-scrub>{text}</ga-scrub></p>
+    </div>
+  </section>
+)}
+
+<style>
+  .big { font-size: var(--t-2); line-height: 1.2; font-weight: 400; max-width: 28ch; margin: 1.2rem 0 0; }
+</style>
