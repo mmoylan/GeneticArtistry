@@ -1,69 +1,80 @@
 ---
 /**
- * Inline, theme-aware logo. Colours come from the active palette (--ink, --leaf, --accent),
- * so it stays readable in every theme. Standalone files for print live in /public/logo.
+ * Inline, theme-aware Leaf A logo: two leaflets of the site's leaf form the legs of an A, a tan crossbar finishes it.
+ * Colours come from the site palette (--accent, --leaf, --ink). Company title only, no subtitle.
+ * Standalone files (colour, ivory, single-colour, icon) live in /public/logo; the generator is brand/logo-concepts/build-leaf-a.mjs.
+ *
+ * Variants: mark | text-below | text-above | horizontal
  */
 interface Props {
-  variant?: 'mark' | 'text-below' | 'text-above';
+  variant?: 'mark' | 'text-below' | 'text-above' | 'horizontal';
   height?: number;
   decorative?: boolean; // true when adjacent text already names the brand
 }
 const { variant = 'mark', height = 48, decorative = false } = Astro.props;
-const withText = variant !== 'mark';
-const vbH = withText ? 470 : 400;
-const markY = variant === 'text-above' ? 70 : 0;
-const textY = variant === 'text-above' ? 42 : 446;
-const id = 'leaf-' + Math.random().toString(36).slice(2, 8);
+
+// The mark is drawn with its apex at (0,0): x -122..122, y -26..292.
+const PETAL = 'M0 0C-40 -93 -40 -217 0 -310C40 -217 40 -93 0 0Z';
+const M = { x: -122, y: -26, w: 244, h: 318 };
+const f = (n: number) => +n.toFixed(2);
+const word = (size: number) => Math.round(size * 14.4); // fixed text length: same spacing in any font
+
+let W = 0, H = 0, tx = 0, ty = 0, s = 1;
+let text: { x: number; y: number; size: number; len: number; anchor: string } | null = null;
+
+if (variant === 'mark') {
+  const pad = 12;
+  W = M.w + pad * 2; H = M.h + pad * 2; tx = M.w / 2 + pad; ty = -M.y + pad;
+} else if (variant === 'text-below' || variant === 'text-above') {
+  s = 1.1;
+  const F = 36, pad = 28, gap = 32, cap = F * 0.72, len = word(F), mh = M.h * s;
+  W = len + pad * 2;
+  if (variant === 'text-below') {
+    const baseline = pad + mh + gap + cap;
+    H = baseline + pad; tx = W / 2; ty = pad - M.y * s;
+    text = { x: W / 2, y: baseline, size: F, len, anchor: 'middle' };
+  } else {
+    const baseline = pad + cap, top = baseline + gap;
+    H = top + mh + pad; tx = W / 2; ty = top - M.y * s;
+    text = { x: W / 2, y: baseline, size: F, len, anchor: 'middle' };
+  }
+} else {
+  s = 0.78;
+  const F = 40, pad = 28, gap = 44, len = word(F), mw = M.w * s, mh = M.h * s;
+  H = mh + pad * 2; W = pad + mw + gap + len + pad; tx = pad + mw / 2; ty = pad - M.y * s;
+  text = { x: pad + mw + gap, y: H / 2 + F * 0.36, size: F, len, anchor: 'start' };
+}
 ---
 
 <svg
   class="logo"
   xmlns="http://www.w3.org/2000/svg"
-  viewBox={`0 0 400 ${vbH}`}
+  viewBox={`0 0 ${f(W)} ${f(H)}`}
   style={`height:${height}px;width:auto`}
   role={decorative ? undefined : 'img'}
   aria-label={decorative ? undefined : 'Genetic Artistry'}
   aria-hidden={decorative ? 'true' : undefined}
 >
   <defs>
-    <g id={id} class="leaf">
-      <path d="M0 0C-7-14-7-32 0-46C7-32 7-14 0 0Z" />
-      <path transform="rotate(-28)" d="M0 0C-6.5-12-6.5-28 0-40C6.5-28 6.5-12 0 0Z" />
-      <path transform="rotate(28)" d="M0 0C-6.5-12-6.5-28 0-40C6.5-28 6.5-12 0 0Z" />
-      <path transform="rotate(-56)" d="M0 0C-5.5-10-5.5-22 0-32C5.5-22 5.5-10 0 0Z" />
-      <path transform="rotate(56)" d="M0 0C-5.5-10-5.5-22 0-32C5.5-22 5.5-10 0 0Z" />
-      <path transform="rotate(-82)" d="M0 0C-4.5-7-4.5-15 0-22C4.5-15 4.5-7 0 0Z" />
-      <path transform="rotate(82)" d="M0 0C-4.5-7-4.5-15 0-22C4.5-15 4.5-7 0 0Z" />
-      <path class="stem" d="M0 0V16" />
-    </g>
+    <!-- the clips leave a 2-unit slit where the two legs overlap at the apex -->
+    <clipPath id="la-l"><rect x="-300" y="-60" width="299" height="420" /></clipPath>
+    <clipPath id="la-r"><rect x="1" y="-60" width="299" height="420" /></clipPath>
   </defs>
-  <g transform={`translate(0 ${markY})`}>
-    <path class="ink" d="M230.4 132.5A105 105 0 1 0 255 204H178" stroke-width="24" />
-    <path class="ink" d="M265 62L188 338" stroke-width="26" />
-    <path class="ink" d="M222 204H302" stroke-width="22" />
-    <path class="ink" d="M265 62L312 214" stroke-width="26" />
-    <path class="ink-fill" d="M258 52Q265 44 272 52L272 66L258 66Z" />
-    <path class="ferrule" d="M295.8 219L328.2 209L335.9 233.8L303.5 243.8Z" />
-    <path class="bristle" d="M303.5 243.8L335.9 233.8C339 256 335 270 330 280C320 272 301 260 303.5 243.8Z" />
-    <path class="trail" d="M331 282C372 300 384 352 304 368C262 376 220 372 178 360" />
-    <use href={`#${id}`} transform="translate(352 304) rotate(55) scale(.95)" />
-    <use href={`#${id}`} transform="translate(366 336) rotate(115) scale(.85)" />
-    <use href={`#${id}`} transform="translate(336 363) rotate(172) scale(.8)" />
-    <use href={`#${id}`} transform="translate(282 373) rotate(184) scale(.68)" />
-    <use href={`#${id}`} transform="translate(232 372) rotate(190) scale(.55)" />
+  <g transform={`translate(${f(tx)} ${f(ty)}) scale(${s})`}>
+    <g clip-path="url(#la-l)"><path class="leg" transform="rotate(202)" d={PETAL} /></g>
+    <g clip-path="url(#la-r)"><path class="leg" transform="rotate(158)" d={PETAL} /></g>
+    <rect class="bar" x="-56" y="166" width="112" height="14" rx="7" />
+    <circle class="dot" cx="0" cy="-16" r="9" />
   </g>
-  {withText && (
-    <text x="200" y={textY} text-anchor="middle" class="word" font-size="28" letter-spacing="5">GENETIC ARTISTRY</text>
+  {text && (
+    <text class="word" x={f(text.x)} y={f(text.y)} text-anchor={text.anchor} font-size={text.size} textLength={text.len} lengthAdjust="spacing">GENETIC ARTISTRY</text>
   )}
 </svg>
 
 <style>
   .logo { overflow: visible; }
-  .ink { fill: none; stroke: var(--ink); }
-  .ink-fill { fill: var(--ink); }
-  .ferrule { fill: var(--accent); }
-  .bristle, .leaf { fill: var(--leaf); }
-  .stem { stroke: var(--leaf); stroke-width: 3; stroke-linecap: round; fill: none; }
-  .trail { fill: none; stroke: var(--leaf); stroke-width: 7; stroke-linecap: round; }
-  .word { fill: var(--ink); font-family: var(--display); font-weight: 400; }
+  .leg { fill: var(--accent); }
+  .bar { fill: #c9b27a; }
+  .dot { fill: var(--leaf); }
+  .word { fill: var(--ink); font-family: var(--display); font-weight: 500; }
 </style>

@@ -25,7 +25,8 @@ Edit content locally at `http://localhost:4321/admin` (Sveltia can open a local 
 | `src/data/site.json` | Company text, contact info, social links, footer disclaimer, Instagram feed ID (edited through the CMS) |
 | `src/data/lines.json` | The genetic lines shown by the Collection block |
 | `public/admin/` | Sveltia CMS entry point and `config.yml` |
-| `public/logo/` | Logo SVGs: `logo-mark`, `logo-text-below`, `logo-text-above` |
+| `public/logo/` | Leaf A logo SVGs: `logo-mark`, `logo-text-below`, `logo-text-above`, `logo-horizontal` (each with an `-ivory` version for dark backgrounds), plus `logo-mono-dark` and `logo-mono-white`. `public/favicon.svg` is the app icon |
+| `brand/logo-concepts/` | Logo generators. `node build-leaf-a.mjs --site` regenerates the Leaf A files above |
 
 ## Page builder
 
@@ -85,4 +86,4 @@ Fallback: on the login screen choose "Sign in with token" and paste a GitHub per
 
 ## Logo notes
 
-`public/logo/*.svg` are generated geometric vectors. The wordmark is live text (Cormorant Garamond with Georgia fallback); convert it to outlines in Inkscape/Illustrator before sending to print.
+The logo is **Leaf A**: two leaflets of the site's leaf form the legs of an A, with a tan crossbar. Company title only, no subtitle. It comes in four layouts (mark, title below, title above, horizontal) and four colourways (colour, ivory, mono dark, mono white), as standalone SVGs in `public/logo/` and as the inline `Logo` component. The wordmark is live text (Bitter, Georgia fallback) with a fixed text length; convert it to outlines in Inkscape or Illustrator before sending to print. Regenerate everything with `node build-leaf-a.mjs --site` in `brand/logo-concepts/`.

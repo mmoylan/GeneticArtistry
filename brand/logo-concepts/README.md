@@ -28,6 +28,21 @@ const petal = (len, w) => `M0 0C${-w} ${-len * 0.3} ${-w} ${-len * 0.7} 0 ${-len
 Hub at (0,0), leaflets point up (negative y), stem runs down. Solid versions separate overlapping leaflets with a
 hairline "seam" stroke in the background colour.
 
+## `build-leaf-a.mjs`: Leaf A (chosen, live on the website)
+
+Concept 03 developed into a full set. Company title only ("GENETIC ARTISTRY"), no subtitle, transparent backgrounds.
+
+```bash
+node build-leaf-a.mjs          # svg/leaf-a-<layout>-<scheme>.svg and sheet-leaf-a.html
+node build-leaf-a.mjs --site   # also writes ../../public/logo/* and ../../public/favicon.svg for the website
+```
+
+- **Layouts:** `mark`, `below` (title below), `above` (title above), `horizontal`, `icon` (rounded square for favicon and app icon).
+- **Schemes:** `color`, `ivory` (for dark backgrounds), `mono-dark`, `mono-white` (single colour for print and embroidery). Icon: `color` (dark square) and `light`.
+- The two leaflets are clipped to leave a 2-unit slit at the apex, so the A still reads in a single flat colour.
+- The website's inline `Logo` component (`src/components/Logo.astro`) uses the same geometry and takes its colours from the site palette.
+- The wordmark uses a fixed `textLength`, so spacing is identical whichever font loads.
+
 ## `build.mjs`: first eight concepts
 
 | File | Concept |

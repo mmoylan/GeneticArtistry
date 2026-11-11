@@ -64,7 +64,7 @@ const code = {
   counter: `<ga-counter to="120" suffix="+">120+</ga-counter>`,
   progress: `<ga-progress aria-hidden="true"></ga-progress>\n\n<!-- Already in Base.astro; the green bar at the very top of every page. -->`,
   hscroll: `<ga-hscroll>\n  <div class="pin"> <!-- position: sticky; top: 0; height: 100svh; overflow: hidden -->\n    <div class="track"> <!-- display: flex; gap: 1.5rem; width: max-content -->\n      <article>…</article> <article>…</article>\n    </div>\n  </div>\n</ga-hscroll>\n\n<!-- Turns vertical scroll into a sideways slide at ≥860 px; keyboard focus scrolls cards into view. -->`,
-  logo: `<Logo variant="mark" height={48} />\n<Logo variant="text-below" height={140} />\n<Logo variant="text-above" height={140} />\n\n<!-- Colours follow the active theme. Print versions: /public/logo/*.svg -->`,
+  logo: `<Logo variant="mark" height={48} />\n<Logo variant="text-below" height={170} />\n<Logo variant="text-above" height={170} />\n<Logo variant="horizontal" height={80} />\n\n<!-- Leaf A: two leaflets form the legs of an A, tan crossbar. Company title only, no subtitle. Colours follow the site palette. -->\n<!-- Standalone files in /public/logo (colour, ivory, mono, icon); generator: brand/logo-concepts/build-leaf-a.mjs -->`,
   leaf: `<LeafArt class="my-leaf" stroke={1.2} />\n\n<!-- Outline leaf in currentColor: set colour and opacity from CSS; crop it by placing it half outside an overflow:hidden parent. -->`,
   buttons: `<a class="btn" href="#">Outline</a>\n<a class="btn solid" href="#">Solid</a>\n<button class="btn">Button</button>`,
   cards: `<div class="card">Soft card (cream)</div>\n<div class="card" style="background:var(--accent);color:var(--on-accent)">Accent card</div>`,
@@ -211,11 +211,12 @@ const tokens = [
     <h2 class="group">Building blocks</h2>
     <p class="muted g-intro">Smaller pieces used inside the sections above. Mix them into any layout.</p>
 
-    <Spec id="logo" kind="Block" name="Logo" desc="The GA mark with the paintbrush leg, in three layouts. Colours follow the active theme." code={code.logo}>
+    <Spec id="logo" kind="Block" name="Logo" desc="The Leaf A logo: two leaflets of the site's leaf form the legs of an A, with a tan crossbar. Company title only, in four layouts. Colours follow the site palette." code={code.logo}>
       <div class="logos">
-        <Logo variant="mark" height={90} />
-        <Logo variant="text-below" height={170} />
-        <Logo variant="text-above" height={170} />
+        <Logo variant="mark" height={110} />
+        <Logo variant="text-below" height={190} />
+        <Logo variant="text-above" height={190} />
+        <Logo variant="horizontal" height={90} />
       </div>
     </Spec>
 
