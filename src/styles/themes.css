@@ -5,7 +5,7 @@
  */
 :root {
   --bg: #ffffff; --bg-2: #f3efe6; --ink: #151c1a; --muted: #4d5752;
-  --accent: #1f4d33; --on-accent: #ffffff; --leaf: #2f6b40; --tan: #d6c28a;
+  --accent: #1f4d33; --on-accent: #ffffff; --leaf: #2f6b40; --sage: #8fbf9a;
   --line: rgba(21, 28, 26, 0.16); --glow-a: #cfe0c8; --glow-b: #e9dcb2;
   color-scheme: light;
 }
