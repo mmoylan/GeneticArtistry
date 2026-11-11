@@ -8,7 +8,7 @@ import LeafArt from './LeafArt.astro';
  */
 interface Props { level?: 'none' | 'subtle' | 'medium'; position?: 'left' | 'right' | 'center' }
 const { level = 'subtle', position = 'left' } = Astro.props;
-const opacity = { subtle: 0.1, medium: 0.18 }[level as 'subtle'] ?? 0;
+const opacity = { subtle: 0.6, medium: 0.85 }[level as 'subtle'] ?? 0;
 ---
 
 {level !== 'none' && (
@@ -27,7 +27,7 @@ const opacity = { subtle: 0.1, medium: 0.18 }[level as 'subtle'] ?? 0;
   .backdrop :global(ga-parallax) { position: absolute; width: 200vw; left: -80vw; top: calc(110vh - 139.1vw); transform-origin: 50% 76.2%; }
   .backdrop[data-pos='right'] :global(ga-parallax) { left: -20vw; }
   .backdrop[data-pos='center'] :global(ga-parallax) { left: -50vw; }
-  .backdrop :global(.bd-leaf) { width: 100%; height: auto; color: var(--leaf); opacity: var(--bd-op, .1); }
+  .backdrop :global(.bd-leaf) { width: 100%; height: auto; color: var(--tan); opacity: var(--bd-op, .6); }
   /* Hairline strokes at any size, so the huge leaf stays delicate instead of getting thick. */
   .backdrop :global(.bd-leaf *) { vector-effect: non-scaling-stroke; }
   @media (prefers-contrast: more) { .backdrop { display: none; } }

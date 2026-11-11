@@ -62,7 +62,7 @@ const code = {
   cards: `<div class="card">Soft card (cream)</div>\n<div class="card" style="background:var(--accent);color:var(--on-accent)">Accent card</div>`,
   type: `<p class="eyebrow">Eyebrow</p>\n<h1>…</h1> <h2>…</h2> <h3>…</h3>\n<p class="lede">Display-serif lead paragraph</p>\n<p class="muted">Secondary text</p>\n<p class="label">Small caps label</p>\n<h2 class="mega">Huge</h2>\n<em>Italic accent word</em>`,
   social: `<SocialLinks />\n\n<!-- Links come from Site Settings → Social Links: Name, Icon, URL. Pick "Icons only" or "Icons with text" with the Social link style option. -->\n<!-- Accessibility: the name is always in the page for screen readers (hidden visually in icons-only mode), icons are decorative, targets are 48 px, the focus ring is visible, and the new-tab hint is announced. -->`,
-  backdrop: `<Base backdrop="subtle">…</Base>   <!-- subtle | medium | none -->\n\n<!-- Or set Background leaf on each page in /admin → Pages. Built from: -->\n<ga-parallax scope="page" speed="0.1" rotate="0.0025">\n  <LeafArt />   <!-- 200vw wide, fixed behind the page, about 10% opacity -->\n</ga-parallax>\n\n<!-- scope="page" drives the motion from total page scroll, so it works as a full-page background. -->`,
+  backdrop: `<Base backdrop="subtle">…</Base>   <!-- subtle | medium | none -->\n\n<!-- Or set Background leaf on each page in /admin → Pages. Built from: -->\n<ga-parallax scope="page" speed="0.1" rotate="0.0025">\n  <LeafArt />   <!-- 200vw wide, fixed behind the page, soft tan -->\n</ga-parallax>\n\n<!-- scope="page" drives the motion from total page scroll, so it works as a full-page background. -->`,
   instagram: `<InstagramFeed />\n\n<!-- With a Behold feed ID (site.json → instagram.behold_feed_id) it embeds the live grid; otherwise it shows a profile link. -->`,
   tokens: `color: var(--ink);  background: var(--bg-2);\nborder-color: var(--line);  color: var(--accent);\n\n<!-- Defined in src/styles/themes.css (one scheme; visitors who ask for more contrast get a stronger set). Every pairing is checked to WCAG AA. -->`,
 };
@@ -164,7 +164,7 @@ const tokens = [
       </div>
     </Spec>
 
-    <Spec id="backdrop" kind="Element" name="Page backdrop" desc="A huge outline leaf, 200% of the page width, with 40% of it off the left or right screen edge,, fixed behind the whole page and drifting and turning slowly as you scroll. Deliberately faint (about 10% opacity, 18% for Medium) so it never competes with text. Set per page as Background leaf: subtle, medium or none. It is hidden for visitors who request high contrast and when printing." code={code.backdrop} note="You are looking at it now: a faint leaf behind this whole page. Scroll to watch it move." />
+    <Spec id="backdrop" kind="Element" name="Page backdrop" desc="A huge outline leaf, 200% of the page width, with 40% of it off the left or right screen edge,, fixed behind the whole page and drifting and turning slowly as you scroll. Drawn in the soft tan token (--tan) and kept faint so it never competes with text. Set per page as Background leaf: subtle, medium or none. It is hidden for visitors who request high contrast and when printing." code={code.backdrop} note="You are looking at it now: a faint leaf behind this whole page. Scroll to watch it move." />
 
     <Spec id="parallax" kind="Element" name="ga-parallax" desc="Moves its content at a different speed from the page, giving depth. Can also rotate slightly." code={code.parallax} note="Scroll up and down: the leaf drifts and turns inside its frame.">
       <div class="px">
