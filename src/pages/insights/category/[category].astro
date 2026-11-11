@@ -1,0 +1,36 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PostCard from '../../../components/PostCard.astro';
+import CategoryNav from '../../../components/CategoryNav.astro';
+import { getCategories, getPosts } from '../../../lib/insights';
+
+// One page per category, listing its posts. Created automatically when a category is added in the CMS.
+export async function getStaticPaths() {
+  const categories = await getCategories();
+  return categories.map((category) => ({ params: { category: category.id }, props: { category } }));
+}
+
+const { category } = Astro.props;
+const posts = await getPosts(category.id);
+---
+
+<Base title={category.data.title} description={category.data.description || `${category.data.title} from Genetic Artistry.`}>
+  <section class="pad top">
+    <div class="wrap">
+      <p class="eyebrow">Insights</p>
+      <h1>{category.data.title}</h1>
+      {category.data.description && <p class="lede muted intro">{category.data.description}</p>}
+      <CategoryNav current={category.id} />
+      {posts.length === 0 ? <p class="muted">Nothing in this category yet. <a href="/insights">See all insights</a>.</p> : (
+        <ul class="grid">{posts.map((p) => <PostCard post={p} />)}</ul>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .top { padding-top: clamp(8rem, 14vw, 11rem); }
+  h1 { margin: 1.2rem 0 1rem; max-width: 16ch; }
+  .intro { margin: 0 0 2rem; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+</style>

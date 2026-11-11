@@ -1,13 +1,16 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getCategoryOf } from '../lib/insights';
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
 const { title, date, description, tags, cover } = post.data;
+const category = await getCategoryOf(post);
 ---
 
 <li>
-  <a class="card post" href={`/blog/${post.id}`}>
+  <a class="card post" href={`/insights/${post.id}`}>
     {cover && <img src={cover} alt="" loading="lazy" />}
+    {category && <span class="label cat">{category.data.title}</span>}
     <time class="label muted" datetime={date.toISOString()}>{date.toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' })}{tags.length > 0 && ` · ${tags.join(', ')}`}</time>
     <h3>{title}</h3>
     {description && <p class="muted">{description}</p>}
@@ -20,5 +23,6 @@ const { title, date, description, tags, cover } = post.data;
   .post:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,.08); }
   img { border-radius: calc(var(--r) - 8px); aspect-ratio: 16/9; object-fit: cover; width: 100%; }
   h3 { margin: 0; } p { margin: 0; }
+  .cat { color: var(--leaf); }
   .more { margin-top: auto; padding-top: 1rem; color: var(--leaf); }
 </style>

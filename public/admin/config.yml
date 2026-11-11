@@ -50,7 +50,7 @@ collections:
               - { name: title, label: Title, widget: string, hint: "Wrap a word in <em>…</em> for the italic accent." }
               - { name: lede, label: Intro, widget: text, required: false }
               - { name: primary_label, label: Main button text, widget: string, required: false }
-              - { name: primary_link, label: Main button link, widget: string, required: false, hint: "e.g. #collection or /blog" }
+              - { name: primary_link, label: Main button link, widget: string, required: false, hint: "e.g. #collection or /insights" }
               - { name: secondary_label, label: Second button text, widget: string, required: false }
               - { name: secondary_link, label: Second button link, widget: string, required: false }
               - { name: leaf, label: Background leaf, widget: select, default: draw, options: [{ label: "Draws itself in", value: draw }, { label: "Still (no drawing)", value: static }, { label: "No leaf", value: none }] }
@@ -154,14 +154,15 @@ collections:
               - *anchor
               - *animation
 
-          - label: Journal (latest posts)
-            name: journal
+          - label: Insights (latest posts)
+            name: insights
             widget: object
-            summary: "Journal: {{heading}}"
+            summary: "Insights: {{heading}}"
             fields:
               - { name: eyebrow, label: Eyebrow, widget: string, required: false }
               - { name: heading, label: Heading, widget: string }
               - { name: count, label: Number of posts, widget: number, value_type: int, min: 1, max: 12, default: 3 }
+              - { name: category, label: Only show this category, widget: relation, collection: categories, search_fields: [title], value_field: "{{slug}}", display_fields: [title], required: false, hint: "Leave empty to show the newest from every category." }
               - { name: button_label, label: Button text, widget: string, required: false }
               - *spacing
               - *anchor
@@ -234,8 +235,8 @@ collections:
               - *animation
 
   - name: blog
-    label: Blog Posts
-    label_singular: Blog Post
+    label: Insights
+    label_singular: Insight
     folder: src/content/blog
     create: true
     extension: md
@@ -245,11 +246,27 @@ collections:
     fields:
       - { name: title, label: Title, widget: string }
       - { name: date, label: Publish Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
-      - { name: description, label: Summary, widget: text, hint: "Shown on the blog list and in search results." }
+      - { name: description, label: Summary, widget: text, hint: "Shown on the Insights list and in search results." }
+      - { name: category, label: Category, widget: relation, collection: categories, search_fields: [title], value_field: "{{slug}}", display_fields: [title], required: false, hint: "Create new categories under Insight Categories." }
       - { name: cover, label: Cover Image, widget: image, required: false }
       - { name: tags, label: Tags, widget: list, required: false }
       - { name: draft, label: Draft (hide from site), widget: boolean, default: false }
       - { name: body, label: Body, widget: markdown }
+
+  - name: categories
+    label: Insight Categories
+    label_singular: Insight Category
+    folder: src/content/categories
+    format: json
+    extension: json
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [order, title]
+    fields:
+      - { name: title, label: Category name, widget: string, hint: "e.g. Business Insights, Cultivation, Grow Journal. Each category gets its own page and a filter chip on the Insights page." }
+      - { name: description, label: Short description, widget: text, required: false, hint: "Shown at the top of the category page." }
+      - { name: order, label: Order, widget: number, value_type: int, default: 100, hint: "Lower numbers come first." }
 
   - name: settings
     label: Site Settings

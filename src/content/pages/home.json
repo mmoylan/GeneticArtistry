@@ -78,11 +78,12 @@
       "animation": { "entrance": "none", "item_motion": true }
     },
     {
-      "type": "journal",
-      "eyebrow": "Journal",
+      "type": "insights",
+      "eyebrow": "Insights",
       "heading": "Notes from the grow room",
       "count": 3,
-      "button_label": "All entries",
+      "category": "",
+      "button_label": "All insights",
       "spacing": "normal",
       "animation": { "entrance": "none", "headline_words": true, "item_motion": true }
     },

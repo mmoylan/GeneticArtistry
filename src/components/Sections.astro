@@ -10,7 +10,7 @@ import Specimen from './Specimen.astro';
 import Process from './Process.astro';
 import Catalogue from './Catalogue.astro';
 import Stats from './Stats.astro';
-import Journal from './Journal.astro';
+import Insights from './Insights.astro';
 import Connect from './Connect.astro';
 import TextBlock from './TextBlock.astro';
 import Statement from './Statement.astro';
@@ -21,7 +21,7 @@ interface Props { sections: Array<Record<string, any>> }
 const { sections } = Astro.props;
 
 const registry: Record<string, any> = {
-  hero: Hero, about: Specimen, process: Process, collection: Catalogue, stats: Stats, journal: Journal,
+  hero: Hero, about: Specimen, process: Process, collection: Catalogue, stats: Stats, insights: Insights,
   connect: Connect, text: TextBlock, statement: Statement, image: ImageBand, cta: CtaBand,
 };
 // Anchors the header links rely on (/#specimen, /#process, /#collection, /#connect).

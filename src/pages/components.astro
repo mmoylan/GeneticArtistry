@@ -9,7 +9,8 @@ import Catalogue from '../components/Catalogue.astro';
 import Stats from '../components/Stats.astro';
 import Connect from '../components/Connect.astro';
 import PostCard from '../components/PostCard.astro';
-import Journal from '../components/Journal.astro';
+import Insights from '../components/Insights.astro';
+import CategoryNav from '../components/CategoryNav.astro';
 import TextBlock from '../components/TextBlock.astro';
 import Statement from '../components/Statement.astro';
 import ImageBand from '../components/ImageBand.astro';
@@ -28,7 +29,7 @@ const sampleImage = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http
 
 const toc = [
   ['Page builder', [['builder', 'How blocks work']]],
-  ['Page sections', [['hero', 'Hero'], ['specimen', 'About bento'], ['process', 'Process steps'], ['collection', 'Catalogue'], ['stats', 'Stats'], ['connect', 'Connect'], ['journal', 'Journal'], ['text', 'Text'], ['statement', 'Statement'], ['image', 'Image'], ['cta', 'Call to action'], ['postcard', 'Post card']]],
+  ['Page sections', [['hero', 'Hero'], ['specimen', 'About bento'], ['process', 'Process steps'], ['collection', 'Catalogue'], ['stats', 'Stats'], ['connect', 'Connect'], ['insights', 'Insights'], ['text', 'Text'], ['statement', 'Statement'], ['image', 'Image'], ['cta', 'Call to action'], ['postcard', 'Post card'], ['categories', 'Category filter']]],
   ['Motion elements', [['section', 'ga-section'], ['backdrop', 'Page backdrop'], ['reveal', 'ga-reveal'], ['split', 'ga-split'], ['scrub', 'ga-scrub'], ['draw', 'ga-draw'], ['parallax', 'ga-parallax'], ['counter', 'ga-counter'], ['progress', 'ga-progress'], ['hscroll', 'ga-hscroll']]],
   ['Building blocks', [['logo', 'Logo'], ['leaf', 'LeafArt'], ['buttons', 'Buttons'], ['cards', 'Cards'], ['type', 'Typography'], ['social', 'Social links'], ['instagram', 'Instagram feed'], ['tokens', 'Colour tokens']]],
 ] as const;
@@ -41,13 +42,14 @@ const code = {
   stats: `{ "type": "stats", "items": [{ "value": 12, "suffix": "+", "label": "Lines released" }], "count_up": true }`,
   connect: `{ "type": "connect", "heading": "Let's make something <em>rare.</em>", "show_email": true, "show_social": true, "show_instagram": true }\n\n// Email, phone and location come from Site Settings → Contact.`,
   builder: `{\n  "title": "Home",\n  "sections": [\n    { "type": "hero", "title": "…", "animation": { "entrance": "fade", "duration": 1200 } },\n    { "type": "about", "heading": "…", "spacing": "roomy" },\n    { "type": "cta", "heading": "…", "anchor": "contact" }\n  ]\n}\n\n// Stored in src/content/pages/<slug>.json and edited in /admin → Pages. The page called "home" is the home page; any other page appears at /<slug>.`,
-  journal: `{ "type": "journal", "heading": "Notes from the grow room", "count": 3, "button_label": "All entries" }\n\n// Shows the newest published blog posts; hides itself when there are none.`,
+  insights: `{ "type": "insights", "heading": "Notes from the grow room", "count": 3, "category": "cultivation", "button_label": "All insights" }\n\n// Leave category blank for the newest insights from every category. Hides itself when there are none.`,
   text: `{ "type": "text", "eyebrow": "Our story", "heading": "…", "body": "markdown paragraphs", "align": "left" }`,
   statement: `{ "type": "statement", "text": "One big sentence whose words light up as you scroll." }`,
   image: `{ "type": "image", "image": "/uploads/grow-room.jpg", "alt": "…", "caption": "…", "height": "tall", "parallax": true }`,
   cta: `{ "type": "cta", "heading": "Ready to talk?", "text": "…", "button_label": "Get in touch", "button_link": "#connect" }`,
   section: `<ga-section effect="rise" delay="0" duration="1000" data-headline="on" data-items="on" data-spacing="normal">\n  …a whole block…\n</ga-section>\n\n// Added automatically around every block by <Sections />. In /admin it is each block's Animation group:\n//   Block entrance: none | fade | rise | left | right | zoom      Speed / delay: milliseconds\n//   Headline words rise one by one: on | off                       Cards and paragraphs appear in turn: on | off\n//   Block-specific: hero leaf (draws / still / none, subtle→bold), process line, counting numbers, parallax image.`,
-  postcard: `---\nimport PostCard from '../components/PostCard.astro';\nconst posts = await getCollection('blog');\n---\n<ul class="grid">\n  {posts.map((p) => <PostCard post={p} />)}\n</ul>`,
+  categories: `<CategoryNav />            <!-- on /insights -->\n<CategoryNav current="cultivation" />   <!-- on a category page -->\n\n// Add a category in /admin → Insight Categories (title, description, order), then pick it on each post.`,
+  postcard: `---\nimport PostCard from '../components/PostCard.astro';\nconst posts = await getPosts(); // newest first; getPosts('cultivation') filters by category\n---\n<ul class="grid">\n  {posts.map((p) => <PostCard post={p} />)}\n</ul>`,
   reveal: `<ga-reveal>…anything…</ga-reveal>\n<ga-reveal delay="200">staggered by 200 ms</ga-reveal>\n<ga-reveal effect="fade">fades without sliding</ga-reveal>`,
   split: `<h2><ga-split>One breeder. <em>Every plant</em> a canvas.</ga-split></h2>\n\n<!-- Words rise into view. Inline tags such as <em> are kept. -->`,
   scrub: `<p class="display"><ga-scrub>Words light up one by one as you scroll past this paragraph.</ga-scrub></p>`,
@@ -111,8 +113,8 @@ const tokens = [
     <Stats data={block('stats')} uid="gd-stats" anchor="" />
     <div class="wrap"><Spec id="connect" kind="Section" name="Connect" desc="Contact panel with email, social links and the Instagram feed." code={code.connect} /></div>
     <Connect data={block('connect')} uid="gd-connect" anchor="" />
-    <div class="wrap"><Spec id="journal" kind="Section" name="Journal" desc="Latest blog posts as cards, with a button to the full journal." code={code.journal} /></div>
-    <Journal data={block('journal')} uid="gd-journal" anchor="" />
+    <div class="wrap"><Spec id="insights" kind="Section" name="Insights" desc="Latest insights as cards, optionally from just one category (for example only Cultivation), with a button to the full list or that category's page." code={code.insights} /></div>
+    <Insights data={block('insights')} uid="gd-insights" anchor="" />
     <div class="wrap"><Spec id="text" kind="Section" name="Text" desc="Heading and body copy in a comfortable reading column, left aligned or centred. For general pages like About or FAQ." code={code.text} /></div>
     <TextBlock data={{ eyebrow: 'Our story', heading: 'Slow, careful and documented', body: 'Every line starts as a single seed and is followed for many seasons.\n\nNotes, photographs and measurements are kept for each plant, so nothing is left to memory.', align: 'left' }} uid="gd-text" anchor="" />
     <div class="wrap"><Spec id="statement" kind="Section" name="Statement" desc="One large sentence whose words light up as the visitor scrolls past it." code={code.statement} /></div>
@@ -125,10 +127,14 @@ const tokens = [
 
   <div class="wrap">
     {posts.length > 0 && (
-      <Spec id="postcard" kind="Block" name="Post card" desc="Journal entry card with date, tags, title and summary. Used in the blog list and on the home page." code={code.postcard}>
+      <Spec id="postcard" kind="Block" name="Post card" desc="Insight card with category, date, tags, title and summary. Used in the Insights list, category pages and the home page." code={code.postcard}>
         <ul class="plist">{posts.map((p) => <PostCard post={p} />)}</ul>
       </Spec>
     )}
+
+    <Spec id="categories" kind="Block" name="Category filter" desc="Chips that filter Insights by category. Categories are created in /admin → Insight Categories; each gets its own page at /insights/category/<name>, and a chip appears once it has a published post." code={code.categories}>
+      <CategoryNav />
+    </Spec>
 
     <h2 class="group">Motion elements</h2>
     <p class="muted g-intro">Custom HTML elements (no framework). They respect “reduce motion” and fall back to plain, fully visible content without JavaScript.</p>

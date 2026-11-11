@@ -1,24 +1,25 @@
 ---
-import { getCollection } from 'astro:content';
+import { getEntry } from 'astro:content';
 import PostCard from './PostCard.astro';
-/** Page-builder block: journal (latest blog posts). Renders nothing when there are no published posts. */
+import { getPosts } from '../lib/insights';
+/** Page-builder block: insights (latest posts, optionally from one category). Renders nothing when there are none. */
 interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
-const { data = {}, uid = 'journal', anchor = '' } = Astro.props;
-const { eyebrow = 'Journal', heading = 'Notes from the grow room', count = 3, button_label = 'All entries' } = data;
-const posts = (await getCollection('blog', (p) => !p.data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, Math.max(1, count));
+const { data = {}, uid = 'insights', anchor = '' } = Astro.props;
+const { eyebrow = 'Insights', heading = 'Notes from the grow room', count = 3, category = '', button_label = 'All insights' } = data;
+const posts = (await getPosts(category || undefined)).slice(0, Math.max(1, count));
+const cat = category ? await getEntry('categories', category) : undefined;
+const href = cat ? `/insights/category/${cat.id}` : '/insights';
 ---
 
 {posts.length > 0 && (
-  <section id={anchor || undefined} class="pad journal" aria-labelledby={`${uid}-title`}>
+  <section id={anchor || undefined} class="pad insights" aria-labelledby={`${uid}-title`}>
     <div class="wrap">
       <div class="head">
         <div>
           {eyebrow && <ga-reveal><p class="eyebrow">{eyebrow}</p></ga-reveal>}
           {heading && <h2 id={`${uid}-title`}><ga-split>{heading}</ga-split></h2>}
         </div>
-        {button_label && <a class="btn" href="/blog">{button_label}</a>}
+        {button_label && <a class="btn" href={href}>{button_label}</a>}
       </div>
       <ul class="grid">{posts.map((p) => <PostCard post={p} />)}</ul>
     </div>

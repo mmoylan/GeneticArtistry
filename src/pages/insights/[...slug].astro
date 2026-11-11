@@ -1,20 +1,23 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { getPosts, getCategoryOf } from '../../lib/insights';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', (p) => !p.data.draft);
+  const posts = await getPosts();
   return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
 const { title, date, description, cover, tags } = post.data;
+const category = await getCategoryOf(post);
 ---
 
 <Base title={title} description={description}>
   <article class="wrap pad top">
-    <a class="back label" href="/blog">← All entries</a>
+    <a class="back label" href="/insights">← All insights</a>
+    {category && <p class="cat"><a class="label" href={`/insights/category/${category.id}`}>{category.data.title}</a></p>}
     <h1>{title}</h1>
     <p class="meta label muted">
       <time datetime={date.toISOString()}>{date.toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' })}</time>
@@ -28,6 +31,8 @@ const { title, date, description, cover, tags } = post.data;
 <style>
   .top { padding-top: clamp(8rem, 16vw, 12rem); }
   .back { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; color: var(--accent); }
-  h1 { margin: 1.5rem 0 1rem; font-size: var(--t-1); max-width: 16ch; }
+  .cat { margin: 1.2rem 0 0; }
+  .cat a { display: inline-flex; align-items: center; min-height: 44px; color: var(--leaf); }
+  h1 { margin: .4rem 0 1rem; font-size: var(--t-1); max-width: 16ch; }
   .cover { margin: 2.5rem 0; width: 100%; }
 </style>

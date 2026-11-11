@@ -8,8 +8,19 @@ const blog = defineCollection({
     date: z.coerce.date(),
     description: z.string().default(''),
     cover: z.string().optional(),
+    category: z.string().optional(), // id of an entry in the categories collection
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+  }),
+});
+
+/* Insight categories (e.g. Business Insights, Cultivation, Grow Journal), managed in the CMS. */
+const categories = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/categories' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().default(''),
+    order: z.coerce.number().default(100),
   }),
 });
 
@@ -43,7 +54,7 @@ const section = z.discriminatedUnion('type', [
   z.object({ type: z.literal('process'), ...base, eyebrow: str, heading: str, intro: str, steps: z.array(z.object({ title: str, text: str })).optional(), cta_label: str, cta_link: str, rail: bool }),
   z.object({ type: z.literal('collection'), ...base, heading: str, intro: str, limit: num, plate_leaf: bool, cta_card: bool, cta_kicker: str, cta_label: str, cta_link: str }),
   z.object({ type: z.literal('stats'), ...base, items: z.array(z.object({ value: num, suffix: str, label: str })).optional(), count_up: bool }),
-  z.object({ type: z.literal('journal'), ...base, eyebrow: str, heading: str, count: num, button_label: str }),
+  z.object({ type: z.literal('insights'), ...base, eyebrow: str, heading: str, count: num, category: str, button_label: str }),
   z.object({ type: z.literal('connect'), ...base, eyebrow: str, heading: str, show_email: bool, show_details: bool, show_social: bool, show_instagram: bool }),
   z.object({ type: z.literal('text'), ...base, eyebrow: str, heading: str, body: str, align: z.enum(['left', 'center']).optional() }),
   z.object({ type: z.literal('statement'), ...base, eyebrow: str, text: str }),
@@ -62,4 +73,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { blog, pages };
+export const collections = { blog, categories, pages };

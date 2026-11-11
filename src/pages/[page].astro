@@ -6,7 +6,7 @@ import Sections from '../components/Sections.astro';
 // Every other entry in the Pages collection becomes its own page at /<slug>.
 export async function getStaticPaths() {
   // Names already used by real routes are skipped so they can't be shadowed.
-  const reserved = new Set(['home', 'blog', 'components', 'admin']);
+  const reserved = new Set(['home', 'insights', 'blog', 'components', 'admin']);
   const pages = await getCollection('pages');
   return pages.filter((p) => !reserved.has(p.id)).map((p) => ({ params: { page: p.id }, props: { page: p } }));
 }
