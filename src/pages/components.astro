@@ -16,7 +16,7 @@ import ImageBand from '../components/ImageBand.astro';
 import CtaBand from '../components/CtaBand.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import InstagramFeed from '../components/InstagramFeed.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher.astro';
+import SocialIcon from '../components/SocialIcon.astro';
 import Logo from '../components/Logo.astro';
 import LeafArt from '../components/LeafArt.astro';
 
@@ -29,8 +29,8 @@ const sampleImage = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http
 const toc = [
   ['Page builder', [['builder', 'How blocks work']]],
   ['Page sections', [['hero', 'Hero'], ['specimen', 'About bento'], ['process', 'Process steps'], ['collection', 'Catalogue'], ['stats', 'Stats'], ['connect', 'Connect'], ['journal', 'Journal'], ['text', 'Text'], ['statement', 'Statement'], ['image', 'Image'], ['cta', 'Call to action'], ['postcard', 'Post card']]],
-  ['Motion elements', [['section', 'ga-section'], ['reveal', 'ga-reveal'], ['split', 'ga-split'], ['scrub', 'ga-scrub'], ['draw', 'ga-draw'], ['parallax', 'ga-parallax'], ['counter', 'ga-counter'], ['progress', 'ga-progress'], ['hscroll', 'ga-hscroll']]],
-  ['Building blocks', [['logo', 'Logo'], ['leaf', 'LeafArt'], ['buttons', 'Buttons'], ['cards', 'Cards'], ['type', 'Typography'], ['social', 'Social links'], ['instagram', 'Instagram feed'], ['theme', 'Theme switcher'], ['tokens', 'Colour tokens']]],
+  ['Motion elements', [['section', 'ga-section'], ['backdrop', 'Page backdrop'], ['reveal', 'ga-reveal'], ['split', 'ga-split'], ['scrub', 'ga-scrub'], ['draw', 'ga-draw'], ['parallax', 'ga-parallax'], ['counter', 'ga-counter'], ['progress', 'ga-progress'], ['hscroll', 'ga-hscroll']]],
+  ['Building blocks', [['logo', 'Logo'], ['leaf', 'LeafArt'], ['buttons', 'Buttons'], ['cards', 'Cards'], ['type', 'Typography'], ['social', 'Social links'], ['instagram', 'Instagram feed'], ['tokens', 'Colour tokens']]],
 ] as const;
 
 const code = {
@@ -61,10 +61,10 @@ const code = {
   buttons: `<a class="btn" href="#">Outline</a>\n<a class="btn solid" href="#">Solid</a>\n<button class="btn">Button</button>`,
   cards: `<div class="card">Soft card (cream)</div>\n<div class="card" style="background:var(--accent);color:var(--on-accent)">Accent card</div>`,
   type: `<p class="eyebrow">Eyebrow</p>\n<h1>…</h1> <h2>…</h2> <h3>…</h3>\n<p class="lede">Display-serif lead paragraph</p>\n<p class="muted">Secondary text</p>\n<p class="label">Small caps label</p>\n<h2 class="mega">Huge</h2>\n<em>Italic accent word</em>`,
-  social: `<SocialLinks />\n\n<!-- Links come from site.json → socials[] (label + url). Empty URLs are skipped. -->`,
+  social: `<SocialLinks />\n\n<!-- Links come from Site Settings → Social Links: Name, Icon, URL. Pick "Icons only" or "Icons with text" with the Social link style option. -->\n<!-- Accessibility: the name is always in the page for screen readers (hidden visually in icons-only mode), icons are decorative, targets are 48 px, the focus ring is visible, and the new-tab hint is announced. -->`,
+  backdrop: `<Base backdrop="subtle">…</Base>   <!-- subtle | medium | none -->\n\n<!-- Or set Background leaf on each page in /admin → Pages. Built from: -->\n<ga-parallax scope="page" speed="0.1" rotate="0.0025">\n  <LeafArt />   <!-- 150vw wide, fixed behind the page, about 7% opacity -->\n</ga-parallax>\n\n<!-- scope="page" drives the motion from total page scroll, so it works as a full-page background. -->`,
   instagram: `<InstagramFeed />\n\n<!-- With a Behold feed ID (site.json → instagram.behold_feed_id) it embeds the live grid; otherwise it shows a profile link. -->`,
-  theme: `<ThemeSwitcher />\n\n<!-- Sage / Paper / Night / High contrast. Choice is remembered; also follows prefers-color-scheme and prefers-contrast. -->`,
-  tokens: `color: var(--ink);  background: var(--bg-2);\nborder-color: var(--line);  color: var(--accent);\n\n<!-- Defined per theme in src/styles/themes.css; every pairing is checked to WCAG AA. -->`,
+  tokens: `color: var(--ink);  background: var(--bg-2);\nborder-color: var(--line);  color: var(--accent);\n\n<!-- Defined in src/styles/themes.css (one scheme; visitors who ask for more contrast get a stronger set). Every pairing is checked to WCAG AA. -->`,
 };
 
 const tokens = [
@@ -164,6 +164,8 @@ const tokens = [
       </div>
     </Spec>
 
+    <Spec id="backdrop" kind="Element" name="Page backdrop" desc="A huge outline leaf, 150% of the page width, fixed behind the whole page and drifting and turning slowly as you scroll. Deliberately faint (about 7% opacity) so it never competes with text. Set per page as Background leaf: subtle, medium or none. It is hidden for visitors who request high contrast and when printing." code={code.backdrop} note="You are looking at it now: a faint leaf behind this whole page. Scroll to watch it move." />
+
     <Spec id="parallax" kind="Element" name="ga-parallax" desc="Moves its content at a different speed from the page, giving depth. Can also rotate slightly." code={code.parallax} note="Scroll up and down: the leaf drifts and turns inside its frame.">
       <div class="px">
         <ga-parallax speed="0.25" rotate="0.04"><LeafArt class="pxleaf" stroke={1.2} /></ga-parallax>
@@ -221,8 +223,12 @@ const tokens = [
       <p class="label">Small caps label</p>
     </Spec>
 
-    <Spec id="social" kind="Block" name="Social links" desc="Large text links to your profiles, opened in a new tab with an accessible hint." code={code.social}>
+    <Spec id="social" kind="Block" name="Social links" desc="Round, single-colour icon buttons (or text links) to your profiles, chosen per link in the CMS from a set of 25 icons. Each keeps a readable name for screen readers, a 48 px target and a visible focus ring." code={code.social}>
       <SocialLinks />
+      <p class="label muted" style="margin:1.6rem 0 .8rem">The icon set</p>
+      <ul class="iconset">
+        {['instagram','facebook','x','youtube','tiktok','linkedin','pinterest','threads','bluesky','reddit','discord','mastodon','twitch','spotify','soundcloud','whatsapp','telegram','snapchat','vimeo','etsy','substack','patreon','github','email','website'].map((n) => (<li><SocialIcon name={n} size={22} /><span class="label muted">{n}</span></li>))}
+      </ul>
     </Spec>
 
     <Spec id="instagram" kind="Block" name="Instagram feed" desc="Live Instagram grid through Behold, or a simple profile link until a feed is connected." code={code.instagram}>
@@ -230,11 +236,7 @@ const tokens = [
       <p class="muted">Nothing shows here until an Instagram handle or Behold feed ID is set in the CMS.</p>
     </Spec>
 
-    <Spec id="theme" kind="Block" name="Theme switcher" desc="Lets visitors pick Sage, Paper, Night or High contrast. Remembered between visits." code={code.theme}>
-      <ThemeSwitcher />
-    </Spec>
-
-    <Spec id="tokens" kind="Reference" name="Colour tokens" desc="The colours every component is built from. Switch theme to see them change." code={code.tokens}>
+    <Spec id="tokens" kind="Reference" name="Colour tokens" desc="The colours every component is built from." code={code.tokens}>
       <ul class="tokens">
         {tokens.map(([v, label]) => (
           <li><span class="chip" style={`background:var(${v})`} aria-hidden="true"></span><code>{v}</code><span class="muted">{label}</span></li>
@@ -289,6 +291,9 @@ const tokens = [
   .lcard { position: relative; overflow: hidden; min-height: 14rem; border-radius: 16px; background: var(--bg-2); }
   .lcard :global(.l1) { position: absolute; width: 90%; right: -18%; bottom: -34%; color: var(--leaf); opacity: .4; }
   .lcard :global(.l2) { position: absolute; width: 70%; left: 15%; top: 8%; color: var(--ink); opacity: .85; }
+  .iconset { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem 1rem; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+  .iconset li { display: flex; flex-direction: column; align-items: center; gap: .4rem; padding: .8rem .4rem; border: 1px solid var(--line); border-radius: 14px; }
+  .iconset .label { font-size: .65rem; letter-spacing: .12em; }
   .row { display: flex; flex-wrap: wrap; gap: .8rem; margin: 0; }
   .acc { background: var(--accent); color: var(--on-accent); }
   .acc .label { color: var(--on-accent); }

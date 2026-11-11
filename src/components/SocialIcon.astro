@@ -1,0 +1,45 @@
+---
+/**
+ * Monochrome social icon set. Brand glyphs come from Simple Icons (CC0), drawn in a single colour
+ * (currentColor) so they follow the theme. `email` and `website` are drawn in the same weight.
+ * Always decorative: the link around it carries the accessible name (see SocialLinks.astro).
+ * To offer another icon: import it here, add it to `brand`, and add it to the select in public/admin/config.yml.
+ */
+import {
+  siInstagram, siFacebook, siX, siYoutube, siTiktok, siLinkedin, siPinterest, siThreads, siBluesky,
+  siReddit, siDiscord, siMastodon, siTwitch, siSpotify, siSoundcloud, siWhatsapp, siTelegram,
+  siSnapchat, siVimeo, siEtsy, siSubstack, siPatreon, siGithub,
+} from 'simple-icons';
+
+interface Props { name: string; size?: number }
+const { name, size = 22 } = Astro.props;
+
+const brand: Record<string, { path: string }> = {
+  instagram: siInstagram, facebook: siFacebook, x: siX, youtube: siYoutube, tiktok: siTiktok,
+  linkedin: siLinkedin, pinterest: siPinterest, threads: siThreads, bluesky: siBluesky, reddit: siReddit,
+  discord: siDiscord, mastodon: siMastodon, twitch: siTwitch, spotify: siSpotify, soundcloud: siSoundcloud,
+  whatsapp: siWhatsapp, telegram: siTelegram, snapchat: siSnapchat, vimeo: siVimeo, etsy: siEtsy,
+  substack: siSubstack, patreon: siPatreon, github: siGithub,
+};
+const drawn: Record<string, string> = {
+  email: 'M3.5 6h17v12h-17z M3.5 7.5l8.5 6.2 8.5-6.2',
+  website: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M3 12h18 M12 3c3.2 3.2 3.2 14.8 0 18 M12 3c-3.2 3.2-3.2 14.8 0 18',
+};
+const glyph = brand[name];
+const line = drawn[name];
+---
+
+{glyph && (
+  <svg class="icon" viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true" focusable="false">
+    <path d={glyph.path} />
+  </svg>
+)}
+{!glyph && line && (
+  <svg class="icon" viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path d={line} />
+  </svg>
+)}
+
+<style>
+  .icon { display: block; flex: none; }
+</style>

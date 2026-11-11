@@ -7,7 +7,7 @@ import Sections from '../components/Sections.astro';
 const page = await getEntry('pages', 'home');
 ---
 
-<Base description={page?.data.description || undefined}>
+<Base description={page?.data.description || undefined} backdrop={page?.data.backdrop}>
   {page ? (
     <Sections sections={page.data.sections} />
   ) : (

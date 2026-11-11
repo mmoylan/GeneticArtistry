@@ -10,11 +10,13 @@
   "socials": [
     {
       "label": "Instagram",
-      "url": "https://instagram.com/"
+      "url": "https://instagram.com/",
+      "icon": "instagram"
     }
   ],
   "instagram": {
     "handle": "",
     "behold_feed_id": ""
-  }
+  },
+  "social_style": "icons"
 }

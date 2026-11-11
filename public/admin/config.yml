@@ -33,6 +33,7 @@ collections:
     fields:
       - { name: title, label: Page Title, widget: string }
       - { name: description, label: Description (search results), widget: text, required: false }
+      - { name: backdrop, label: Background leaf, widget: select, default: subtle, hint: "A huge, faint leaf fixed behind the whole page that drifts as you scroll. Switched off automatically for visitors who ask for high contrast.", options: [{ label: "Subtle (recommended)", value: subtle }, { label: Medium, value: medium }, { label: None, value: none }] }
       - label: Sections
         name: sections
         widget: list
@@ -266,12 +267,14 @@ collections:
               - { name: email, label: Email, widget: string, required: false }
               - { name: phone, label: Phone, widget: string, required: false }
               - { name: location, label: Location, widget: string, required: false }
+          - { name: social_style, label: Social link style, widget: select, default: icons, hint: "Icons only is the cleanest. Icons with text also shows each name beside its icon.", options: [{ label: "Icons only", value: icons }, { label: "Icons with text", value: icons_text }] }
           - label: Social Links
             name: socials
             widget: list
             summary: "{{fields.label}}"
             fields:
-              - { name: label, label: Label, widget: string }
+              - { name: label, label: "Name (read aloud by screen readers)", widget: string, hint: "Required, even with an icon: e.g. Instagram. It is hidden visually in icons-only mode but is what screen readers announce." }
+              - { name: icon, label: Icon, widget: select, default: none, options: [{ label: "None (show the name as text)", value: none }, { label: "Instagram", value: instagram }, { label: "Facebook", value: facebook }, { label: "X (Twitter)", value: x }, { label: "YouTube", value: youtube }, { label: "TikTok", value: tiktok }, { label: "LinkedIn", value: linkedin }, { label: "Pinterest", value: pinterest }, { label: "Threads", value: threads }, { label: "Bluesky", value: bluesky }, { label: "Reddit", value: reddit }, { label: "Discord", value: discord }, { label: "Mastodon", value: mastodon }, { label: "Twitch", value: twitch }, { label: "Spotify", value: spotify }, { label: "SoundCloud", value: soundcloud }, { label: "WhatsApp", value: whatsapp }, { label: "Telegram", value: telegram }, { label: "Snapchat", value: snapchat }, { label: "Vimeo", value: vimeo }, { label: "Etsy", value: etsy }, { label: "Substack", value: substack }, { label: "Patreon", value: patreon }, { label: "GitHub", value: github }, { label: "Email", value: email }, { label: "Website / link", value: website }] }
               - { name: url, label: URL, widget: string }
           - label: Instagram Feed
             name: instagram

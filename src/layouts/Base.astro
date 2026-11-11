@@ -2,15 +2,16 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PageBackdrop from '../components/PageBackdrop.astro';
 import site from '../data/site.json';
 
-interface Props { title?: string; description?: string; noindex?: boolean }
-const { title, description = site.tagline, noindex = false } = Astro.props;
+interface Props { title?: string; description?: string; noindex?: boolean; backdrop?: 'none' | 'subtle' | 'medium' }
+const { title, description = site.tagline, noindex = false, backdrop = 'subtle' } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.tagline}`;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="sage">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,16 +21,7 @@ const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.t
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Apply saved / system theme before first paint (no flash). Respects prefers-contrast and prefers-color-scheme. -->
-    <script is:inline>
-      (function () {
-        var d = document.documentElement, t;
-        try { t = localStorage.getItem('ga-theme'); } catch (e) {}
-        if (!t) t = matchMedia('(prefers-contrast: more)').matches ? 'contrast' : matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'sage';
-        d.dataset.theme = t;
-        d.classList.add('js');
-      })();
-    </script>
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -39,6 +31,7 @@ const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.t
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
+    <PageBackdrop level={backdrop} />
     <ga-progress aria-hidden="true"></ga-progress>
     <Header />
     <main id="main" tabindex="-1"><slot /></main>

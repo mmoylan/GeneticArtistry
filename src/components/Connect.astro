@@ -54,7 +54,8 @@ const hasDetails = show_details && (phone || location);
   h3.label { font-family: var(--sans); font-size: var(--t-label); letter-spacing: .24em; text-transform: uppercase; margin: 0 0 1rem; line-height: 1.4; }
   .plain { list-style: none; margin: 0; padding: 0; font-family: var(--display); font-size: 1.3rem; }
   .plain li { min-height: 44px; display: flex; align-items: center; }
-  .panel :global(.links a) { font-size: 1.3rem; text-decoration-color: currentColor; }
-  .panel :global(.links a:hover) { color: var(--on-accent); text-decoration-thickness: 3px; }
+  .panel :global(.soc:not(.iconic):not(.mixed)) { font-size: 1.3rem; text-decoration-color: currentColor; }
+  .panel :global(.soc:not(.iconic):not(.mixed):hover) { color: var(--on-accent); text-decoration-thickness: 3px; }
+  .panel :global(.iconic:hover), .panel :global(.mixed:hover) { background: var(--on-accent); color: var(--accent); }
   .ig { margin-top: 3rem; }
 </style>

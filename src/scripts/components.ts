@@ -142,10 +142,15 @@ class GaParallax extends HTMLElement {
     tickers.delete(this.update);
   }
   draw() {
-    const host = (this.parentElement as HTMLElement).getBoundingClientRect();
     const speed = parseFloat(this.getAttribute('speed') ?? '0.2');
-    const off = host.top + host.height / 2 - innerHeight / 2;
     const rot = parseFloat(this.getAttribute('rotate') ?? '0');
+    // scope="page": driven by how far the whole page has scrolled (for a fixed full-page backdrop).
+    if (this.getAttribute('scope') === 'page') {
+      this.style.transform = `translate3d(0, ${(-scrollY * speed).toFixed(1)}px, 0) rotate(${(scrollY * rot).toFixed(2)}deg)`;
+      return;
+    }
+    const host = (this.parentElement as HTMLElement).getBoundingClientRect();
+    const off = host.top + host.height / 2 - innerHeight / 2;
     this.style.transform = `translate3d(0, ${(-off * speed).toFixed(1)}px, 0) rotate(${(off * rot).toFixed(2)}deg)`;
   }
 }
@@ -231,24 +236,6 @@ class GaProgress extends HTMLElement {
   }
 }
 
-/** <ga-theme> wraps buttons[data-theme-value]; sets <html data-theme> and remembers it. */
-class GaTheme extends HTMLElement {
-  connectedCallback() {
-    const root = document.documentElement;
-    const buttons = [...this.querySelectorAll<HTMLButtonElement>('button[data-theme-value]')];
-    const sync = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeValue === root.dataset.theme)));
-    buttons.forEach((b) =>
-      b.addEventListener('click', () => {
-        root.dataset.theme = b.dataset.themeValue;
-        try { localStorage.setItem('ga-theme', b.dataset.themeValue!); } catch {}
-        document.dispatchEvent(new Event('ga-theme-change'));
-      }),
-    );
-    document.addEventListener('ga-theme-change', sync); // keeps header + footer switchers in step
-    sync();
-  }
-}
-
 /**
  * <ga-draw>            line-art that draws itself as you scroll (scrub)
  * <ga-draw autoplay>   draws once when it first becomes visible
@@ -276,7 +263,6 @@ class GaDraw extends HTMLElement {
 
 const defs: [string, CustomElementConstructor][] = [
   ['ga-draw', GaDraw],
-  ['ga-theme', GaTheme],
   ['ga-reveal', GaReveal],
   ['ga-section', GaSection],
   ['ga-split', GaSplit],

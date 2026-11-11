@@ -1,15 +1,40 @@
 ---
 import site from '../data/site.json';
+import SocialIcon from './SocialIcon.astro';
+/**
+ * Social links. Each link can show a monochrome icon (chosen per link in the CMS) or plain text.
+ * Accessibility: the link's text (the label) is always in the page for screen readers, icons are
+ * decorative (aria-hidden), targets are 48px, focus is visible, and the new-tab hint is announced.
+ * "Icons with text" (site.social_style) shows the label beside the icon for sighted visitors too.
+ */
+const links = (site.socials as Array<{ label: string; url: string; icon?: string }>).filter((s) => s.url);
+const withText = (site as { social_style?: string }).social_style === 'icons_text';
 ---
 
 <ul class="links">
-  {site.socials.filter((s) => s.url).map((s) => (
-    <li><a href={s.url} target="_blank" rel="noopener noreferrer me">{s.label}<span class="sr-only"> (opens in a new tab)</span> <span aria-hidden="true">↗</span></a></li>
-  ))}
+  {links.map((s) => {
+    const icon = s.icon && s.icon !== 'none' ? s.icon : '';
+    return (
+      <li>
+        <a class:list={['soc', { iconic: icon && !withText, mixed: icon && withText }]} href={s.url} target="_blank" rel="noopener noreferrer me" title={icon && !withText ? s.label : undefined}>
+          {icon && <SocialIcon name={icon} />}
+          <span class:list={{ 'sr-only': icon && !withText }}>{s.label}</span>
+          <span class="sr-only"> (opens in a new tab)</span>
+          {!icon && <span aria-hidden="true">↗</span>}
+        </a>
+      </li>
+    );
+  })}
 </ul>
 
 <style>
-  .links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; }
-  a { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; font-family: var(--display); font-size: 1.6rem; font-weight: 300; text-decoration-color: var(--line); }
-  a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  .links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .7rem 1rem; }
+  .soc { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; text-decoration-color: var(--line); transition: background .25s var(--ease), color .25s var(--ease), transform .25s var(--ease); }
+  /* Plain text link (no icon chosen) */
+  .soc:not(.iconic):not(.mixed) { font-family: var(--display); font-size: 1.6rem; font-weight: 300; }
+  .soc:not(.iconic):not(.mixed):hover { color: var(--accent); text-decoration-color: var(--accent); }
+  /* Icon button: 48px round, 1.5px outline in the current text colour (≥3:1 non-text contrast) */
+  .iconic { width: 48px; border: 1.5px solid currentColor; border-radius: 50%; text-decoration: none; }
+  .mixed { padding: 0 1.2rem 0 1rem; border: 1.5px solid currentColor; border-radius: 999px; text-decoration: none; font: 600 .95rem/1 var(--sans); }
+  .iconic:hover, .mixed:hover { background: var(--accent); color: var(--on-accent); transform: translateY(-2px); }
 </style>
