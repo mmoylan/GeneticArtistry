@@ -7,11 +7,11 @@ import { getPosts } from '../../lib/insights';
 const posts = await getPosts();
 ---
 
-<Base title="Insights" description="Business insights, cultivation notes and grow journals from Genetic Artistry.">
+<Base title="Insights" description="Practical insights on cannabis cultivation, lean operations, genetics and growing the business.">
   <section class="backing top pad">
     <div class="wrap">
       <p class="eyebrow">Insights</p>
-      <h1>Notes from the <em>grow room</em></h1>
+      <h1>Practical insights for <em>operators</em></h1>
       <CategoryNav />
       {posts.length === 0 ? <p class="muted">No insights yet.</p> : (
         <ul class="grid">{posts.map((p) => <PostCard post={p} />)}</ul>

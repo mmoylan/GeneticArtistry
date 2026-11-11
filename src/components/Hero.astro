@@ -4,11 +4,11 @@ import LeafArt from './LeafArt.astro';
 interface Props { data?: Record<string, any>; uid?: string; anchor?: string }
 const { data = {}, uid = 'hero', anchor = '' } = Astro.props;
 const {
-  eyebrow = 'Small-batch cannabis genetics',
-  title = 'Genetics, <em>painted</em> by hand.',
-  lede = 'One breeder. Every cross selected, grown and documented like a work in progress.',
-  primary_label = 'Explore the collection', primary_link = '#collection',
-  secondary_label = 'Get in touch', secondary_link = '#connect',
+  eyebrow = 'Cannabis consulting, education & genetics',
+  title = 'Maximize ROI. <em>Minimize</em> waste.',
+  lede = 'Hands-on consulting, practical education and lean efficiency training for cannabis operators.',
+  primary_label = 'Explore our services', primary_link = '#services',
+  secondary_label = 'Book a discovery call', secondary_link = '#connect',
   leaf = 'draw', leaf_strength = 'subtle',
 } = data;
 const strength = { subtle: 0.3, medium: 0.5, bold: 0.8 }[leaf_strength as 'subtle'] ?? 0.3;
