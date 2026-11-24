@@ -204,14 +204,16 @@ class GaHScroll extends HTMLElement {
 class GaCounter extends HTMLElement {
   connectedCallback() {
     // `static` shows the final number straight away (editor turned counting off).
-    if (this.hasAttribute('static')) return;
-    this.textContent = '0' + (this.getAttribute('suffix') ?? '');
+    // The page is built with the real number in it, and it stays that way until the count-up starts
+    // (so no-JS, print and reduced-motion visitors always see the real figure).
+    if (this.hasAttribute('static') || reduced) return;
     whenVisible(this);
   }
   onEnter() {
     const to = parseFloat(this.getAttribute('to') ?? '0');
     const suffix = this.getAttribute('suffix') ?? '';
     if (reduced) return void (this.textContent = to + suffix);
+    this.textContent = '0' + suffix; // drop to zero when triggered, then count up
     const t0 = performance.now();
     const dur = 1800;
     const step = (t: number) => {
