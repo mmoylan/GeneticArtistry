@@ -40,6 +40,7 @@ Pages are an ordered list of **blocks**. In `/admin` → **Pages**, open a page 
 - **Block-specific motion:** Hero leaf (draws itself / still / none, and subtle to bold), Process line (draws across or static), Numbers (count up or show final), Image (parallax on or off).
 - Motion switches off automatically for visitors who prefer reduced motion.
 - **Add a new block type:** build the component, register it in `src/components/Sections.astro`, add its schema in `src/content.config.ts` and its fields in `public/admin/config.yml`.
+- **Live preview:** the editor's preview pane draws pages, insights and people with the site's own markup and CSS. `public/admin/preview.js` has one function per block that mirrors its Astro component; `scripts/build-preview.mjs` (run by `npm run build`) generates `/admin/preview.css` and `/admin/preview-data.json`. When you change a block's markup in `src/components`, change its function in `preview.js` too. The preview only exists in the built site (not under `astro dev`), and motion is switched off in it.
 
 ## Design system
 
