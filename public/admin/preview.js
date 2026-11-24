@@ -101,7 +101,7 @@
       var host = rail ? 'ga-draw' : 'div';
       return '<section class="pad"' + ctx.id + '><div class="wrap">' + eyebrow(g(d.eyebrow, 'How we work'), K(ctx, 'eyebrow')) + title('h2', g(d.heading, 'From sketch to seed'), ctx.uid + '-title', '', K(ctx, 'heading')) +
         (d.intro ? '<ga-reveal' + K(ctx, 'intro') + '><p class="lede muted intro">' + esc(d.intro) + '</p></ga-reveal>' : '') +
-        '<' + host + ' class="rail-host" style="--cols:' + steps.length + ';--n:' + Math.max(steps.length - 1, 1) + '"><div class="rail' + (wide ? '' : ' off') + '" aria-hidden="true"><i></i></div><ol' + (wide ? '' : ' class="many"') + '>' +
+        '<' + host + ' class="rail-host" style="--cols:' + steps.length + ';--n:' + Math.max(steps.length - 1, 1) + '"><div class="rail' + (wide ? '' : ' off') + '" aria-hidden="true"><i></i></div><ol' + K(ctx, 'steps') + (wide ? '' : ' class="many"') + '>' +
         steps.map(function (s, i) { return '<li style="--i:' + i + '"' + K(ctx, 'steps.' + i) + '><ga-reveal><span class="circle" aria-hidden="true">' + (i + 1) + '</span><h3>' + esc(s.title) + '</h3><p class="muted">' + esc(s.text) + '</p></ga-reveal></li>'; }).join('') +
         '</ol></' + host + '>' + (d.cta_label ? '<ga-reveal' + K(ctx, 'cta_label') + '><a class="btn solid" href="#">' + esc(d.cta_label) + '</a></ga-reveal>' : '') + '</div></section>';
     },
@@ -124,13 +124,13 @@
       var items = g(d.items, []), cols = ['2', '3', '4'].indexOf(String(g(d.columns, 'auto'))) >= 0 ? String(d.columns) : '';
       var ey = g(d.eyebrow, 'What we stand for'), heading = g(d.heading, ''), intro = d.intro ? hole('<div class="muted body">' + mdParse(d.intro) + '</div>') : '';
       var head = (ey || heading || intro) ? '<div class="head"><div>' + eyebrow(ey, K(ctx, 'eyebrow')) + title('h2', heading, ctx.uid + '-title', '', K(ctx, 'heading')) + '</div>' + (intro ? '<ga-reveal' + K(ctx, 'intro') + '>' + intro + '</ga-reveal>' : '') + '</div>' : '';
-      return '<section class="pad"' + ctx.id + '><div class="wrap">' + head + '<ul class="grid' + (cols ? ' fixed' : '') + '"' + (cols ? ' style="--cols:' + cols + '"' : '') + '>' +
+      return '<section class="pad"' + ctx.id + '><div class="wrap">' + head + '<ul class="grid' + (cols ? ' fixed' : '') + '"' + K(ctx, 'items') + (cols ? ' style="--cols:' + cols + '"' : '') + '>' +
         items.map(function (v, j) { return '<li' + K(ctx, 'items.' + j) + '><ga-reveal><div class="card value">' + (v.icon && v.icon !== 'none' ? '<span class="tile">' + icon(v.icon) + '</span>' : '') + '<h3>' + esc(v.title) + '</h3>' + (v.text ? '<p class="muted">' + esc(v.text) + '</p>' : '') + '</div></ga-reveal></li>'; }).join('') +
         '</ul></div></section>';
     },
 
     stats: function (d, ctx) {
-      return '<section class="pad stats"' + ctx.id + ' aria-label="By the numbers"><div class="wrap"><dl>' +
+      return '<section class="pad stats"' + ctx.id + ' aria-label="By the numbers"><div class="wrap"><dl' + K(ctx, 'items') + '>' +
         g(d.items, []).map(function (s, j) { return '<ga-reveal class="card"' + K(ctx, 'items.' + j) + '><dd class="display"><ga-counter>' + esc(s.value) + esc(s.suffix) + '</ga-counter></dd><dt class="label muted">' + esc(s.label) + '</dt></ga-reveal>'; }).join('') + '</dl></div></section>';
     },
 
@@ -216,8 +216,9 @@
       return '<ga-section data-key-path="sections.' + i + '" data-spacing="' + g(s.spacing, 'normal') + '" data-backing="' + (on ? 'on' : 'off') + '" data-headline="off" data-items="off">' + sec + '</ga-section>';
     }).join('');
     html = html.replace(/\u0001POST"([^"]+)"\u0002/g, function (m, id) { return postCard(id); });
-    var body = '<div' + (first && first !== 'hero' ? ' class="page-offset"' : '') + '>' + (html || '<section class="pad"><div class="wrap"><p class="muted">This page has no blocks yet. Add one under Sections.</p></div></section>') + '</div>';
-    return unhole(chrome(g(data.backdrop, 'subtle'), g(data.backdrop_position, 'left'), body));
+    var body = '<div data-key-path="sections"' + (first && first !== 'hero' ? ' class="page-offset"' : '') + '>' + (html || '<section class="pad"><div class="wrap"><p class="muted">This page has no blocks yet. Add one under Sections.</p></div></section>') + '</div>';
+    // Page-level fields (title, description, background leaf) have no block of their own: they map to the header.
+    return unhole(chrome(g(data.backdrop, 'subtle'), g(data.backdrop_position, 'left'), body).replace('<header class="site-header"', '<header data-key-path="title" class="site-header"'));
   }
 
   function authorCard(person, asset) {
@@ -245,12 +246,117 @@
     return '<div style="max-width:22rem;margin:2rem auto">' + authorCard({ name: g(d.name, 'Name'), job_title: d.job_title, bio: d.bio, photo: d.photo }, asset) + '</div>';
   }
 
+  // ---------- editor <-> preview sync ----------
+  // Sveltia keeps the panes in step by looking up the preview element whose data-key-path equals the editor field's path.
+  // It needs an exact match and does nothing when there is none (e.g. for "spacing" or "animation.duration", which have
+  // nothing visible). This makes a missing path resolve to the nearest enclosing one (sections.3.spacing -> sections.3),
+  // and anything at the very top (page title, description) to the header.
+  //
+  // Sveltia's own scroll sync samples the OUTERMOST path at the top of the editor, which for a page is always the whole
+  // "sections" list, so it can only scroll proportionally and drifts away from the block you are editing. So the two
+  // "sections" lookups (editor and preview) are switched off below, and scrollSync() follows the actual block and field.
+  var SECTION_PATH = /^sections\.\d+(\.|$)/;
+  var lastDriver = null; // which pane the user is scrolling: 'editor' or 'preview'
+  var scrolling = null;  // pending animation frame
+
+  // The preview element for a key path, or the nearest enclosing one; `exact` says whether it was an exact match.
+  var findIn = function (root, path) {
+    var parts = path.split('.');
+    for (var n = parts.length; n >= 2; n--) {
+      var el = root.querySelector('[data-key-path="' + parts.slice(0, n).join('.') + '"]');
+      if (el && el.getClientRects().length) return { el: el, exact: n === parts.length };
+    }
+    return null;
+  };
+  var deepestSection = function (doc, x, y) {
+    var els = doc.elementsFromPoint(x, y);
+    for (var i = 0; i < els.length; i++) { // deepest first
+      var p = els[i].matches && els[i].matches('[data-key-path]') && els[i].getAttribute('data-key-path');
+      if (p && SECTION_PATH.test(p)) return els[i];
+    }
+    return null;
+  };
+  var previewDoc = function () { var f = document.querySelector('iframe'); try { return f && f.contentDocument && f.contentDocument.querySelector('[data-key-path="sections"]') ? f.contentDocument : null; } catch (e) { return null; } };
+  var editorPane = function () { var c = document.querySelector('.content'); return c && c.querySelector('.field[data-key-path]') ? c : null; };
+
+  var syncPreview = function () { // editor scrolled -> put the preview at the same block and field
+    var c = editorPane(), doc = previewDoc();
+    if (!c || !doc) return;
+    var cr = c.getBoundingClientRect(), y = cr.top + 3;
+    var hit = deepestSection(document, cr.left + 80, y);
+    if (!hit) return;
+    var found = findIn(doc, hit.getAttribute('data-key-path'));
+    if (!found) return;
+    var hr = hit.getBoundingClientRect(), f = hr.height ? Math.min(1, Math.max(0, (y - hr.top) / hr.height)) : 0;
+    var tr = found.el.getBoundingClientRect(), win = doc.defaultView;
+    // an exact field: follow it across its height; a setting with no visible form (spacing, animation…): the end of the block
+    var top = found.exact ? tr.top + win.scrollY - 96 + tr.height * f : tr.bottom + win.scrollY - win.innerHeight * 0.65;
+    win.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+  };
+  var syncEditor = function () { // preview scrolled -> put the editor at the same block and field
+    var c = editorPane(), doc = previewDoc();
+    if (!c || !doc) return;
+    var win = doc.defaultView, y = 120;
+    var hit = deepestSection(doc, 100, y);
+    if (!hit) return;
+    var path = hit.getAttribute('data-key-path').split('.'), field = null;
+    for (var n = path.length; n >= 2 && !field; n--) {
+      var el = c.querySelector('.field[data-key-path="' + path.slice(0, n).join('.') + '"]');
+      if (el && el.getClientRects().length) field = el;
+    }
+    if (!field) return;
+    var hr = hit.getBoundingClientRect(), f = hr.height ? Math.min(1, Math.max(0, (y - hr.top) / hr.height)) : 0;
+    var fr = field.getBoundingClientRect(), cr = c.getBoundingClientRect();
+    c.scrollTop += fr.top + fr.height * f - (cr.top + 3);
+  };
+  var schedule = function (who, fn) {
+    if (lastDriver !== who) return; // the other pane is following; don't answer back
+    if (scrolling) cancelAnimationFrame(scrolling);
+    scrolling = requestAnimationFrame(function () { scrolling = null; fn(); });
+  };
+
+  // Editor side (main page): note when the user takes over, and follow editor scrolling.
+  ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(function (t) { document.addEventListener(t, function () { lastDriver = 'editor'; }, true); });
+  document.addEventListener('scroll', function (e) {
+    var c = e.target;
+    if (c && c.classList && c.classList.contains('content') && c.ownerDocument === document) schedule('editor', syncPreview);
+  }, true);
+  // Turn off Sveltia's own list-level editor sync (the preview side is switched off in installLookup).
+  var mainQuery = Element.prototype.querySelector;
+  Element.prototype.querySelector = function (sel) {
+    if (sel === '[data-key-path="sections"]' && this.classList && this.classList.contains('content')) return null;
+    return mainQuery.call(this, sel);
+  };
+
+  var installLookup = function (win) {
+    if (!win || win.__gaKeyPaths) return;
+    win.__gaKeyPaths = true;
+    var proto = win.Element.prototype, orig = proto.querySelector;
+    proto.querySelector = function (sel) {
+      var m = typeof sel === 'string' && /^\[data-key-path="(.*)"\]$/.exec(sel);
+      if (m && m[1] === 'sections') return null;
+      var hit = orig.call(this, sel);
+      if (hit || !m) return hit;
+      var parts = m[1].replace(/\\(.)/g, '$1').split('.');
+      while (parts.length > 1) {
+        parts.pop();
+        var up = parts.join('.') === 'sections' ? null : orig.call(this, '[data-key-path="' + parts.join('.') + '"]');
+        if (up) return up;
+      }
+      return orig.call(this, '[data-key-path="title"]');
+    };
+    // Preview side: note when the user takes over, and follow preview scrolling.
+    ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(function (t) { win.document.addEventListener(t, function () { lastDriver = 'preview'; }, true); });
+    win.addEventListener('scroll', function () { schedule('preview', syncEditor); });
+  };
+
   // ---------- registration ----------
   var make = function (render) {
     return window.createClass({
       getInitialState: function () { return { ready: !!D }; },
       componentDidMount: function () {
         var self = this;
+        installLookup(this.props.window);
         if (!D) dataPromise.then(function (d) { D = d; self.setState({ ready: !!d }); });
       },
       render: function () {
@@ -258,12 +364,9 @@
         var html;
         try { html = render(this.props.entry, this.props.getAsset); }
         catch (e) { html = '<p style="font:14px sans-serif;padding:1rem;color:#a00">Preview error: ' + esc(e && e.message) + '</p>'; }
-        return h('div', {
-          className: 'ga-preview',
-          dangerouslySetInnerHTML: { __html: html },
-          // Links in the preview are for show; never navigate away from the editor.
-          onClick: function (e) { var a = e.target && e.target.closest && e.target.closest('a'); if (a) e.preventDefault(); },
-        });
+        // Links are for show: with no href they cannot navigate, and clicks still reach Sveltia (which focuses the matching field).
+        html = html.replace(/\shref="[^"]*"/g, '');
+        return h('div', { className: 'ga-preview', dangerouslySetInnerHTML: { __html: html } });
       },
     });
   };
